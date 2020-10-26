@@ -19,8 +19,10 @@ namespace ClassLibrary.Controllers {
         
         //Creates the Database table for session if it doesn't exist already
         public bool CreateDBTableSessions() {
-            try {
-                using (IDbConnection db = new SqlConnection(ConfigurationManager.ConnectionStrings["host=localhost port=5432 dbname=mydb connect_timeout=10"].ConnectionString)) {
+            try
+            {
+                using (IDbConnection db = new SqlConnection(ConfigurationManager.ConnectionStrings["host=localhost port=5432 dbname=mydb connect_timeout=10"].ConnectionString))
+                {
                     db.Query<SessionsModel>(@"CREATE TABLE if not exists KennisSessie (
                                             SessieID int,
                                             Datum Date,
@@ -32,8 +34,10 @@ namespace ClassLibrary.Controllers {
                                             ); 
                                         ");
                     return true;
+                }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 return false;
             }
         }
