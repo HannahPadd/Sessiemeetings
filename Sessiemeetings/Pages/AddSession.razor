@@ -31,7 +31,7 @@ else
                             <RadzenLabel Text="Beschrijving" />
                         </div>
                         <div class="col-md-8">
-                            <RadzenTextBox style="width: 100%;" Name="SessionDesc" />
+                            <RadzenTextArea Placeholder="Beschrijving..." style="width: 100%;" Name="SessionDesc" />
                         </div>
                     </div>
                     <div class="row">
@@ -39,7 +39,7 @@ else
                             <RadzenLabel Text="Datum en Tijd" />
                         </div>
                         <div class="col-md-8">
-                            <RadzenDatePicker style="width: 100%;" Name="SessionDate" @bind-Value="order.SessionDate" />
+                            <RadzenDatePicker style="width: 100%;" Name="SessionDate" TValue="DateTime?" ShowTime="true"  HourFormat="24" DateFormat="dd/MM/yyyy hh:mm tt" />
                         </div>
                     </div>
                 </RadzenFieldset>
@@ -55,6 +55,10 @@ else
 }
 
 @code {
+
+
+    DateTime? value = DateTime.Now;
+
     public class Order
     {
         public string SessionName { get; set; }
@@ -72,8 +76,8 @@ else
 
     Order order = new Order()
     {
-        SessionDate = DateTime.Parse("10/10/2022"),
         TodayDate = DateTime.Now,
+        SessionDate = DateTime.Now
     };
 
 
