@@ -1,0 +1,89 @@
+﻿@page "/AddSession"
+
+<h3>Een nieuwe sessie toevoegen</h3>
+
+<style>
+    form .row {
+        margin-bottom: 16px;
+    }
+</style>
+
+@if (order == null)
+{
+    <p><em>Laden...</em></p>
+}
+else
+{
+    <RadzenTemplateForm Data="@order" Submit="@((Order args) => { Submit(args); })">
+        <div class="row">
+            <div class="col-md-6">
+                <RadzenFieldset Text="Sessie Info">
+                    <div class="row">
+                        <div class="col-md-4 align-items-center d-flex">
+                            <RadzenLabel Text="Naam van de sessie" />
+                        </div>
+                        <div class="col-md-8">
+                            <RadzenTextBox style="width: 100%;" Name="SessionName" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 align-items-center d-flex">
+                            <RadzenLabel Text="Beschrijving" />
+                        </div>
+                        <div class="col-md-8">
+                            <RadzenTextBox style="width: 100%;" Name="SessionDesc" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 align-items-center d-flex">
+                            <RadzenLabel Text="Datum en Tijd" />
+                        </div>
+                        <div class="col-md-8">
+                            <RadzenDatePicker style="width: 100%;" Name="SessionDate" @bind-Value="order.SessionDate" />
+                        </div>
+                    </div>
+                </RadzenFieldset>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-12" style="margin-top: 16px;">
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Opslaan" />
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="display: inline-block; margin-left: 10px;" Text="Annuleren" Click="@Cancel" />
+            </div>
+        </div>
+    </RadzenTemplateForm>
+}
+
+@code {
+    public class Order
+    {
+        public string SessionName { get; set; }
+        public DateTime SessionDate { get; set; }
+        public string SessionDesc { get; set; }
+        public DateTime TodayDate { get; set; }
+    }
+
+    public class SessionInfo
+    {
+        public int SessionName { get; set; }
+        public string SessionDesc { get; set; }
+    }
+
+
+    Order order = new Order()
+    {
+        SessionDate = DateTime.Parse("10/10/2022"),
+        TodayDate = DateTime.Now,
+    };
+
+
+    void Submit(Order arg)
+    {
+        //
+    }
+
+    void Cancel()
+    {
+        //
+    }
+}
