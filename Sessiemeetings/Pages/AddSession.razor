@@ -8,13 +8,13 @@
     }
 </style>
 
-@if (order == null)
+@if (session == null)
 {
     <p><em>Laden...</em></p>
 }
 else
 {
-    <RadzenTemplateForm Data="@order" Submit="@((Order args) => { Submit(args); })">
+    <RadzenTemplateForm Data="@session" Submit="@((Session args) => { Submit(args); })">
         <div class="row">
             <div class="col-md-6">
                 <RadzenFieldset Text="Sessie Info">
@@ -70,29 +70,30 @@ else
 
     DateTime? value = DateTime.Now;
 
-    public class Order
+    public class Session
     {
         public string SessionName { get; set; }
         public DateTime SessionDate { get; set; }
         public string SessionDesc { get; set; }
         public DateTime TodayDate { get; set; }
+        public string SessionAdress { get; set; }
     }
 
-    public class SessionInfo
-    {
-        public int SessionName { get; set; }
-        public string SessionDesc { get; set; }
-    }
+    //public class SessionInfo  Overbodig
+    //{
+    //    public string SessionName { get; set; }
+    //    public string SessionDesc { get; set; }
+    //}
 
 
-    Order order = new Order()
+    Session session = new Session()
     {
         TodayDate = DateTime.Now,
         SessionDate = DateTime.Now
     };
 
 
-    void Submit(Order arg)
+    void Submit(Session arg)
     {
         //
     }

@@ -11,5 +11,6 @@ namespace ClassLibrary.Models
         public string Date { get; set; }
         public string Time { get; set; }
         public bool IsDone { get; set; }
+        public string Address { get; set; }
     }
 }

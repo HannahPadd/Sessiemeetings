@@ -21,10 +21,10 @@
                 <RadzenTextBox @bind-Value="model.Email"></RadzenTextBox>
 
                 <label>Wachtwoord</label>
-                <RadzenTextBox @bind-Value="model.Password"></RadzenTextBox>
+                <RadzenTextBox type="password" @bind-Value="model.Password"></RadzenTextBox>
 
                 <label>Wachtwoord bevestigen</label>
-                <RadzenTextBox @bind-Value="model.ConfirmPassword"></RadzenTextBox>
+                <RadzenTextBox type="password" @bind-Value="model.ConfirmPassword"></RadzenTextBox>
                 <hr />
 
                 <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Registreren"
