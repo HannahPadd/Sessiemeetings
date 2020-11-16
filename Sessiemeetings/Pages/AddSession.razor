@@ -39,7 +39,18 @@ else
                             <RadzenLabel Text="Datum en Tijd" />
                         </div>
                         <div class="col-md-8">
-                            <RadzenDatePicker style="width: 100%;" Name="SessionDate" TValue="DateTime?" ShowTime="true"  HourFormat="24" DateFormat="dd/MM/yyyy hh:mm tt" />
+                            <RadzenDatePicker style="width: 100%;" Name="SessionDate" TValue="DateTime?" ShowTime="true" HourFormat="24" DateFormat="dd/MM/yyyy hh:mm tt" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 align-items-center d-flex">
+                            <RadzenLabel Text="Adres" />
+                        </div>
+                        <div class="col-md-8">
+                            <RadzenTextBox style="width: 100%;" Name="SessionAdress" />
+                        </div>
+                        <div class="align-items-center d-flex" style="margin-top: 16px;">
+                            <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="add_location" style="margin-left: 11px; width: 166.046875px;" Text="Locatie"></RadzenButton>
                         </div>
                     </div>
                 </RadzenFieldset>
