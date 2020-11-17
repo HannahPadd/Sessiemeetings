@@ -1,6 +1,7 @@
 ﻿@page "/Authentication/Login"
 @layout AuthenticationLayout
 @using ClassLibrary.Models
+@inject NavigationManager NavigationManager
 
 <div>
     <div class="col-12">
@@ -14,14 +15,18 @@
             <RadzenTextBox type="password"></RadzenTextBox>
             <hr />
 
-            <RadzenButton ButtonType="Radzen.ButtonType.Button" Path="Index"  Text="Login"
+            <RadzenButton ButtonType="Radzen.ButtonType.Button" Path="Index" Text="Login"
                           ButtonStyle="Radzen.ButtonStyle.Primary" class="btn-block mr-2" />
-            <hr />
-            <RadzenLink Path="Authentication/Register" Text="Nieuw account aanmaken"></RadzenLink>
+
+            <RadzenButton ButtonType="Radzen.ButtonType.Button" Path="Index" Text="Registreren"
+                          ButtonStyle="Radzen.ButtonStyle.Secondary" class="btn-block mr-2" Click="@loadRegister" />
         </RadzenCard>
     </div>
 </div>
 
 @code {
-
+    public void loadRegister()
+    {
+        NavigationManager.NavigateTo("/Authentication/Register");
+    }
 }

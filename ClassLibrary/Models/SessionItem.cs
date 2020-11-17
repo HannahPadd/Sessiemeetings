@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ClassLibrary.Models
 {
-    class SessionItem
+    public class SessionItem
     {
         public string Name { get; set; }
         public string Description { get; set; }

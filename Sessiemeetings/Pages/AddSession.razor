@@ -1,7 +1,13 @@
 ﻿@page "/AddSession"
+@using ClassLibrary.Models
 
 <h3>Een nieuwe sessie toevoegen</h3>
-
+<ul>
+    @foreach (var session in sessions)
+    {
+        <li>@session.Name</li>
+    }
+</ul>
 <style>
     form .row {
         margin-bottom: 16px;
@@ -23,7 +29,7 @@ else
                             <RadzenLabel Text="Naam van de sessie" />
                         </div>
                         <div class="col-md-8">
-                            <RadzenTextBox style="width: 100%;" Name="SessionName" />
+                            <RadzenTextBox style="width: 100%;" @bind-Value="newsName" />
                         </div>
                     </div>
                     <div class="row">
@@ -42,6 +48,10 @@ else
                             <RadzenDatePicker style="width: 100%;" Name="SessionDate" TValue="DateTime?" ShowTime="true" HourFormat="24" DateFormat="dd/MM/yyyy hh:mm tt" />
                         </div>
                     </div>
+                </RadzenFieldset>
+            </div>
+            <div class="col-md-6">
+                <RadzenFieldset Text="Sessie Locatie">
                     <div class="row">
                         <div class="col-md-4 align-items-center d-flex">
                             <RadzenLabel Text="Adres" />
@@ -51,19 +61,29 @@ else
                         </div>
                         <div class="align-items-center d-flex" style="margin-top: 16px;">
                             <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="add_location" style="margin-left: 11px; width: 166.046875px;" Text="Locatie"></RadzenButton>
+
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <RadzenGoogleMap style="height: 250px"></RadzenGoogleMap>
+                        </div>
+                    </div>
+
+
                 </RadzenFieldset>
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-md-12" style="margin-top: 16px;">
-                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Opslaan" />
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Opslaan" Click="@AddsName" />
                 <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="display: inline-block; margin-left: 10px;" Text="Annuleren" Click="@Cancel" />
             </div>
         </div>
     </RadzenTemplateForm>
 }
+
+
 
 @code {
 
@@ -101,5 +121,17 @@ else
     void Cancel()
     {
         //
+    }
+
+    public IList<SessionItem> sessions = new List<SessionItem>();
+    public string newsName;
+
+    public void AddsName()
+    {
+        if (!string.IsNullOrWhiteSpace(newsName))
+        {
+            sessions.Add(new SessionItem { Name = newsName });
+            newsName = string.Empty;
+        }
     }
 }
