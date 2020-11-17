@@ -5702,11 +5702,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Danny\\source\\repos\\paniek\\paniek\\paniek.csproj",
+      "projectUniqueName": "C:\\Users\\Danny\\Documents\\GitHub\\Sessiemeetings\\paniek\\paniek.csproj",
       "projectName": "paniek",
-      "projectPath": "C:\\Users\\Danny\\source\\repos\\paniek\\paniek\\paniek.csproj",
+      "projectPath": "C:\\Users\\Danny\\Documents\\GitHub\\Sessiemeetings\\paniek\\paniek.csproj",
       "packagesPath": "C:\\Users\\Danny\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Danny\\source\\repos\\paniek\\paniek\\obj\\",
+      "outputPath": "C:\\Users\\Danny\\Documents\\GitHub\\Sessiemeetings\\paniek\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Danny\\AppData\\Roaming\\NuGet\\NuGet.Config",
