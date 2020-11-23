@@ -59,7 +59,7 @@ namespace Sessiemeetings.Areas.Identity.Pages.Account
                 await _emailSender.SendEmailAsync(
                     Input.Email,
                     "Wachtwoord resetten",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    $"Reset uw wachtwoord door <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>hier te klikken</a>.");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
