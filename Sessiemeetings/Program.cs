@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ClassLibrary;
 
 namespace Sessiemeetings
 {
@@ -15,6 +16,7 @@ namespace Sessiemeetings
     {
         public static void Main(string[] args)
         {
+            DbConnection dbConnection = new DbConnection();
             CreateHostBuilder(args).Build().Run();
         }
 
