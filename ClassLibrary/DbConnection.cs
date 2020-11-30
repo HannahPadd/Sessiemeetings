@@ -77,7 +77,16 @@ namespace ClassLibrary
         //Inserts into the Database
         public void InsertSession(string Naam, string Locatie, string Onderwerp, string Tijd, string Datum)
         {
-            string query = $"INSERT INTO SessionsTable (Naam, Locatie, Onderwerp, Tijd, Datum) VALUES('{Naam}', '{Locatie}', '{Onderwerp}', , )";
+            string query = $"INSERT INTO SessionsTable (Naam, Locatie, Onderwerp, Tijd, Datum) VALUES ('{Naam}', '{Locatie}', '{Onderwerp}', 'Time', 'Date')";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
         //Updates the Database
         public void Update()
@@ -90,10 +99,18 @@ namespace ClassLibrary
 
         }
         //Selects from the Database
-        //public List <string> [] Select()
-        //{
-        //    
-        //}
+    //  public List <string> [] Select()
+    //  {
+    //      string query = "SELECT * FROM SessionsTable";
+    //      using MySqlCommand cmd = new MySqlCommand(query, connection);
+    //      using MySqlDataReader result = cmd.ExecuteReader();
+    //
+    //      while (result.Read())
+    //      {
+    //
+    //      }
+    //      
+    //  }
         //Count statement
         public int Count()
         {

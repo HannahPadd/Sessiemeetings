@@ -1,5 +1,6 @@
 ﻿@page "/AddSession"
 @using ClassLibrary.Models
+@using ClassLibrary
 
 
 <h3>Een nieuwe sessie toevoegen</h3>
@@ -116,7 +117,8 @@ else
 
     void Submit(Session arg)
     {
-        //
+        DbConnection addSession = new DbConnection();
+        addSession.InsertSession(arg.SessionName, arg.SessionAdress, arg.SessionDesc, "Time", arg.SessionDate.ToString());
     }
 
     void Cancel()

@@ -16,7 +16,6 @@ namespace Sessiemeetings
     {
         public static void Main(string[] args)
         {
-            DbConnection dbConnection = new DbConnection();
             CreateHostBuilder(args).Build().Run();
         }
 
