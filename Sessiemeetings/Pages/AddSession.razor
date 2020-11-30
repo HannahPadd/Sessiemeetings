@@ -31,7 +31,7 @@ else
                             <RadzenLabel Text="Naam van de sessie" />
                         </div>
                         <div class="col-md-8">
-                            <RadzenTextBox style="width: 100%;" @bind-Value="newsName" />
+                            <RadzenTextBox style="width: 100%;" @bind-value="SessionName" />
                         </div>
                     </div>
                     <div class="row">
@@ -39,7 +39,7 @@ else
                             <RadzenLabel Text="Beschrijving" />
                         </div>
                         <div class="col-md-8">
-                            <RadzenTextArea Placeholder="Beschrijving..." style="width: 100%;" Name="SessionDesc" />
+                            <RadzenTextArea Placeholder="Beschrijving..." style="width: 100%;" @bind-Value="SessionDesc" />
                         </div>
                     </div>
                     <div class="row">
@@ -59,7 +59,7 @@ else
                             <RadzenLabel Text="Adres" />
                         </div>
                         <div class="col-md-8">
-                            <RadzenTextBox style="width: 100%;" Name="SessionAdress" />
+                            <RadzenTextBox style="width: 100%;" @bind-value="SessionAdress" />
                         </div>
                         <div class="align-items-center d-flex" style="margin-top: 16px;">
                             <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="add_location" style="margin-left: 11px; width: 166.046875px;" Text="Locatie"></RadzenButton>
@@ -78,7 +78,7 @@ else
         </div>
         <div class="row justify-content-center">
             <div class="col-md-12" style="margin-top: 16px;">
-                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Opslaan" Click="@AddsName" />
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Opslaan"/>
                 <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="display: inline-block; margin-left: 10px;" Text="Annuleren" Click="@Cancel" />
             </div>
         </div>
@@ -118,7 +118,7 @@ else
     void Submit(Session arg)
     {
         DbConnection addSession = new DbConnection();
-        addSession.InsertSession(arg.SessionName, arg.SessionAdress, arg.SessionDesc, "Time", arg.SessionDate.ToString());
+        addSession.InsertSession(SessionName, SessionAdress, SessionDesc, "Time", SessionDate.ToString());
     }
 
     void Cancel()
@@ -127,14 +127,10 @@ else
     }
 
     public IList<SessionItem> sessions = new List<SessionItem>();
-    public string newsName;
+    public string SessionName { get; set; }
+    public DateTime SessionDate { get; set; }
+    public string SessionDesc { get; set; }
+    public DateTime TodayDate { get; set; }
+    public string SessionAdress { get; set; }
 
-    public void AddsName()
-    {
-        if (!string.IsNullOrWhiteSpace(newsName))
-        {
-            sessions.Add(new SessionItem { Name = newsName });
-            newsName = string.Empty;
-        }
-    }
 }

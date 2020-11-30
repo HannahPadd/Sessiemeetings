@@ -77,7 +77,7 @@ namespace ClassLibrary
         //Inserts into the Database
         public void InsertSession(string Naam, string Locatie, string Onderwerp, string Tijd, string Datum)
         {
-            string query = $"INSERT INTO SessionsTable (Naam, Locatie, Onderwerp, Tijd, Datum) VALUES ('{Naam}', '{Locatie}', '{Onderwerp}', 'Time', 'Date')";
+            string query = $"INSERT INTO SessionsTable (Naam, Locatie, Onderwerp, Tijd, Datum) VALUES ('{Naam}', '{Locatie}', '{Onderwerp}', 'Time', 'Datum')";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             try
             {
