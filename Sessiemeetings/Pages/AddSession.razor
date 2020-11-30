@@ -30,7 +30,7 @@ else
                             <RadzenLabel Text="Naam van de sessie" />
                         </div>
                         <div class="col-md-8">
-                            <RadzenTextBox style="width: 100%;" @bind-Value="newsName" />
+                            <RadzenTextBox style="width: 100%;" @bind-Value="SessionName" />
                         </div>
                     </div>
                     <div class="row">
@@ -38,7 +38,7 @@ else
                             <RadzenLabel Text="Beschrijving" />
                         </div>
                         <div class="col-md-8">
-                            <RadzenTextArea Placeholder="Beschrijving..." style="width: 100%;" Name="SessionDesc" />
+                            <RadzenTextArea Placeholder="Beschrijving..." style="width: 100%;" @bind-Value=string "SessionDesc" />
                         </div>
                     </div>
                     <div class="row">
@@ -58,7 +58,7 @@ else
                             <RadzenLabel Text="Adres" />
                         </div>
                         <div class="col-md-8">
-                            <RadzenTextBox style="width: 100%;" Name="SessionAdress" />
+                            <RadzenTextBox style="width: 100%;" @bind-Value="SessionAdress" />
                         </div>
                         <div class="align-items-center d-flex" style="margin-top: 16px;">
                             <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="add_location" style="margin-left: 11px; width: 166.046875px;" Text="Locatie"></RadzenButton>
@@ -77,7 +77,7 @@ else
         </div>
         <div class="row justify-content-center">
             <div class="col-md-12" style="margin-top: 16px;">
-                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Opslaan" Click="@AddsName" />
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Opslaan" Click="@Submit" />
                 <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="display: inline-block; margin-left: 10px;" Text="Annuleren" Click="@Cancel" />
             </div>
         </div>
@@ -135,4 +135,5 @@ else
             newsName = string.Empty;
         }
     }
+
 }
