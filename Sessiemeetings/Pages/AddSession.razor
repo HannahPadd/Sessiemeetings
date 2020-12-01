@@ -47,7 +47,7 @@ else
                             <RadzenLabel Text="Datum en Tijd" />
                         </div>
                         <div class="col-md-8">
-                            <RadzenDatePicker style="width: 100%;" @bind-Value="SessionDate" ShowTime="true" HourFormat="24" DateFormat="yyyy/MM/dd hh:mm tt" />
+                            <RadzenDatePicker style="width: 100%;" @bind-Value="SessionDate" DateFormat="yyyy/MM/dd" />
                         </div>
                     </div>
                 </RadzenFieldset>
@@ -118,7 +118,7 @@ else
     void Submit(Session arg)
     {
         DbConnection addSession = new DbConnection();
-        addSession.InsertSession(SessionName, SessionAdress, SessionDesc, "Time", SessionDate);
+        addSession.InsertSession(SessionName, SessionAdress, SessionDesc, "Time", SessionDate.Date.ToString());
     }
 
     void Cancel()
