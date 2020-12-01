@@ -42,7 +42,6 @@ else
                             <RadzenTextArea Placeholder="Beschrijving..." style="width: 100%;" @bind-Value="SessionDesc" />
                         </div>
                     </div>
-                    <div class="row">
                         <div class="row">
                             <div class="col-md-4 align-items-center d-flex">
                                 <RadzenLabel Text="Datum" />
@@ -54,11 +53,8 @@ else
                                 <RadzenLabel Text="Tijd" />
                             </div>
                             <div class="col-md-8">
-                                <RadzenDatePicker ShowTime="true" TimeOnly="true" @bind-Value="SessionDate" DateFormat="HH:mm"   />
+                                <RadzenDatePicker ShowTime="true" TimeOnly="true" @bind-Value="SessionTime" DateFormat="HH:mm"   />
                             </div>
-                        </div>
-                        <div class="col-md-8">
-                            <RadzenDatePicker style="width: 100%;" @bind-Value="SessionDate" DateFormat="yyyy-MM-dd" />
                         </div>
                 </RadzenFieldset>
             </div>
@@ -69,7 +65,7 @@ else
                             <RadzenLabel Text="Adres" />
                         </div>
                         <div class="col-md-8">
-                            <RadzenTextBox style="width: 100%;" Name="SessionAdress" />
+                            <RadzenTextBox style="width: 100%;" @bind-Value="SessionAdress" />
                         </div>
                         <div class="align-items-center d-flex" style="margin-top: 16px;">
                             <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="add_location" style="margin-left: 11px; width: 166.046875px;" Text="Locatie"></RadzenButton>
@@ -109,6 +105,7 @@ else
         public string SessionDesc { get; set; }
         public string SessionTime { get; set; }
         public string SessionAdress { get; set; }
+        public DateTime TodayDate { get; set; }
     }
 
     //public class SessionInfo  -- Overbodig
@@ -128,7 +125,7 @@ else
     void Submit(Session arg)
     {
         DbConnection addSession = new DbConnection();
-        addSession.InsertSession(SessionName, SessionAdress, SessionDesc, "Time", SessionDate.Date.ToString("yyyy-MM-d"));
+        addSession.InsertSession(SessionName, SessionAdress, SessionDesc, SessionTime.ToString("HH:mm"), SessionDate.Date.ToString("yyyy-MM-d"));
     }
 
     void Cancel()
@@ -142,5 +139,6 @@ else
     public string SessionDesc { get; set; }
     public DateTime TodayDate { get; set; }
     public string SessionAdress { get; set; }
+    public DateTime SessionTime { get; set; }
 
 }
