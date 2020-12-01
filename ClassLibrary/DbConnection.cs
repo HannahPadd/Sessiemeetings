@@ -77,7 +77,8 @@ namespace ClassLibrary
         //Inserts into the Database
         public void InsertSession(string Naam, string Locatie, string Onderwerp, string Tijd, string Datum)
         {
-            string query = $"INSERT INTO SessionsTable (Naam, Locatie, Onderwerp, Tijd, Datum) VALUES ('{Naam}', '{Locatie}', '{Onderwerp}', '{Tijd}', '{Datum}')";
+            string sessionId = GenerateId();
+            string query = $"INSERT INTO SessionsTable (SessieID, Naam, Locatie, Onderwerp, Tijd, Datum) VALUES ('{sessionId}', '{Naam}', '{Locatie}', '{Onderwerp}', '{Tijd}', '{Datum}')";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             try
             {
@@ -125,6 +126,12 @@ namespace ClassLibrary
         public void Restore()
         {
 
+        }
+
+
+        public string GenerateId()
+        {
+            return Guid.NewGuid().ToString("N");
         }
     }
 }
