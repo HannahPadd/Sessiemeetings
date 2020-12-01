@@ -50,11 +50,11 @@ namespace ClassLibrary
                 switch (ex.Number)
                 {
                     case 0:
-                        Console.WriteLine("Cannot connect to server.  Contact administrator");
+                        System.Diagnostics.Debug.WriteLine("Cannot connect to server.  Contact administrator");
                         break;
                    
                     case 1045:
-                        Console.WriteLine("Invalid username/password, please try again");
+                        System.Diagnostics.Debug.WriteLine("Invalid username/password, please try again");
                         break;
                 }
                 return false;
@@ -77,7 +77,7 @@ namespace ClassLibrary
         //Inserts into the Database
         public void InsertSession(string Naam, string Locatie, string Onderwerp, string Tijd, string Datum)
         {
-            string query = $"INSERT INTO SessionsTable (Naam, Locatie, Onderwerp, Tijd, Datum) VALUES ('{Naam}', '{Locatie}', '{Onderwerp}', 'Time', 'Datum')";
+            string query = $"INSERT INTO SessionsTable (Naam, Locatie, Onderwerp, Tijd, Datum) VALUES ('{Naam}', '{Locatie}', '{Onderwerp}', 'Time', '{Datum}')";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             try
             {
@@ -85,7 +85,7 @@ namespace ClassLibrary
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
             }
         }
         //Updates the Database

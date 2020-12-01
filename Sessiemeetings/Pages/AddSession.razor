@@ -47,7 +47,7 @@ else
                             <RadzenLabel Text="Datum en Tijd" />
                         </div>
                         <div class="col-md-8">
-                            <RadzenDatePicker style="width: 100%;" Name="SessionDate" TValue="DateTime?" ShowTime="true" HourFormat="24" DateFormat="dd/MM/yyyy hh:mm tt" />
+                            <RadzenDatePicker style="width: 100%;" @bind-Value="SessionDate" ShowTime="true" HourFormat="24" DateFormat="yyyy/MM/dd hh:mm tt" />
                         </div>
                     </div>
                 </RadzenFieldset>
@@ -59,7 +59,7 @@ else
                             <RadzenLabel Text="Adres" />
                         </div>
                         <div class="col-md-8">
-                            <RadzenTextBox style="width: 100%;" @bind-value="SessionAdress" />
+                            <RadzenTextBox style="width: 100%;" Name="SessionAdress" />
                         </div>
                         <div class="align-items-center d-flex" style="margin-top: 16px;">
                             <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="add_location" style="margin-left: 11px; width: 166.046875px;" Text="Locatie"></RadzenButton>
@@ -95,7 +95,7 @@ else
     public class Session
     {
         public string SessionName { get; set; }
-        public DateTime SessionDate { get; set; }
+        public string SessionDate { get; set; }
         public string SessionDesc { get; set; }
         public DateTime TodayDate { get; set; }
         public string SessionAdress { get; set; }
@@ -111,14 +111,14 @@ else
     Session session = new Session()
     {
         TodayDate = DateTime.Now,
-        SessionDate = DateTime.Now
+        SessionDate = DateTime.Now.ToString()
     };
 
 
     void Submit(Session arg)
     {
         DbConnection addSession = new DbConnection();
-        addSession.InsertSession(SessionName, SessionAdress, SessionDesc, "Time", SessionDate.ToString());
+        addSession.InsertSession(SessionName, SessionAdress, SessionDesc, "Time", SessionDate);
     }
 
     void Cancel()
