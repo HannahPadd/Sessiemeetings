@@ -1,5 +1,6 @@
-﻿@page "/Sessions"
-
+﻿@page "/session"
+@using ClassLibrary
+  
 
 <h3>Sessie's</h3>
 
@@ -7,6 +8,30 @@
     <RadzenTextBox Placeholder="Zoek sessie" />
 </div>
 <hr />
+
+<RadzenDataList WrapItems="true" AllowPaging="true" Data="@GetList()" TItem="List<string>">
+    <Template Context="sessionsList">
+        <RadzenCard Style="width:300px;">
+            <div class="row">
+                <div class="col-md-6">
+                    <div>Sessie:</div>
+                    <b>@sessionsList[1]</b>
+                    <div>Locatie:</div>
+                    <b>@sessionsList[2]</b>
+                    <div style="margin-top:20px">Oderwerp:</div>
+                    <b>@sessionsList[3]</b>
+                    <div style="margin-top:20px">Tijd:</div>
+                    <b>@sessionsList[4]</b>
+                    <div style="margin-top:20px">Datum:</div>
+                    <b>@sessionsList[5]</b>
+                    }
+                </div>
+            </div>
+
+        </RadzenCard>
+    </Template>
+</RadzenDataList>
+
 
 <div class="row">
     <div class="col-md-6">
@@ -16,4 +41,10 @@
 
 @code {
 
+
+    public List<string>[] GetList()
+    {
+        DbConnection getSessionsList = new DbConnection();
+        return getSessionsList.GetSessionsList();
+    }
 }
