@@ -9,31 +9,25 @@
 </div>
 <hr />
 
-@{ 
-    var list = GetList();
-}
-<RadzenDataList WrapItems="true" AllowPaging="true" Data="@list" TItem="List<string>">
-    <Template Context="sessionsList">
+<RadzenDataList WrapItems="true" AllowPaging="true" Data="@list" TItem="IEnumerable<string>">
+    <Template Context="sessionList">
         <RadzenCard Style="width:300px;">
             <div class="row">
                 <div class="col-md-6">
-                    {@for (int i = 0; i <= (list.Length / 3) - 1; i++)
-                    {
                     <div>Sessie:</div>
-                    <b>@list[1][i]</b>
+                    <b>@list.ElementAt(1).ElementAt(i)</b>
                     <div>Locatie:</div>
-                    <b>@list[2][i]</b>
+                    <b>@list.ElementAt(2).ElementAt(i)</b>
                     <div style="margin-top:20px">Oderwerp:</div>
-                    <b>@list[3][i]</b>
+                    <b>@list.ElementAt(3).ElementAt(i)</b>
                     <div style="margin-top:20px">Tijd:</div>
-                    <b>@list[4][i]</b>
+                    <b>@list.ElementAt(4).ElementAt(i)</b>
                     <div style="margin-top:20px">Datum:</div>
-                    <b>@list[5][i]</b>
-                        }
-                    }
+                    <b>@list.ElementAt(5).ElementAt(i)</b>
+                    </div>
                 </div>
-            </div>
-
+            @{i++;
+                }
         </RadzenCard>
     </Template>
 </RadzenDataList>
@@ -45,12 +39,13 @@
     </div>
 </div>
 
-@code {
+@code {        
 
-
-    public List<string>[] GetList()
+    IEnumerable<string>[] list;
+    int i = 0;
+    protected override void OnInitialized()
     {
         DbConnection getSessionsList = new DbConnection();
-        return getSessionsList.GetSessionsList();
+        list = getSessionsList.GetSessionsList();
     }
 }
