@@ -81,6 +81,7 @@ namespace ClassLibrary
         //Inserts into the Database
         public void InsertSession(string Naam, string Locatie, string Onderwerp, string Tijd, string Datum)
         {
+            connection.Open();
             string sessionId = GenerateId();
             string query = $"INSERT INTO SessionsTable (SessieID, Naam, Locatie, Onderwerp, Tijd, Datum) VALUES ('{sessionId}', '{Naam}', '{Locatie}', '{Onderwerp}', '{Tijd}', '{Datum}')";
             MySqlCommand cmd = new MySqlCommand(query, connection);
@@ -116,14 +117,12 @@ namespace ClassLibrary
             list[4] = new List<string>();
             list[5] = new List<string>();
 
-
             if (this.OpenConnection() == true)
             {
                 MySqlCommand cmd = new MySqlCommand(query, connection);
                 MySqlDataReader dataReader = cmd.ExecuteReader();
 
                 //Puts the sessiontable into a list for display into the application
-                int i = 0;
                 while (dataReader.Read())
                 {
                     list[0].Add(dataReader["SessieId"] + "");

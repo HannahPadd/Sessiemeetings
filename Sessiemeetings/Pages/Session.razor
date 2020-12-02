@@ -9,21 +9,27 @@
 </div>
 <hr />
 
-<RadzenDataList WrapItems="true" AllowPaging="true" Data="@GetList()" TItem="List<string>">
+@{ 
+    var list = GetList();
+}
+<RadzenDataList WrapItems="true" AllowPaging="true" Data="@list" TItem="List<string>">
     <Template Context="sessionsList">
         <RadzenCard Style="width:300px;">
             <div class="row">
                 <div class="col-md-6">
+                    {@for (int i = 0; i <= (list.Length / 3) - 1; i++)
+                    {
                     <div>Sessie:</div>
-                    <b>@sessionsList[1]</b>
+                    <b>@list[1][i]</b>
                     <div>Locatie:</div>
-                    <b>@sessionsList[2]</b>
+                    <b>@list[2][i]</b>
                     <div style="margin-top:20px">Oderwerp:</div>
-                    <b>@sessionsList[3]</b>
+                    <b>@list[3][i]</b>
                     <div style="margin-top:20px">Tijd:</div>
-                    <b>@sessionsList[4]</b>
+                    <b>@list[4][i]</b>
                     <div style="margin-top:20px">Datum:</div>
-                    <b>@sessionsList[5]</b>
+                    <b>@list[5][i]</b>
+                        }
                     }
                 </div>
             </div>
