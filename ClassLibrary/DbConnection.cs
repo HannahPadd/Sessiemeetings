@@ -12,6 +12,7 @@ namespace ClassLibrary
         private string database;
         private string uid;
         private string password;
+        bool isConnectionopen = false;
 
 
         public DbConnection()
@@ -28,12 +29,15 @@ namespace ClassLibrary
             string connectionString;
             connectionString = $"Server=sql.hosted.hr.nl;user id={uid};password={password};database={database}";
             connection = new MySqlConnection(connectionString);
-            OpenConnection();
-
+            if (isConnectionopen)
+            {
+                bool isConnectionOpen = OpenConnection();
+            }
         }
         //Opens the connection to the Database
         private bool OpenConnection()
         {
+
             try
             {
                 connection.Open();
@@ -52,7 +56,7 @@ namespace ClassLibrary
                     case 0:
                         System.Diagnostics.Debug.WriteLine("Cannot connect to server.  Contact administrator");
                         break;
-                   
+
                     case 1045:
                         System.Diagnostics.Debug.WriteLine("Invalid username/password, please try again");
                         break;
@@ -100,19 +104,48 @@ namespace ClassLibrary
 
         }
         //Selects from the Database
-    //  public List <string> [] Select()
-    //  {
-    //      string query = "SELECT * FROM SessionsTable";
-    //      using MySqlCommand cmd = new MySqlCommand(query, connection);
-    //      using MySqlDataReader result = cmd.ExecuteReader();
-    //
-    //      while (result.Read())
-    //      {
-    //
-    //      }
-    //      
-    //  }
-        //Count statement
+         public List <string> [] GetSessionsList()
+         {
+            string query = "SELECT * FROM SessionsTable";
+
+            List<string>[] list = new List<string>[6];
+            list[0] = new List<string>();
+            list[1] = new List<string>();
+            list[2] = new List<string>();
+            list[3] = new List<string>();
+            list[4] = new List<string>();
+            list[5] = new List<string>();
+
+
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                //Puts the sessiontable into a list for display into the application
+                int i = 0;
+                while (dataReader.Read())
+                {
+                    list[0].Add(dataReader["SessieId"] + "");
+                    list[1].Add(dataReader["Naam"] + "");
+                    list[2].Add(dataReader["Locatie"] + "");
+                    list[3].Add(dataReader["Onderwerp"] + "");
+                    list[4].Add(dataReader["Tijd"] + "");
+                    list[5].Add(dataReader["Datum"] + "");
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+
+                return list;
+            }
+            else
+            {
+                return list;
+            }
+             
+         }
+         //Count statement
         public int Count()
         {
             return 0;
