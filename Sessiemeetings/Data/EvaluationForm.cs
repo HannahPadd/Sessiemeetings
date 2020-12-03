@@ -9,6 +9,12 @@ namespace Sessiemeetings.Data
     {
         public string formName { get; set; }
         public List<Field> fields = new List<Field>();
+        public EvaluationForm() { }
+        public EvaluationForm(String formName, List<Field> fields)
+        {
+            this.formName = formName;
+            this.fields = fields;
+        }
 
     }
     public class Field
