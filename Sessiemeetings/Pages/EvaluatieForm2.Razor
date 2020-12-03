@@ -1,69 +1,68 @@
-@page "/EvaluatieForm2"
-@using Radzen
-@using Radzen.Blazor
+@page "/CreateForm"
 @using Sessiemeetings.Data
 
-<h1>Creating Form, @Form.formName</h1>
 
-<input @bind-value="Form.formName" @bind-value:event="oninput" />
-<input @bind-value="fieldNum" @bind-value:event="oninput" />
-<ul>
-    <div class="row">
+<EditForm Model="@Form">
 
-        <div class="col">
-            <li>
-                <RadzenLabel Component="textBox1" style="width: 100%" Text="Field name">
-                </RadzenLabel>
-            </li>
-        </div>
-        <div class="col">
-            <RadzenLabel Component="textBox1" style="width: 100%" Text="Field sort">
-            </RadzenLabel>
-        </div>
-        <div class="col">
-
+    <div class="form-group">
+        <label for="name">Naam</label>
+        <div>
+            <InputText class="form-control" id="name" @bind-Value="@Form.formName" />
         </div>
     </div>
-
-    @for (int i = 1; i <= fieldNum; i++)
-    {
-        <div class="row">
-
-            <div class="col">
-                <li>
-                    <input @bind-value="fieldName" @bind-value:event="oninput" />
-
-                </li>
-            </div>
-            <div class="col">
-            <RadzenDropDown TextProperty="Attributes" Name="Dropdown0" TValue="dynamic" Rate="Attributes[0]" Date="Attributes[1]" Textbox="Attributes[2]">
-            </RadzenDropDown>
-            </div>
-            <div class="col">
-                <RadzenDropDown TextProperty="Attributes" Name="Dropdown0" TValue="dynamic" Rate="Attributes[0]" Date="Attributes[1]" Textbox="Attributes[2]">
-                </RadzenDropDown>
-            </div>
+    <div class="form-group">
+        <div class="form-group">
+            <button type="button" class="btn btn-secondary"
+                    @onclick="@(() => Form.fields.Add(new Field()))">
+                Voeg veld toe
+            </button>
         </div>
+        @for (int i = 0; i < Form.fields.Count; i++)
+        {
+            int index = i;
+            var field = Form.fields[i];
+            <h5>Field @(i+1)</h5>
 
-        AddField();
-    }
-</ul>
+            <div class="row">
 
-@functions{
-    private void AddField()
-    {
-        if (string.IsNullOrEmpty(fieldName))
-            return;
-        Form.fields.Add(fieldName);
-    }
-}
+                <div class="col">
+                    <label>Title:</label>
+                    <input @bind-value="field.title" @bind-value:event="oninput" />
+                </div>
+                <div class="col">
+                    <div><b>Type</b></div>
+                    <RadzenDropDown AllowClear="true" TValue="string"
+                                    Data="@field.types"
+                                    @bind-Value="field.type" />
+
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-danger"
+                            @onclick="@(() => Form.fields.RemoveAt(index))">
+                        Remove
+                    </button>
+                </div>
+            </div>
+
+        }
+    </div>
+
+
+    <button class="btn btn-primary" type="submit">Send</button>
+    <button class="btn btn-secondary" type="button" @onclick="Clear">Clear</button>
+
+</EditForm>
+
 @code {
-    Int32 fieldNum;
-    String fieldName = "";
-    string Rate;
-    string Date;
-    string Textbox;
-    EvaluationForm Form = new EvaluationForm { };
-    private List<String> Attributes = new List<string>() {"textbox", "rate", "date"};
 
+    EvaluationForm Form = new EvaluationForm { };
+
+
+
+
+
+    private void Clear()
+    {
+        Form = new EvaluationForm();
+    }
 }

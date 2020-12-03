@@ -30,10 +30,9 @@
                     <input @bind-value="field.title" @bind-value:event="oninput" />
                 </div>
                 <div class="col">
-                    <div><b>Type</b></div>
                     <RadzenDropDown AllowClear="true" TValue="string"
-                                    Data="@field.types"
-                                    @bind-Value="SelectedSurveyItem.ItemType" />
+                                    Data="@types" Placeholder="Type"
+                                    @bind-Value="field.type" />
 
                 </div>
                 <div class="col">
@@ -56,9 +55,8 @@
 @code {
 
     EvaluationForm Form = new EvaluationForm { };
-    
+    IEnumerable<string> types = new string[] { "Text Box", "Rate", "Date"};
 
-}
 
 
 
