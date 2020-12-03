@@ -36,11 +36,12 @@
                 </li>
             </div>
             <div class="col">
-                <RadzenDropDown TextProperty="Attributes" Name="Dropdown1" TValue="dynamic">
-                </RadzenDropDown>
+            <RadzenDropDown TextProperty="Attributes" Name="Dropdown0" TValue="dynamic" Rate="Attributes[0]" Date="Attributes[1]" Textbox="Attributes[2]">
+            </RadzenDropDown>
             </div>
             <div class="col">
-
+                <RadzenDropDown TextProperty="Attributes" Name="Dropdown0" TValue="dynamic" Rate="Attributes[0]" Date="Attributes[1]" Textbox="Attributes[2]">
+                </RadzenDropDown>
             </div>
         </div>
 
@@ -54,13 +55,15 @@
         if (string.IsNullOrEmpty(fieldName))
             return;
         Form.fields.Add(fieldName);
-        fieldName = "";
     }
 }
 @code {
     Int32 fieldNum;
     String fieldName = "";
+    string Rate;
+    string Date;
+    string Textbox;
     EvaluationForm Form = new EvaluationForm { };
-
+    private List<String> Attributes = new List<string>() {"textbox", "rate", "date"};
 
 }
