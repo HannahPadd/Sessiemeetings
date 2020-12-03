@@ -1,0 +1,53 @@
+﻿@page "/SessiesBord"
+@inject NavigationManager NavigationManager
+@inject DialogService DialogService
+@using ClassLibrary.Models
+
+<h1>Sessies Bord</h1>
+
+<h4>Huidige Sessies</h4>
+
+@if (false)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <RadzenCard Style="width:350px;">
+        <div class="row">
+            <div class="col-md-6">
+                <div>SessieNaam:</div>
+                <b>(SessieNaam)</b>
+                <div style="margin-top:20px">Description:</div>
+                <b>(Description)</b>
+            </div>
+            <div class="col-md-6">
+                <div>Location:</div>
+                <b>(Location)</b>
+                <div style="margin-top:20px">Date:</div>
+                <b>(Date)</b>
+                <div style="margin-top:20px">Starting Time</div>
+                <b>(Starting Time)</b>
+                <RadzenButton style="margin-top:20px" Text="Aanmelden" Click="@loadAanmeldPagina"/>
+            </div>
+        </div>
+
+    </RadzenCard>
+
+}
+@code {
+    int sessieID = 1;
+    private List<string> Sessies;
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    Sessies = await _db.GetSessies();
+    //}
+
+    public void loadAanmeldPagina()
+    {
+        NavigationManager.NavigateTo("/SessieAanmeldPage");
+        //Sessie aantemeldensessie = sessie;
+    }
+}
