@@ -1,7 +1,49 @@
-﻿@page "/AdminHomepage"
+﻿@page "/adminhomepage"
 @layout AdminLayout
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <link rel="stylesheet" href="/css/CSS/style.css">
+    </head>
+    <body>
+        <h1>Beheerders pagina</h1>
 
-<h3>AdminHomepage</h3>
+        <div class="card1"
+            <RadzenCard Style="width:300px; margin-bottom:20px; margin-right:20px; margin-top:50px; height: 200px">
+
+
+                        <h3>Sessie's beheren</h3>
+                        <h4>Hier kunt u de huidige sessie's bekijken en nieuwe sessie's toevoegen</h4>
+
+                    <RadzenLink Path="sessions" Text="Klik hier" Style="color:#547733" />
+</RadzenCard>
+
+        </div>
+
+
+        <div class="card2"
+            <RadzenCard Style="width:300px; margin-bottom:20px; margin-right:20px; margin-top:50px; height: 200px">
+
+
+                <h3>Formulieren beheren</h3>
+                <h4>Hier kunt u de huidige evaluatieformulieren bekijken en nieuwe formuleren toevoegen</h4>
+                <RadzenLink Path="evaluatieform1" Text="Klik hier" Style="color:#547733;" />
+            </RadzenCard>
+        </div>
+        <div class="card3"
+            <RadzenCard Style="width:300px; margin-bottom:20px; margin-right:20px; margin-top:50px; height: 200px">
+
+
+                <h3>Medewerkers beheren</h3>
+                <h4>bla bla bla geen idee wat hier komt</h4>
+                <RadzenLink Path="evaluatieform1" Text="Klik hier" Style="color:#547733" />
+            </RadzenCard>
+        </div>
+
+
+
+    </body>
+</html>
 
 @code {
 
