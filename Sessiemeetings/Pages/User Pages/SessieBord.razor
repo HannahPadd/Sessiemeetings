@@ -1,57 +1,53 @@
 ﻿@page "/SessiesBord"
 @inject NavigationManager NavigationManager
-@using System.Text.Json;
-@using System.Text.Json.Serialization;
+@inject DialogService DialogService
 @using ClassLibrary.Models
-@using ClassLibrary
+
 <h1>Sessies Bord</h1>
 
 <h4>Huidige Sessies</h4>
 
-@if (Sessies == null)
+@if (false)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" PageSize="4" AllowPaging="true" Data="@Sessies" TItem="Session" ColumnWidth="200px">
-        <Columns>
-            <RadzenGridColumn TItem="Session" Property="SessionName" Title="Naam" />
-            <RadzenGridColumn TItem="Session" Property="SessionDesc" Title="Beschrijving" />
-            <RadzenGridColumn TItem="Session" Title="Aanmelden" Context="sessie" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
-                <Template Context="sessie">
-                    <RadzenButton Icon="done" Size="ButtonSize.Small" Click="@(args => loadAanmeldPagina(sessie))">
-                    </RadzenButton>
-                </Template>
-            </RadzenGridColumn>
-            <RadzenGridColumn TItem="Session" Property="SessionAdress" Title="Locatie"/>
-        </Columns>
-    </RadzenGrid>
+
+    <RadzenCard Style="width:350px;">
+        <div class="row">
+            <div class="col-md-6">
+                <div>SessieNaam:</div>
+                <b>(SessieNaam)</b>
+                <div style="margin-top:20px">Description:</div>
+                <b>(Description)</b>
+            </div>
+            <div class="col-md-6">
+                <div>Location:</div>
+                <b>(Location)</b>
+                <div style="margin-top:20px">Date:</div>
+                <b>(Date)</b>
+                <div style="margin-top:20px">Starting Time</div>
+                <b>(Starting Time)</b>
+                <RadzenButton style="margin-top:20px" Text="Aanmelden" Click="@loadAanmeldPagina"/>
+            </div>
+        </div>
+
+    </RadzenCard>
+
 }
 @code {
+    int sessieID = 1;
+    private List<string> Sessies;
 
-    private IEnumerable<string>[] List;
-    private List<Session> Sessies;
-    public string filterString;
-    public string filterOptie;
-    public string sessie;
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    Sessies = await _db.GetSessies();
+    //}
 
-
-    protected override void OnInitialized()
+    public void loadAanmeldPagina()
     {
-        Sessies = new List<Session>();
-        DbConnection getSessionsList = new DbConnection();
-        List = getSessionsList.GetSessionsList();
-        for(int i = 0; i < List[0].Count(); i++)
-        {
-            Sessies.Add(new Session(List[0].ElementAt(i), List[1].ElementAt(i), List[2].ElementAt(i), List[3].ElementAt(i), List[4].ElementAt(i), List[5].ElementAt(i)));
-        }
-
-    }
-
-    public void loadAanmeldPagina(Session Sessie)
-    {
-        sessie = Newtonsoft.Json.JsonConvert.SerializeObject(sessie);
-        NavigationManager.NavigateTo("/SessieAanmeldPage/{sessie}");
+        NavigationManager.NavigateTo("/SessieAanmeldPage");
+        //Sessie aantemeldensessie = sessie;
     }
 }
