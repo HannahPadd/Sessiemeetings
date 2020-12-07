@@ -13,7 +13,7 @@ namespace ClassLibrary.Models {
         public string SessionAdress { get; set; }
     
 
-        public Session(string Id, string name, string description, string location, string date, string todayDate) {
+        public Session(string Id, string name, string location, string description, string date, string todayDate) {
             this.SessionId = Id;
             this.SessionName = name;
             this.SessionDesc = description;
