@@ -18,3 +18,8 @@ h3 {
 .clearfix{
     clear:both;
 }
+.stick-to-right {
+    width: 250px;
+    float: right;
+    margin-right: 100px;
+}
