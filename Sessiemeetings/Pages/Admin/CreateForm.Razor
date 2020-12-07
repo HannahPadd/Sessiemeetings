@@ -1,5 +1,6 @@
 @page "/CreateForm"
 @using Sessiemeetings.Data
+@layout AdminLayout
 
 
 <EditForm Model="@Form">
@@ -55,7 +56,7 @@
 @code {
 
     EvaluationForm Form = new EvaluationForm { };
-    IEnumerable<string> types = new string[] { "Text Box", "Rate", "Date"};
+    IEnumerable<string> types = new string[] { "Text Box", "Rate", "Date" };
     public IList<EvaluationForm> forms = new List<EvaluationForm>();
 
     private void Send()
