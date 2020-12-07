@@ -1,6 +1,8 @@
-﻿@page "/sessieaanmeldpage"
+﻿@page "/SessieAanmeldPage/{sessie}"
 @inject NavigationManager NavigationManager
-@inject DialogService DialogService
+@using System.Text.Json;
+@using System.Text.Json.Serialization;
+@using ClassLibrary.Models
 
 <h1>Shrijf je in</h1>
 
@@ -11,17 +13,17 @@
             <div class="row">
                 <div class="col-md-6">
                     <div>SessieNaam:</div>
-                    <b>(SessieNaam)</b>
+                    <b>Sessie.SessionName</b>
                     <div style="margin-top:20px">Description:</div>
-                    <b>(Description)</b>
+                    <b>Sessie.SessionDesc</b>
                 </div>
                 <div class="col-md-6">
                     <div>Location:</div>
-                    <b>(Location)</b>
+                    <b>Session.SessionAdress</b>
                     <div style="margin-top:20px">Date:</div>
-                    <b>(Date)</b>
+                    <b>Session.SessionDate</b>
                     <div style="margin-top:20px">Starting Time</div>
-                    <b>(Starting Time)</b>
+                    <b>Session.TodayDate</b>
                 </div>
             </div>
 
@@ -34,13 +36,26 @@
 
 
 @code {
+
+    [Parameter] public string sessie { get; set; }
+    public Session Sessie;
+
+    public string opmerking;
+
+    protected override void OnInitialized()
+    {
+        Sessie = Newtonsoft.Json.JsonConvert.DeserializeObject<Session>(sessie);
+    }
+
+
+
     void OnInput(string value)
     {
-        string opmerking = value;
+        opmerking = value;
     }
     void submitAanmelding()
     {
-        //aantemeldenSessie.Deelnemers add deelnemer
+        SessieAanmelding nieuweAanmelding = new SessieAanmelding(Sessie.SessionName, "User.userid", opmerking);
         NavigationManager.NavigateTo("/SessiesBord");
     }
 }
