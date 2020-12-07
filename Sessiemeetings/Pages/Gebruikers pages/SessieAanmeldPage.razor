@@ -38,13 +38,13 @@
 @code {
 
     [Parameter] public string sessie { get; set; }
-    public Session Sessie;
+    public SessionModel Sessie;
 
     public string opmerking;
 
     protected override void OnInitialized()
     {
-        Sessie = Newtonsoft.Json.JsonConvert.DeserializeObject<Session>(sessie);
+        Sessie = Newtonsoft.Json.JsonConvert.DeserializeObject<SessionModel>(sessie);
     }
 
 

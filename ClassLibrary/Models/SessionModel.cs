@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace ClassLibrary.Models {
-    public class Session
+    public class SessionModel
     {
         public string SessionId { get; set; }
         public string SessionName { get; set; }
@@ -13,7 +13,7 @@ namespace ClassLibrary.Models {
         public string SessionAdress { get; set; }
     
 
-        public Session(string Id, string name, string location, string description, string date, string todayDate) {
+        public SessionModel(string Id, string name, string location, string description, string date, string todayDate) {
             this.SessionId = Id;
             this.SessionName = name;
             this.SessionDesc = description;
