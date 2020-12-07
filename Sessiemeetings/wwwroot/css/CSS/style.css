@@ -1,0 +1,25 @@
+﻿
+h3 {
+    color: #547733;
+}
+
+.card1{
+    margin-right2%;
+    float: left;
+}
+
+.card2{
+    float: left;
+}
+
+.card3{
+    float: left;
+}
+.clearfix{
+    clear:both;
+}
+.stick-to-right {
+    width: 250px;
+    float: right;
+    margin-right: 100px;
+}

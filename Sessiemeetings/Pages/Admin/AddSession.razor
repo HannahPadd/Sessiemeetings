@@ -1,8 +1,8 @@
-﻿@page "/AddSession"
+﻿@page "/addsession"
+@layout AdminLayout
 @using ClassLibrary.Models
 @using ClassLibrary
 @inject NavigationManager NavigationManager
-
 
 <h3>Een nieuwe sessie toevoegen</h3>
 <ul>
@@ -108,13 +108,6 @@ else
         public string SessionAdress { get; set; }
         public DateTime TodayDate { get; set; }
     }
-
-    //public class SessionInfo  -- Overbodig
-    //{
-    //    public string SessionName { get; set; }
-    //    public string SessionDesc { get; set; }
-    //}
-
 
     Session session = new Session()
     {
