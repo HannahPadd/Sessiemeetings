@@ -9,17 +9,17 @@ namespace ClassLibrary.Models {
         public string SessionName { get; set; }
         public string SessionDate { get; set; }
         public string SessionDesc { get; set; }
-        public string TodayDate { get; set; }
+        public string StartingTime { get; set; }
         public string SessionAdress { get; set; }
     
 
-        public SessionModel(string Id, string name, string location, string description, string date, string todayDate) {
+        public SessionModel(string Id, string name, string location, string description, string date, string startingTime) {
             this.SessionId = Id;
             this.SessionName = name;
             this.SessionDesc = description;
             this.SessionAdress = location;
             this.SessionDate = date;
-            this.TodayDate = todayDate;
+            this.StartingTime = startingTime;
         }
     }
 }

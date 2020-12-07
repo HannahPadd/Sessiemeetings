@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\Gebruikers pages\**" />
+    <Content Remove="Pages\Gebruikers pages\**" />
+    <EmbeddedResource Remove="Pages\Gebruikers pages\**" />
+    <None Remove="Pages\Gebruikers pages\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Migrations\20201117142641_identity.cs" />
     <Compile Remove="Migrations\20201117142641_identity.Designer.cs" />
   </ItemGroup>
@@ -35,10 +42,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj" />
     <PackageReference Include="Radzen.Blazor" Version="2.17.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\Gebruikers pages\" />
   </ItemGroup>
 
 </Project>
