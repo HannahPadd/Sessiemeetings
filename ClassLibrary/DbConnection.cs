@@ -94,6 +94,25 @@ namespace ClassLibrary
                 System.Diagnostics.Debug.WriteLine(ex.ToString());
             }
         }
+
+        public void InsertForm(string formName, string fields)
+        {
+            connection.Open();
+            string formId = GenerateId();
+            string query = $"INSERT INTO FormsTable (formId, Naam, fields) VALUES ('{formId}', '{formName}', '{fields}')";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+            }
+        }
+
+
+
         //Updates the Database
         public void Update()
         {
