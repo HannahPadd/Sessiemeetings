@@ -1,0 +1,44 @@
+@page "/FormsBoard"
+@inject NavigationManager NavigationManager
+@using System.Text.Json;
+@using System.Text.Json.Serialization;
+@using ClassLibrary.Models
+@using ClassLibrary
+@using Sessiemeetings.Data
+<h1>Forms Bord</h1>
+
+<h4>Huidige Forms</h4>
+
+@if (forms == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" PageSize="4" AllowPaging="true" Data="@forms" TItem="EvaluationForm" ColumnWidth="200px">
+        <Columns>
+            <RadzenGridColumn TItem="EvaluationForm" Property="forms.formName" Title="Naam" />
+        </Columns>
+    </RadzenGrid>
+}
+@code {
+
+    private IEnumerable<string>[] List;
+    private List<EvaluationForm> forms;
+    public string form;
+
+
+    protected override void OnInitialized()
+    {
+        forms = new List<EvaluationForm>();
+        DbConnection getFormsList = new DbConnection();
+        List = getFormsList.GetFormsList();
+        for (int i = 0; i < List[0].Count(); i++)
+        {
+            List<Field> jsonDe = JsonSerializer.Deserialize<List<Field>>(List[2].ElementAt(i));
+            forms.Add(new EvaluationForm(List[0].ElementAt(i), List[1].ElementAt(i), jsonDe));
+        }
+
+    }
+
+}

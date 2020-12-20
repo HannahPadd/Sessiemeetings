@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\Admin\Forms bord.Razor" />
     <Content Remove="Pages\EvaluatieForm2.Razor" />
   </ItemGroup>
 

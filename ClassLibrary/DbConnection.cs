@@ -97,11 +97,11 @@ namespace ClassLibrary
             }
         }
 
-        public void InsertForm(string Name)
+        public void InsertForm(string Name, string Fields)
         {
             connection.Open();
             string formID = GenerateId();
-            string query = $"INSERT INTO FormsTable (FormID, Name) VALUES ('{formID}', '{Name}')";
+            string query = $"INSERT INTO FormsTable (FormID, Name, Fields) VALUES ('{formID}', '{Name}', '{Fields}')";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             try
             {
@@ -167,31 +167,38 @@ namespace ClassLibrary
          }
 
 
-        public List<string>[] GetFormsData()
+        public List<string>[] GetFormsList()
         {
             string query = "SELECT * FROM FormsTable";
 
-            List<String>[] forms = new List<string>[1];
-            forms[0] = new List<string>();
+            List<string>[] list = new List<string>[3];
+            list[0] = new List<string>();
+            list[1] = new List<string>();
+            list[2] = new List<string>();
 
             if (this.OpenConnection() == true)
             {
                 MySqlCommand cmd = new MySqlCommand(query, connection);
                 MySqlDataReader dataReader = cmd.ExecuteReader();
 
+                //Puts the sessiontable into a list for display into the application
                 while (dataReader.Read())
                 {
-                    forms[0].Add((string)dataReader["Naam" + ""]);
-                    forms[1].Add((string)dataReader["fields" + ""]);
+                    list[0].Add(dataReader["FormID"] + "");
+                    list[1].Add(dataReader["Name"] + "");
+                    list[2].Add(dataReader["Fields"] + "");
                 }
                 dataReader.Close();
+
                 this.CloseConnection();
-                return forms;
+
+                return list;
             }
             else
             {
-                return forms;
+                return list;
             }
+
         }
 
 

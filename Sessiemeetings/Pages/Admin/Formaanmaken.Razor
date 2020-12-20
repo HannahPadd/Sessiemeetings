@@ -2,8 +2,7 @@
 @using Sessiemeetings.Data
 @using ClassLibrary.Models
 @using ClassLibrary
-@using System.Text.Json
-@using System.Text.Json.Serialization;
+@using System.Text.Json;
 @layout AdminLayout
 
 
@@ -64,10 +63,10 @@
     public IList<EvaluationForm> forms = new List<EvaluationForm>();
     private void Send()
     {
-        //string Name = JsonConvert.SerializeObject(Form.formName);
-        string Name = JsonSerializer.Serialize(Form);
+        var jsonFields = JsonSerializer.Serialize(Form.fields);
+        Console.WriteLine(jsonFields);
         DbConnection addForm = new DbConnection();
-        addForm.InsertForm(Name);
+        addForm.InsertForm(Form.formName, jsonFields);
         Clear();
     }
 
