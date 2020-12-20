@@ -1,0 +1,38 @@
+@page "/Forms"
+@using Radzen
+@using Radzen.Blazor
+@using ClassLibrary.Models
+@using ClassLibrary
+@using Sessiemeetings.Data
+
+@if (forms == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" PageSize="10" Columns="10" AllowPaging="true" Data="@forms" TItem="string" ColumnWidth="200px">
+        <Columns>
+            <RadzenGridColumn TItem="string" Property="SessionName" Title="Naam" />
+        </Columns>
+    </RadzenGrid>
+}
+
+@code {
+
+    private IEnumerable<string>[] formsData;
+    private List<string> forms;
+
+    protected override void OnInitialized()
+    {
+        forms = new List<string>();
+        DbConnection getFormsData = new DbConnection();
+        formsData = getFormsData.GetFormsData();
+        for (int i = 0; i < formsData[0].Count(); i++)
+        {
+            forms.Add(formsData[0].ElementAt(i));
+        }
+
+    }
+
+}

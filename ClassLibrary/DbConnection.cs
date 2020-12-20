@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using MySql.Data.MySqlClient;
+using System.Text.Json;
+
 
 namespace ClassLibrary
 {
@@ -95,11 +97,11 @@ namespace ClassLibrary
             }
         }
 
-        public void InsertForm(string formName, string fields)
+        public void InsertForm(string Name)
         {
             connection.Open();
-            string formId = GenerateId();
-            string query = $"INSERT INTO FormsTable (formId, Naam, fields) VALUES ('{formId}', '{formName}', '{fields}')";
+            string formID = GenerateId();
+            string query = $"INSERT INTO FormsTable (FormID, Name) VALUES ('{formID}', '{Name}')";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             try
             {
@@ -163,7 +165,38 @@ namespace ClassLibrary
             }
              
          }
-         //Count statement
+
+
+        public List<string>[] GetFormsData()
+        {
+            string query = "SELECT * FROM FormsTable";
+
+            List<String>[] forms = new List<string>[1];
+            forms[0] = new List<string>();
+
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    forms[0].Add((string)dataReader["Naam" + ""]);
+                    forms[1].Add((string)dataReader["fields" + ""]);
+                }
+                dataReader.Close();
+                this.CloseConnection();
+                return forms;
+            }
+            else
+            {
+                return forms;
+            }
+        }
+
+
+
+        //Count statement
         public int Count()
         {
             return 0;

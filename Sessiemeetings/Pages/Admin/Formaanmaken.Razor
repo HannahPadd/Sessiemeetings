@@ -2,6 +2,8 @@
 @using Sessiemeetings.Data
 @using ClassLibrary.Models
 @using ClassLibrary
+@using System.Text.Json
+@using System.Text.Json.Serialization;
 @layout AdminLayout
 
 
@@ -58,21 +60,17 @@
 @code {
 
     EvaluationForm Form = new EvaluationForm { };
-    string fieldsString;
     IEnumerable<string> types = new string[] { "Text Box", "Text Area", "Rate", "Date" };
     public IList<EvaluationForm> forms = new List<EvaluationForm>();
-
     private void Send()
     {
-        foreach (var field in Form.fields)
-        {
-            fieldsString = fieldsString + "|" + field.title.ToString() + "/" + field.type.ToString();
-        }
-
+        //string Name = JsonConvert.SerializeObject(Form.formName);
+        string Name = JsonSerializer.Serialize(Form);
         DbConnection addForm = new DbConnection();
-        addForm.InsertForm(Form.formName, fieldsString);
+        addForm.InsertForm(Name);
         Clear();
     }
+
 
 
 
