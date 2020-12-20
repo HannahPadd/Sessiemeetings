@@ -15,7 +15,7 @@
 }
 else
 {
-    <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" PageSize="4" AllowPaging="true" Data="@forms" TItem="EvaluationForm" ColumnWidth="200px">
+    <RadzenGrid PageSize="10" AllowPaging="true" Data="@forms" TItem="EvaluationForm" ColumnWidth="200px">
         <Columns>
             <RadzenGridColumn TItem="EvaluationForm" Property="forms.formName" Title="Naam" />
         </Columns>
