@@ -63,10 +63,10 @@
     public IList<EvaluationForm> forms = new List<EvaluationForm>();
     private void Send()
     {
-        //var jsonFields = JsonSerializer.Serialize(Form.fields);
-        string jsonForms = Newtonsoft.Json.JsonConvert.SerializeObject(Form);
+        var jsonFields = JsonSerializer.Serialize(Form.fields);
+        Console.WriteLine(jsonFields);
         DbConnection addForm = new DbConnection();
-        addForm.InsertForm(jsonForms);
+        addForm.InsertForm(Form.formName, jsonFields);
         Clear();
     }
 

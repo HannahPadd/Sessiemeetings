@@ -97,11 +97,11 @@ namespace ClassLibrary
             }
         }
 
-        public void InsertForm(string Form)
+        public void InsertForm(string Name, string Fields)
         {
             connection.Open();
             string formID = GenerateId();
-            string query = $"INSERT INTO FormsTable (FormID, Form) VALUES ('{formID}', '{Form}')";
+            string query = $"INSERT INTO FormsTable (FormID, Name, Fields) VALUES ('{formID}', '{Name}', '{Fields}')";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             try
             {
@@ -171,9 +171,10 @@ namespace ClassLibrary
         {
             string query = "SELECT * FROM FormsTable";
 
-            List<string>[] list = new List<string>[2];
+            List<string>[] list = new List<string>[3];
             list[0] = new List<string>();
             list[1] = new List<string>();
+            list[2] = new List<string>();
 
             if (this.OpenConnection() == true)
             {
@@ -184,7 +185,8 @@ namespace ClassLibrary
                 while (dataReader.Read())
                 {
                     list[0].Add(dataReader["FormID"] + "");
-                    list[1].Add(dataReader["Form"] + "");
+                    list[1].Add(dataReader["Name"] + "");
+                    list[2].Add(dataReader["Fields"] + "");
                 }
                 dataReader.Close();
 
