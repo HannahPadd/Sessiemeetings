@@ -2,6 +2,7 @@
 @inject NavigationManager NavigationManager
 @using System.Text.Json;
 @using System.Text.Json.Serialization;
+@using Newtonsoft.Json
 @using ClassLibrary.Models
 @using ClassLibrary
 @using Sessiemeetings.Data
@@ -15,7 +16,7 @@
 }
 else
 {
-    <RadzenGrid PageSize="10" AllowPaging="true" Data="@forms" TItem="EvaluationForm" ColumnWidth="200px">
+    <RadzenGrid PageSize="12" AllowPaging="true" Data="@forms" TItem="EvaluationForm" ColumnWidth="200px">
         <Columns>
             <RadzenGridColumn TItem="EvaluationForm" Property="forms.formName" Title="Naam" />
         </Columns>
@@ -35,8 +36,8 @@ else
         List = getFormsList.GetFormsList();
         for (int i = 0; i < List[0].Count(); i++)
         {
-            List<Field> jsonDe = JsonSerializer.Deserialize<List<Field>>(List[2].ElementAt(i));
-            forms.Add(new EvaluationForm(List[0].ElementAt(i), List[1].ElementAt(i), jsonDe));
+            EvaluationForm jsonDe = JsonConvert.DeserializeObject<EvaluationForm>(List[1].ElementAt(i));
+            forms.Add(new EvaluationForm(jsonDe.formName, jsonDe.fields));
         }
 
     }

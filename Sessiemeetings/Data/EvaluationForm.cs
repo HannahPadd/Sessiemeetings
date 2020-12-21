@@ -7,13 +7,11 @@ namespace Sessiemeetings.Data
 {
     public class EvaluationForm
     {
-        public string FormID { get; set; }
         public string formName { get; set; }
         public List<Field> fields = new List<Field>();
         public EvaluationForm() { }
-        public EvaluationForm(string Id, String formName, List<Field> fields)
+        public EvaluationForm( String formName, List<Field> fields)
         {
-            this.FormID = Id;
             this.formName = formName;
             this.fields = fields;
         }
