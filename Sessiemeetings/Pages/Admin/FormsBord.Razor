@@ -7,7 +7,6 @@
 @using Sessiemeetings.Data
 <h1>Forms Bord</h1>
 
-<h4>Huidige Forms</h4>
 
 @if (forms == null)
 {
@@ -18,6 +17,12 @@ else
     <RadzenGrid PageSize="10" AllowPaging="true" Data="@forms" TItem="EvaluationForm" ColumnWidth="200px">
         <Columns>
             <RadzenGridColumn TItem="EvaluationForm" Property="forms.formName" Title="Naam" />
+            <RadzenGridColumn TItem="EvaluationForm" Title="Weergeven" Context="form" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Left" Width="100px">
+                <Template Context="forms">
+                    <RadzenButton Icon="done" ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" Click="@(args => loadFormPagina(forms.formName))">
+                    </RadzenButton>
+                </Template>
+            </RadzenGridColumn>
         </Columns>
     </RadzenGrid>
 }
@@ -25,7 +30,6 @@ else
 
     private IEnumerable<string>[] List;
     private List<EvaluationForm> forms;
-    public string form;
 
 
     protected override void OnInitialized()
@@ -39,6 +43,11 @@ else
             forms.Add(new EvaluationForm(List[0].ElementAt(i), List[1].ElementAt(i), jsonDe));
         }
 
+    }
+
+    public void loadFormPagina(string formName)
+    {
+        NavigationManager.NavigateTo("/Form/" + formName);
     }
 
 }

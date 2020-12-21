@@ -1,0 +1,77 @@
+@page "/Form/{text}"
+@using Radzen
+@using Radzen.Blazor
+@using Sessiemeetings.Data
+@using ClassLibrary
+@using System.Text.Json;
+
+
+
+
+<h1>Form Name : @Text</h1>
+
+
+@foreach (Field field in form.fields)
+{
+    <div class="row">
+        <div class="col-md-3">
+            <RadzenLabel Component="textBox1" style="width: 100%" Text="@field.title">
+            </RadzenLabel>
+        </div>
+        @if (field.type == "Text Box")
+        {
+            <div class="col-md-9">
+                <RadzenTextBox Name="Textbox0">
+                </RadzenTextBox>
+            </div>
+        }
+        @if (field.type == "Text Area")
+        {
+            <div class="col-md-9">
+                <RadzenTextArea Cols="30" Rows="3" Name="Textarea0">
+                </RadzenTextArea>
+            </div>
+        }
+        @if (field.type == "Rate")
+        {
+            <div class="col-md-9">
+                <RadzenRating Name="Rating0">
+                </RadzenRating>
+            </div>
+        }
+        @if (field.type == "Date")
+        {
+            <div class="col-md-9">
+                <RadzenDatePicker Name="Datepicker0" TValue="dynamic">
+                </RadzenDatePicker>
+            </div>
+        }
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public string Text { get; set; }
+    private IEnumerable<string>[] List;
+    private List<EvaluationForm> forms;
+    private EvaluationForm form;
+
+
+    protected override void OnInitialized()
+    {
+        forms = new List<EvaluationForm>();
+        DbConnection getFormsList = new DbConnection();
+        List = getFormsList.GetFormsList();
+        for (int i = 0; i < List[0].Count(); i++)
+        {
+            List<Field> jsonDe = JsonSerializer.Deserialize<List<Field>>(List[2].ElementAt(i));
+            forms.Add(new EvaluationForm(List[0].ElementAt(i), List[1].ElementAt(i), jsonDe));
+        }
+        form = forms.Find(form => form.formName == Text);
+
+    }
+
+
+
+}
