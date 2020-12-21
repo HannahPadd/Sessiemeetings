@@ -15,39 +15,43 @@
 {
     <div class="row">
         <div class="col-md-3">
-            <RadzenLabel Component="textBox1" style="width: 100%" Text="@field.title">
-            </RadzenLabel>
+            <RadzenLabel Component="textBox1" style="width: 100%" Text="@field.title"> </RadzenLabel>
         </div>
         @if (field.type == "Text Box")
         {
             <div class="col-md-9">
-                <RadzenTextBox Name="Textbox0">
-                </RadzenTextBox>
+                <RadzenTextBox Name="Textbox0"> </RadzenTextBox>
             </div>
         }
         @if (field.type == "Text Area")
         {
             <div class="col-md-9">
-                <RadzenTextArea Cols="30" Rows="3" Name="Textarea0">
-                </RadzenTextArea>
+                <RadzenTextArea Cols="30" Rows="3" Name="Textarea0"> </RadzenTextArea>
             </div>
         }
         @if (field.type == "Rate")
         {
             <div class="col-md-9">
-                <RadzenRating Name="Rating0">
-                </RadzenRating>
+                <RadzenRating Name="Rating0"> </RadzenRating>
             </div>
         }
         @if (field.type == "Date")
         {
             <div class="col-md-9">
-                <RadzenDatePicker Name="Datepicker0" TValue="dynamic">
-                </RadzenDatePicker>
+                <RadzenDatePicker Name="Datepicker0" TValue="DateTime"> </RadzenDatePicker>
             </div>
         }
     </div>
+
 }
+<div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
+        <h4></h4>
+        <RadzenButton Click=@(args => Submit()) Text="indienen" ButtonStyle="ButtonStyle.Secondary" Style="margin-bottom: 20px; width: 150px" />
+    </div>
+</div>
+
 
 
 @code {
@@ -72,6 +76,9 @@
 
     }
 
-
+    public void Submit()
+    {
+        
+    }
 
 }
