@@ -2,7 +2,7 @@
 
 <div class="top-row pl-4 navbar navbar-dark">
     <RadzenImage Path="https://i.postimg.cc/5tp8Zr6n/cimlogo.png" Style="width:30px" />
-    <a class="navbar-brand" href="">Menu</a>
+    <a class="navbar-brand" href="">Sessiemeetings</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -11,8 +11,14 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="sessions">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Sessies
+            <NavLink class="nav-link" href="SessiesBord">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Sessie bord
+            </NavLink>
+            <NavLink class="nav-link" href="evaluatieform1">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Formulier 1
+            </NavLink>
+            <NavLink class="nav-link" href="adminhomepage">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Beheerder's menu
             </NavLink>
         </li>
     </ul>
@@ -20,6 +26,8 @@
 
 @code {
     private bool collapseNavMenu = true;
+
+    private bool evaluatieForm;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 

@@ -1,6 +1,7 @@
 ﻿@page "/sessieaanmeldpage"
 @inject NavigationManager NavigationManager
 @inject DialogService DialogService
+@using ClassLibrary.Models 
 
 <h1>Shrijf je in</h1>
 
@@ -34,6 +35,19 @@
 
 
 @code {
+
+    [Parameter] public string sessie { get; set; }
+    public SessionModel Sessie;
+
+    public string opmerking;
+
+    protected override void OnInitialized()
+    {
+        Sessie = Newtonsoft.Json.JsonConvert.DeserializeObject<SessionModel>(sessie);
+    }
+
+
+
     void OnInput(string value)
     {
         string opmerking = value;
