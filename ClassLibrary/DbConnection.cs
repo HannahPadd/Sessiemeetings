@@ -166,5 +166,44 @@ namespace ClassLibrary
         {
             return Guid.NewGuid().ToString("N");
         }
+
+
+
+
+        //Select users from the Database and returns them
+        public List<string>[] GetUsersList()
+        {
+            string query = "SELECT * from AspNetUsers";
+
+            List<string>[] list = new List<string>[6];
+            list[0] = new List<string>();
+            list[1] = new List<string>();
+            list[2] = new List<string>();
+
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                //Puts the sessiontable into a list for display into the application
+                int i = 0;
+                while (dataReader.Read())
+                {
+                    list[0].Add(dataReader["Id"] + "");
+                    list[1].Add(dataReader["UserName"] + "");
+                    list[2].Add(dataReader["Email"] + "");
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+
+                return list;
+            }
+            else
+            {
+                return list;
+            }
+
+        }
     }
 }
