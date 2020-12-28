@@ -1,0 +1,37 @@
+﻿@page "/UsersList"
+@using ClassLibrary
+@using ClassLibrary.Models
+<h3>UsersList</h3>
+
+
+@if (Users == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" PageSize="4" AllowPaging="true" Data="@Users" TItem="UserModel" ColumnWidth="200px">
+        <Columns>
+            <RadzenGridColumn TItem="UserModel" Property="Id" Title="Id van gebruiker" />
+            <RadzenGridColumn TItem="UserModel" Property="UserName" Title="Naam gebruiker" />
+           
+            <RadzenGridColumn TItem="UserModel" Property="Email" Title="e-mail van gebruiker" />
+        </Columns>
+    </RadzenGrid>
+}
+
+@code {
+    private List<UserModel> Users;
+    private IEnumerable<string>[] List;
+    int i = 0;
+    protected override void OnInitialized()
+    {
+        Users = new List<UserModel>();
+        DbConnection getUsersList = new DbConnection();
+        List = getUsersList.GetUsersList();
+        for (int i = 0; i < List[0].Count(); i++)
+        {
+            Users.Add(new UserModel(List[0].ElementAt(i), List[1].ElementAt(i), List[2].ElementAt(i)));
+        }
+    }
+}
