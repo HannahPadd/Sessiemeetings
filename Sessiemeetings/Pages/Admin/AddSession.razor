@@ -57,6 +57,14 @@ else
                             <RadzenDatePicker ShowTime="true" TimeOnly="true" @bind-Value="SessionTime" DateFormat="HH:mm" />
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-4 align-items-center d-flex">
+                            <RadzenLabel Text="Maximaal aantal deelnemers" />
+                        </div>
+                        <div class="col-md-8">
+                            <RadzenNumeric TValue="int" style="width: 100%;" @bind-value="MaxDeelnemers" />
+                        </div>
+                    </div>
                 </RadzenFieldset>
             </div>
             <div class="col-md-6">
@@ -106,6 +114,7 @@ else
         public string SessionDesc { get; set; }
         public string SessionTime { get; set; }
         public string SessionAdress { get; set; }
+        public string MaxDeelnemers { get; set; }
         public DateTime TodayDate { get; set; }
     }
 
@@ -119,7 +128,7 @@ else
     void Submit(Session arg)
     {
         DbConnection addSession = new DbConnection();
-        addSession.InsertSession(SessionName, SessionAdress, SessionDesc, SessionTime.ToString("HH:mm"), SessionDate.Date.ToString("yyyy-MM-d"));
+        addSession.InsertSession(SessionName, SessionAdress, SessionDesc, SessionTime.ToString("HH:mm"), SessionDate.Date.ToString("yyyy-MM-d"), MaxDeelnemers);
     }
 
     void Cancel()
@@ -133,6 +142,7 @@ else
     public string SessionDesc { get; set; }
     public DateTime TodayDate { get; set; }
     public string SessionAdress { get; set; }
+    public int MaxDeelnemers { get; set; }
     public DateTime SessionTime { get; set; }
 
     public void loadSessions()
