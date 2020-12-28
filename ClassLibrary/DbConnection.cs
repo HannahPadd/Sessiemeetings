@@ -184,8 +184,6 @@ namespace ClassLibrary
                 MySqlCommand cmd = new MySqlCommand(query, connection);
                 MySqlDataReader dataReader = cmd.ExecuteReader();
 
-                //Puts the sessiontable into a list for display into the application
-                int i = 0;
                 while (dataReader.Read())
                 {
                     list[0].Add(dataReader["Id"] + "");
