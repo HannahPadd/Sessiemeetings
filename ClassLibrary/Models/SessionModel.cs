@@ -10,16 +10,20 @@ namespace ClassLibrary.Models {
         public string SessionDate { get; set; }
         public string SessionDesc { get; set; }
         public string StartingTime { get; set; }
-        public string SessionAdress { get; set; }
+        public string SessionAddress { get; set; }
+        public string MaxAttendees { get; set; }
+        public string AvailableSpots { get; set; }
     
 
-        public SessionModel(string Id, string name, string location, string description, string date, string startingTime) {
+        public SessionModel(string Id, string name, string location, string description, string date, string startingTime, string maxattendees, string availablespots) {
             this.SessionId = Id;
             this.SessionName = name;
             this.SessionDesc = description;
-            this.SessionAdress = location;
+            this.SessionAddress = location;
             this.SessionDate = date;
             this.StartingTime = startingTime;
+            this.MaxAttendees = maxattendees;
+            this.AvailableSpots = availablespots;
         }
     }
 }
