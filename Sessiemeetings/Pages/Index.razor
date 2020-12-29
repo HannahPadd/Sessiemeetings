@@ -1,7 +1,18 @@
-﻿
+﻿@page "/Index"
+@using ClassLibrary.Service
+@inject ToastService toastService
 
-<h1>Hello, world!</h1>
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+</head>
 
-Welcome to your new app.
+    <h1>Hello, world!</h1>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    Welcome to your new app.
+
+    <SurveyPrompt Title="How is Blazor working for you?" />
+
+    <button class="btn btn-info" @onclick="@(() => toastService.ShowToast("I'm an INFO message", ToastLevel.Info))">Info Toast</button>
+    <button class="btn btn-success" @onclick="@(() => toastService.ShowToast("I'm a SUCCESS message", ToastLevel.Success))">Success Toast</button>
+    <button class="btn btn-warning" @onclick="@(() => toastService.ShowToast("I'm a WARNING message", ToastLevel.Warning))">Warning Toast</button>
+    <button class="btn btn-danger" @onclick="@(() => toastService.ShowToast("I'm an ERROR message", ToastLevel.Error))">Error Toast</button>

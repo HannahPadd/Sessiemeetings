@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Sessiemeetings.Areas.Identity;
 using Sessiemeetings.Data;
+using ClassLibrary.Service;
 
 namespace Sessiemeetings
 {
@@ -40,6 +41,7 @@ namespace Sessiemeetings
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+            services.AddScoped<ToastService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
