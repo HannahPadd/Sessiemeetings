@@ -1,11 +1,13 @@
 ﻿@page "/scheduler"
 @inject DialogService DialogService
-@using Radzen
 @using ClassLibrary.Models
+@using Radzen.Blazor
+@using Radzen
 
 
 
-<RadzenExample Name="Scheduler" AdditionalSourceCodePages=@(new List<string>() { "AddAppointmentPage.razor", "EditAppointmentPage.razor" })>
+
+<RadzenTemplateForm TItem="Appointment" Name="Scheduler" AdditionalSourceCodePages=@(new List<string>() { "AddAppointmentPage.razor", "EditAppointmentPage.razor" })>
     <div class="row">
         <div class="col-xl-6">
             <RadzenScheduler @ref=@scheduler style="height: 768px;" TItem="Appointment" Data=@appointments StartProperty="Start" EndProperty="End"
@@ -20,7 +22,7 @@
             
         </div>
     </div>
-</RadzenExample>
+</RadzenTemplateForm>
 
     @code {
         RadzenScheduler<Appointment> scheduler;
@@ -28,15 +30,15 @@
         Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
 
         IList<Appointment> appointments = new List<Appointment>
-        {
-        new Appointment { Start = DateTime.Today.AddDays(-2), End = DateTime.Today.AddDays(-2), Text = "Birthday" },
-        new Appointment { Start = DateTime.Today.AddDays(-11), End = DateTime.Today.AddDays(-10), Text = "Day off" },
-        new Appointment { Start = DateTime.Today.AddDays(-10), End = DateTime.Today.AddDays(-8), Text = "Work from home" },
-        new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(12), Text = "Online meeting" },
-        new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(13), Text = "Skype call" },
-        new Appointment { Start = DateTime.Today.AddHours(14), End = DateTime.Today.AddHours(14).AddMinutes(30), Text = "Dentist appointment" },
-        new Appointment { Start = DateTime.Today.AddDays(1), End = DateTime.Today.AddDays(12), Text = "Vacation" },
-        };
+    {
+    new Appointment { Start = DateTime.Today.AddDays(-2), End = DateTime.Today.AddDays(-2), Text = "Birthday" },
+    new Appointment { Start = DateTime.Today.AddDays(-11), End = DateTime.Today.AddDays(-10), Text = "Day off" },
+    new Appointment { Start = DateTime.Today.AddDays(-10), End = DateTime.Today.AddDays(-8), Text = "Work from home" },
+    new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(12), Text = "Online meeting" },
+    new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(13), Text = "Skype call" },
+    new Appointment { Start = DateTime.Today.AddHours(14), End = DateTime.Today.AddHours(14).AddMinutes(30), Text = "Dentist appointment" },
+    new Appointment { Start = DateTime.Today.AddDays(1), End = DateTime.Today.AddDays(12), Text = "Vacation" },
+    };
 
         async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
         {
@@ -49,6 +51,7 @@
             {
                 appointments.Add(data);
                 // Either call the Reload method or reassign the Data property of the Scheduler
+                //??
                 await scheduler.Reload();
             }
         }
