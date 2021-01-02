@@ -2,6 +2,14 @@
 @layout AdminLayout
 @using System.Threading;
 @implements IDisposable
+@using Microsoft.AspNetCore.Authorization;
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<IdentityUser> _UserManager
+@inject RoleManager<IdentityRole> _RoleManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+
 
 <!DOCTYPE html>
 <html>
@@ -9,61 +17,109 @@
     <link rel="stylesheet" href="/css/CSS/style.css">
 </head>
 <body>
-    <h1>Beheerders pagina</h1>
+    <AuthorizeView>
+        <Authorized>
+            @if (@context.User.IsInRole(AdminRole))
+            {
+                
+                <h1>Beheerders pagina</h1>
 
-    <div class="card1"
-            <RadzenCard Style="width:300px; margin-bottom:20px; margin-right:20px; margin-top:50px; height: 200px">
+                <div class="card1">
+                    <RadzenCard Style="width:300px; margin-bottom:20px; margin-right:20px; margin-top:50px; height: 200px">
 
 
                         <h3>Sessie's beheren</h3>
                         <h4>Hier kunt u de huidige sessie's bekijken en nieuwe sessie's toevoegen</h4>
 
-                    <RadzenLink Path="sessions" Text="Klik hier" Style="color:#547733" />
-</RadzenCard>
+                        <RadzenLink Path="sessions" Text="Klik hier" Style="color:#547733" />
+                    </RadzenCard>
 
-        </div>
-
-
-    <div class="card2"
-            <RadzenCard Style="width:300px; margin-bottom:20px; margin-right:20px; margin-top:50px; height: 200px">
+                </div>
 
 
-                <h3>Formulieren beheren</h3>
-                <h4>Hier kunt u de huidige evaluatieformulieren bekijken en nieuwe formuleren toevoegen</h4>
-                <RadzenLink Path="CreateForm" Text="Klik hier" Style="color:#547733;" />
-            </RadzenCard>
-        </div>
-    <div class="card3"
-            <RadzenCard Style="width:300px; margin-bottom:20px; margin-right:20px; margin-top:50px; height: 200px">
+                <div class="card2">
+                    <RadzenCard Style="width:300px; margin-bottom:20px; margin-right:20px; margin-top:50px; height: 200px">
 
 
-                <h3>Medewerkers beheren</h3>
-                <h4>Hier kunt u de geregistreerde mederwerkers bekijken en beheren</h4>
-                <RadzenLink Path="evaluatieform1" Text="Klik hier" Style="color:#547733" />
-            </RadzenCard>
-        </div>
-
-    <div class="stick-to-right">
-        <RadzenRadialGauge Style="width: 100%; height: 300px;">
-            <RadzenRadialGaugeScale Step="1" Min="0" Max="12" StartAngle="0" EndAngle="360" ShowFirstTick="false"
-                                    MinorStep=@minorStep
-                                    TickLength="20"
-                                    MinorTickLength="10"
-                                    TickLabelOffset="40"
-                                    TickPosition="GaugeTickPosition.Inside">
-                <RadzenRadialGaugeScalePointer Value=@hours Length="0.6" ShowValue="false" />
-                <RadzenRadialGaugeScalePointer Value=@seconds Length="0.9" Fill="red" Width="2" ShowValue="false" />
-                <RadzenRadialGaugeScalePointer Value=@minutes Length="0.8" ShowValue="false" />
-            </RadzenRadialGaugeScale>
-        </RadzenRadialGauge>
-    </div>
+                        <h3>Formulieren beheren</h3>
+                        <h4>Hier kunt u de huidige evaluatieformulieren bekijken en nieuwe formuleren toevoegen</h4>
+                        <RadzenLink Path="CreateForm" Text="Klik hier" Style="color:#547733;" />
+                    </RadzenCard>
+                </div>
+                <div class="card3">
+                    <RadzenCard Style="width:300px; margin-bottom:20px; margin-right:20px; margin-top:50px; height: 200px">
 
 
+                        <h3>Medewerkers beheren</h3>
+                        <h4>Hier kunt u de geregistreerde mederwerkers bekijken en beheren</h4>
+                        <RadzenLink Path="evaluatieform1" Text="Klik hier" Style="color:#547733" />
+                    </RadzenCard>
+                </div>
 
+                <div class="stick-to-right">
+                    <RadzenRadialGauge Style="width: 100%; height: 300px;">
+                        <RadzenRadialGaugeScale Step="1" Min="0" Max="12" StartAngle="0" EndAngle="360" ShowFirstTick="false"
+                                                MinorStep=@minorStep
+                                                TickLength="20"
+                                                MinorTickLength="10"
+                                                TickLabelOffset="40"
+                                                TickPosition="GaugeTickPosition.Inside">
+                            <RadzenRadialGaugeScalePointer Value=@hours Length="0.6" ShowValue="false" />
+                            <RadzenRadialGaugeScalePointer Value=@seconds Length="0.9" Fill="red" Width="2" ShowValue="false" />
+                            <RadzenRadialGaugeScalePointer Value=@minutes Length="0.8" ShowValue="false" />
+                        </RadzenRadialGaugeScale>
+                    </RadzenRadialGauge>
+                </div>
+
+
+            }
+            else
+            {
+                <p>U bent niet ingelogd als @AdminRole.</p>
+            }
+        </Authorized>
+        <NotAuthorized>
+            <p>U bent niet ingelogd.</p>
+            <RadzenLink Path="/Identity/Account/Login" Text="Klik hier om in te loggen." />
+
+        </NotAuthorized>
+    </AuthorizeView>
 </body>
+
 </html>
 
 @code {
+
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+    string AdminRole = "administrator";
+    System.Security.Claims.ClaimsPrincipal CurrentUser;
+    protected override async Task OnInitializedAsync()
+    {
+        // ensure there is a AdminRole
+        var RoleResult = await _RoleManager.FindByNameAsync(AdminRole);
+        if (RoleResult == null)
+        {
+            // Create AdminRole
+            await _RoleManager.CreateAsync(new IdentityRole(AdminRole));
+        }
+        // Ensure a user named admin@cimsolution.nl is an Administrator
+        var user = await _UserManager.FindByNameAsync("admin@cimsolution.nl");
+        if (user != null)
+        {
+            // Is Admin@BlazorHelpWebsite.com in administrator role?
+            var UserResult = await _UserManager.IsInRoleAsync(user, AdminRole);
+            if (!UserResult)
+            {
+                // Put admin in Administrator role
+                await _UserManager.AddToRoleAsync(user, AdminRole);
+            }
+        }
+        // Get the current logged in user
+        CurrentUser = (await authenticationStateTask).User;
+    }
+
     Timer timer;
     double hours;
     double minutes;
