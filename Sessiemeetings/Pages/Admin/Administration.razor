@@ -120,7 +120,7 @@
 @code {
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
-    string AdminRole = "Administrators";
+    string AdminRole = "administrator";
     System.Security.Claims.ClaimsPrincipal CurrentUser;
     protected override async Task OnInitializedAsync()
     {
@@ -160,7 +160,7 @@
     List<IdentityUser> ColUsers = new List<IdentityUser>();
 
     // Options to display in the roles dropdown when editing a user
-    List<string> Options = new List<string>() { "Users", "Administrators" };
+    List<string> Options = new List<string>() { "Users", "administrator" };
 
     // To hold any possible errors
     string strError = "";
@@ -198,7 +198,7 @@
         // Make new user
         objUser = new IdentityUser();
         objUser.PasswordHash = "*****";
-        // Set Id to blank so we know it is a new record
+        // Set Id to blank
         objUser.Id = "";
         // Open the Popup
         ShowPopup = true;
@@ -208,10 +208,8 @@
     {
         try
         {
-            // Is this an existing user?
             if (objUser.Id != "")
             {
-                // To be implemented later...
             }
             else
             {

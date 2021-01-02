@@ -90,7 +90,6 @@
 
 @code {
 
-
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
     string AdminRole = "administrator";
@@ -105,10 +104,10 @@
             await _RoleManager.CreateAsync(new IdentityRole(AdminRole));
         }
         // Ensure a user named admin@cimsolution.nl is an Administrator
-        var user = await _UserManager.FindByNameAsync("admin@cimsolution.nl");
+        var user = await _UserManager.FindByNameAsync("admin@cimsolutions.nl");
         if (user != null)
         {
-            // Is Admin@BlazorHelpWebsite.com in administrator role?
+            // Is admin@cimsolutions.nl in administrator role?
             var UserResult = await _UserManager.IsInRoleAsync(user, AdminRole);
             if (!UserResult)
             {
@@ -119,6 +118,23 @@
         // Get the current logged in user
         CurrentUser = (await authenticationStateTask).User;
     }
+    // Able to edit current user
+    IdentityUser objUser = new IdentityUser();
+
+    // Gets role placement for current role
+    string CurrentUserRole { get; set; } = "Users";
+
+    // Collection to display the existing users
+    List<IdentityUser> ColUsers = new List<IdentityUser>();
+
+    // Options to display in the roles dropdown when editing a user
+    List<string> Options = new List<string>() { "Users", "administrator" };
+
+    // To hold any possible errors
+    string strError = "";
+
+    // To enable showing the Popup
+    bool ShowPopup = false;
 
     Timer timer;
     double hours;
