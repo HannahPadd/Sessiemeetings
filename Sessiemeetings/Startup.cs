@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Sessiemeetings.Areas.Identity;
 using Sessiemeetings.Data;
+using Radzen;
 
 namespace Sessiemeetings
 {
@@ -38,6 +39,7 @@ namespace Sessiemeetings
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddScoped<DialogService>();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
         }
 
