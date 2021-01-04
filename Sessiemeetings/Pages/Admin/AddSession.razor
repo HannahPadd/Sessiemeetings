@@ -4,150 +4,159 @@
 @using ClassLibrary
 @inject NavigationManager NavigationManager
 
-<h3>Een nieuwe sessie toevoegen</h3>
-<ul>
-    @foreach (var session in sessions)
-    {
-        <li>@session.Name</li>
-    }
-</ul>
-<style>
-    form .row {
-        margin-bottom: 16px;
-    }
-</style>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <link rel="stylesheet" href="/css/CSS/style.css">
+    </head>
+    <body>
 
-@if (session == null)
-{
-    <p><em>Laden...</em></p>
-}
-else
-{
-    <RadzenTemplateForm Data="@session" Submit="@((Session args) => { Submit(args); })">
-        <div class="row">
-            <div class="col-md-6">
-                <RadzenFieldset Text="Sessie Info">
-                    <div class="row">
-                        <div class="col-md-4 align-items-center d-flex">
-                            <RadzenLabel Text="Naam van de sessie" />
-                        </div>
-                        <div class="col-md-8">
-                            <RadzenTextBox style="width: 100%;" @bind-value="SessionName" />
-                        </div>
+        <h3>Een nieuwe sessie toevoegen</h3>
+        <ul>
+            @foreach (var session in sessions)
+            {
+                <li>@session.Name</li>
+            }
+        </ul>
+        <style>
+            form .row {
+                margin-bottom: 16px;
+            }
+        </style>
+
+        @if (session == null)
+        {
+            <p><em>Laden...</em></p>
+        }
+        else
+        {
+            <RadzenTemplateForm Data="@session" Submit="@((Session args) => { Submit(args); })">
+                <div class="row">
+                    <div class="col-md-6">
+                        <RadzenFieldset Text="Sessie Info">
+                            <div class="row">
+                                <div class="col-md-4 align-items-center d-flex">
+                                    <RadzenLabel Text="Naam van de sessie" />
+                                </div>
+                                <div class="col-md-8">
+                                    <RadzenTextBox style="width: 100%;" @bind-value="SessionName" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 align-items-center d-flex">
+                                    <RadzenLabel Text="Beschrijving" />
+                                </div>
+                                <div class="col-md-8">
+                                    <RadzenTextArea Placeholder="Beschrijving..." style="width: 100%;" @bind-Value="SessionDesc" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 align-items-center d-flex">
+                                    <RadzenLabel Text="Datum" />
+                                </div>
+                                <div class="col-md-8">
+                                    <RadzenDatePicker style="width: 100%;" @bind-Value="SessionDate" DateFormat="yyyy/MM/dd" />
+                                </div>
+                                <div class="col-md-4 align-items-center d-flex">
+                                    <RadzenLabel Text="Tijd" />
+                                </div>
+                                <div class="col-md-8">
+                                    <RadzenDatePicker ShowTime="true" TimeOnly="true" @bind-Value="SessionTime" DateFormat="HH:mm" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 align-items-center d-flex">
+                                    <RadzenLabel Text="Maximaal aantal deelnemers" />
+                                </div>
+                                <div class="col-md-8">
+                                    <RadzenNumeric TValue="int" style="width: 100%;" @bind-value="MaxDeelnemers" />
+                                </div>
+                            </div>
+                        </RadzenFieldset>
                     </div>
-                    <div class="row">
-                        <div class="col-md-4 align-items-center d-flex">
-                            <RadzenLabel Text="Beschrijving" />
-                        </div>
-                        <div class="col-md-8">
-                            <RadzenTextArea Placeholder="Beschrijving..." style="width: 100%;" @bind-Value="SessionDesc" />
-                        </div>
+                    <div class="col-md-6">
+                        <RadzenFieldset Text="Sessie Locatie">
+                            <div class="row">
+                                <div class="col-md-4 align-items-center d-flex">
+                                    <RadzenLabel Text="Adres" />
+                                </div>
+                                <div class="col-md-8">
+                                    <RadzenTextBox style="width: 100%;" @bind-Value="SessionAdress" />
+                                </div>
+                                @*<div class="align-items-center d-flex" style="margin-top: 16px;">
+                                        <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="add_location" style="margin-left: 11px; width: 166.046875px;" Text="Locatie"></RadzenButton>
+
+                                    </div>*@
+                            </div>
+                            @*<div class="row">
+                                    <div class="col-xl-6">
+                                        <RadzenGoogleMap style="height: 250px"></RadzenGoogleMap>
+                                    </div>
+                                </div>*@
+
+
+                        </RadzenFieldset>
                     </div>
-                    <div class="row">
-                        <div class="col-md-4 align-items-center d-flex">
-                            <RadzenLabel Text="Datum" />
-                        </div>
-                        <div class="col-md-8">
-                            <RadzenDatePicker style="width: 100%;" @bind-Value="SessionDate" DateFormat="yyyy/MM/dd" />
-                        </div>
-                        <div class="col-md-4 align-items-center d-flex">
-                            <RadzenLabel Text="Tijd" />
-                        </div>
-                        <div class="col-md-8">
-                            <RadzenDatePicker ShowTime="true" TimeOnly="true" @bind-Value="SessionTime" DateFormat="HH:mm" />
-                        </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-12" style="margin-top: 16px;">
+                        <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Opslaan" Click="@loadSessions" />
+                        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="display: inline-block; margin-left: 10px;" Text="Annuleren" Click="@Cancel" />
                     </div>
-                    <div class="row">
-                        <div class="col-md-4 align-items-center d-flex">
-                            <RadzenLabel Text="Maximaal aantal deelnemers" />
-                        </div>
-                        <div class="col-md-8">
-                            <RadzenNumeric TValue="int" style="width: 100%;" @bind-value="MaxDeelnemers" />
-                        </div>
-                    </div>
-                </RadzenFieldset>
-            </div>
-            <div class="col-md-6">
-                <RadzenFieldset Text="Sessie Locatie">
-                    <div class="row">
-                        <div class="col-md-4 align-items-center d-flex">
-                            <RadzenLabel Text="Adres" />
-                        </div>
-                        <div class="col-md-8">
-                            <RadzenTextBox style="width: 100%;" @bind-Value="SessionAdress" />
-                        </div>
-                        <div class="align-items-center d-flex" style="margin-top: 16px;">
-                            <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="add_location" style="margin-left: 11px; width: 166.046875px;" Text="Locatie"></RadzenButton>
+                </div>
+            </RadzenTemplateForm>
+        }
 
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xl-6">
-                            <RadzenGoogleMap style="height: 250px"></RadzenGoogleMap>
-                        </div>
-                    </div>
+        </body>
+</html>
 
 
-                </RadzenFieldset>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-md-12" style="margin-top: 16px;">
-                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Opslaan" Click="@loadSessions" />
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="display: inline-block; margin-left: 10px;" Text="Annuleren" Click="@Cancel" />
-            </div>
-        </div>
-    </RadzenTemplateForm>
-}
+        @code {
 
 
+            DateTime? value = DateTime.Now;
 
-@code {
+            public class Session
+            {
+                public string SessionName { get; set; }
+                public string SessionDate { get; set; }
+                public string SessionDesc { get; set; }
+                public string SessionTime { get; set; }
+                public string SessionAdress { get; set; }
+                public string MaxDeelnemers { get; set; }
+                public DateTime TodayDate { get; set; }
+            }
 
-
-    DateTime? value = DateTime.Now;
-
-    public class Session
-    {
-        public string SessionName { get; set; }
-        public string SessionDate { get; set; }
-        public string SessionDesc { get; set; }
-        public string SessionTime { get; set; }
-        public string SessionAdress { get; set; }
-        public string MaxDeelnemers { get; set; }
-        public DateTime TodayDate { get; set; }
-    }
-
-    Session session = new Session()
-    {
-        TodayDate = DateTime.Now,
-        SessionDate = DateTime.Now.ToString()
-    };
+            Session session = new Session()
+            {
+                TodayDate = DateTime.Now,
+                SessionDate = DateTime.Now.ToString()
+            };
 
 
-    void Submit(Session arg)
-    {
-        DbConnection addSession = new DbConnection();
-        addSession.InsertSession(SessionName, SessionAdress, SessionDesc, SessionTime.ToString("HH:mm"), SessionDate.Date.ToString("yyyy-MM-d"), MaxDeelnemers);
-    }
+            void Submit(Session arg)
+            {
+                DbConnection addSession = new DbConnection();
+                addSession.InsertSession(SessionName, SessionAdress, SessionDesc, SessionTime.ToString("HH:mm"), SessionDate.Date.ToString("yyyy-MM-d"), MaxDeelnemers);
+            }
 
-    void Cancel()
-    {
-        //
-    }
+            void Cancel()
+            {
+                //
+            }
 
-    public IList<SessionItem> sessions = new List<SessionItem>();
-    public string SessionName { get; set; }
-    public DateTime SessionDate { get; set; }
-    public string SessionDesc { get; set; }
-    public DateTime TodayDate { get; set; }
-    public string SessionAdress { get; set; }
-    public int MaxDeelnemers { get; set; }
-    public DateTime SessionTime { get; set; }
+            public IList<SessionItem> sessions = new List<SessionItem>();
+            public string SessionName { get; set; }
+            public DateTime SessionDate { get; set; }
+            public string SessionDesc { get; set; }
+            public DateTime TodayDate { get; set; }
+            public string SessionAdress { get; set; }
+            public int MaxDeelnemers { get; set; }
+            public DateTime SessionTime { get; set; }
 
-    public void loadSessions()
-    {
-        NavigationManager.NavigateTo("/Sessions");
-    }
+            public void loadSessions()
+            {
+                NavigationManager.NavigateTo("/Sessions");
+            }
 
-}
+        }
