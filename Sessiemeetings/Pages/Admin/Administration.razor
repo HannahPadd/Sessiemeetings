@@ -210,6 +210,72 @@
         {
             if (objUser.Id != "")
             {
+                // Get the user
+                var user = await _UserManager.FindByIdAsync(objUser.Id);
+                
+                // Update Email
+                user.Email = objUser.Email;
+                
+                // Update the user
+                await _UserManager.UpdateAsync(user);
+                
+                // Only update password if the current value is not the default value
+                if (objUser.PasswordHash != "*****")
+                {
+                    var resetToken =
+                        await _UserManager.GeneratePasswordResetTokenAsync(user);
+                    var passworduser =
+                        await _UserManager.ResetPasswordAsync(
+                            user,
+                            resetToken,
+                            objUser.PasswordHash);
+                    if (!passworduser.Succeeded)
+                    {
+                        if (passworduser.Errors.FirstOrDefault() != null)
+                        {
+                            strError =
+                                passworduser
+                                .Errors
+                                .FirstOrDefault()
+                                .Description;
+                        }
+                        else
+                        {
+                            strError = "Pasword error";
+                        }
+                        // Keep the popup opened
+                        return;
+                    }
+                }
+
+                // Is user in administrator role?
+                var UserResult =
+                    await _UserManager
+                    .IsInRoleAsync(user, AdminRole);
+                
+                // Is Administrator role selected but user is not an Administrator?
+                if (
+                    (CurrentUserRole == AdminRole)
+                    &
+                    (!UserResult))
+                {
+                    // Put admin in Administrator role
+                    await _UserManager
+                        .AddToRoleAsync(user, AdminRole);
+                }
+                else
+                {
+                    // Is Administrator role not selected 
+                    // but user is an Administrator?
+                    if ((CurrentUserRole != AdminRole)
+                        &
+                        (UserResult))
+                    {
+                        // Remove user from Administrator role
+                        await _UserManager
+                            .RemoveFromRoleAsync(user, AdminRole);
+                    }
+                }
             }
             else
             {
