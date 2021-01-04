@@ -79,11 +79,11 @@ namespace ClassLibrary
             }
         }
         //Inserts into the Database
-        public bool InsertSession(string Naam, string Locatie, string Onderwerp, string Tijd, string Datum, int maxDeelnemers)
+        public void InsertSession(string Naam, string Locatie, string Onderwerp, string Tijd, string Datum, int maxDeelnemers)
         {
             connection.Open();
             string sessionId = GenerateId();
-            string query = $"INSERT INTO SessionsTable (SessieID, Naam, Locatie, Onderwerp, Tijd, Datum) VALUES ('{sessionId}', '{Naam}', '{Locatie}', '{Onderwerp}', '{Tijd}', '{Datum}'), {maxDeelnemers";
+            string query = $"INSERT INTO SessionsTable (SessieID, Naam, Locatie, Onderwerp, Tijd, Datum, MaxDeelnemers, BeschikbarePlekken) VALUES ('{sessionId}', '{Naam}', '{Locatie}', '{Onderwerp}', '{Tijd}', '{Datum}', '{maxDeelnemers}', '{maxDeelnemers}')";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             try
             {
@@ -95,6 +95,36 @@ namespace ClassLibrary
                 System.Diagnostics.Debug.WriteLine(ex.ToString());
                 return false;
             }
+        }
+
+        public void InsertAanmelding(string SessionId, string UserId, string Opmerking)
+        {
+            connection.Open();
+            string query = $"INSERT INTO SessieAanmeldingen (UserId, SessieId, Opmerking) VALUES ('{UserId}', '{SessionId}', '{Opmerking}')";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+            }
+        }
+
+        public void updateAvailableSpots(string SessionId)
+        {
+            string query = $"UPDATE SessionsTable SET BeschikbarePlekken = BeschikbarePlekken - 1 WHERE SessieID = '{SessionId}'";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+            }
+
         }
         //Updates the Database
         public void Update()
@@ -111,13 +141,15 @@ namespace ClassLibrary
          {
             string query = "SELECT * FROM SessionsTable";
 
-            List<string>[] list = new List<string>[6];
+            List<string>[] list = new List<string>[8];
             list[0] = new List<string>();
             list[1] = new List<string>();
             list[2] = new List<string>();
             list[3] = new List<string>();
             list[4] = new List<string>();
             list[5] = new List<string>();
+            list[6] = new List<string>();
+            list[7] = new List<string>();
 
             if (this.OpenConnection() == true)
             {
@@ -133,6 +165,8 @@ namespace ClassLibrary
                     list[3].Add(dataReader["Onderwerp"] + "");
                     list[4].Add(dataReader["Tijd"] + "");
                     list[5].Add(dataReader["Datum"] + "");
+                    list[6].Add(dataReader["MaxDeelnemers"] + "");
+                    list[7].Add(dataReader["BeschikbarePlekken"] + "");
                 }
                 dataReader.Close();
 

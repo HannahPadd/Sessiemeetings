@@ -1,9 +1,9 @@
 ﻿@page "/SessiesBord"
 @inject NavigationManager NavigationManager
-@using System.Text.Json;
-@using System.Text.Json.Serialization;
+@inject ClassLibrary.Services.AppData AppData
 @using ClassLibrary.Models
 @using ClassLibrary
+@using ClassLibrary.Services
 <h1>Sessies Bord</h1>
 
 <h4>Huidige Sessies</h4>
@@ -14,17 +14,27 @@
 }
 else
 {
-    <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" PageSize="4" AllowPaging="true" Data="@Sessies" TItem="SessionModel" ColumnWidth="200px">
+    <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" PageSize="12" AllowPaging="true" Data="@Sessies" TItem="SessionModel" ColumnWidth="200px">
         <Columns>
             <RadzenGridColumn TItem="SessionModel" Property="SessionName" Title="Naam" />
             <RadzenGridColumn TItem="SessionModel" Property="SessionDesc" Title="Beschrijving" />
+            <RadzenGridColumn TItem="SessionModel" Property="SessionAddress" Title="Locatie"/>
+            <RadzenGridColumn TItem="SessionModel" Property="AvailableSpots" Title="Beschikbare plekken"/>
             <RadzenGridColumn TItem="SessionModel" Title="Aanmelden" Context="sessie" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
                 <Template Context="sessie">
-                    <RadzenButton Icon="done" Size="ButtonSize.Small" Click="@(args => loadAanmeldPagina(sessie))">
-                    </RadzenButton>
+                    @if (Int32.Parse(sessie.AvailableSpots) > 0)
+                    {
+                        <RadzenButton Icon="done" Size="ButtonSize.Small" Click="@(args => loadAanmeldPagina(sessie))">
+                        </RadzenButton>
+                    }
+                    else
+                    {
+
+                    }
                 </Template>
             </RadzenGridColumn>
-            <RadzenGridColumn TItem="SessionModel" Property="SessionAdress" Title="Locatie"/>
+
+
         </Columns>
     </RadzenGrid>
 }
@@ -32,7 +42,7 @@ else
 
     private IEnumerable<string>[] List;
     private List<SessionModel> Sessies;
-    public string sessie;
+    public string sessieId;
 
 
     protected override void OnInitialized()
@@ -42,14 +52,14 @@ else
         List = getSessionsList.GetSessionsList();
         for(int i = 0; i < List[0].Count(); i++)
         {
-            Sessies.Add(new SessionModel(List[0].ElementAt(i), List[1].ElementAt(i), List[2].ElementAt(i), List[3].ElementAt(i), List[4].ElementAt(i), List[5].ElementAt(i)));
+            Sessies.Add(new SessionModel(List[0].ElementAt(i), List[1].ElementAt(i), List[2].ElementAt(i), List[3].ElementAt(i), List[4].ElementAt(i), List[5].ElementAt(i), List[6].ElementAt(i), List[7].ElementAt(i)));
         }
 
     }
 
     public void loadAanmeldPagina(SessionModel Sessie)
     {
-        sessie = Newtonsoft.Json.JsonConvert.SerializeObject(sessie);
-        NavigationManager.NavigateTo("/SessieAanmeldPage/{sessie}");
+        AppData.Sessie = Sessie;
+        NavigationManager.NavigateTo("/SessieAanmeldPage");
     }
 }

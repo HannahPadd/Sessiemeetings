@@ -37,6 +37,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.3" />
     <PackageReference Include="Radzen.Blazor" Version="2.17.1" />
+    <PackageReference Include="Syncfusion.Blazor" Version="18.1.0.36-beta" />
   </ItemGroup>
 
   <ItemGroup>
