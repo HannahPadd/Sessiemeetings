@@ -79,19 +79,21 @@ namespace ClassLibrary
             }
         }
         //Inserts into the Database
-        public void InsertSession(string Naam, string Locatie, string Onderwerp, string Tijd, string Datum)
+        public bool InsertSession(string Naam, string Locatie, string Onderwerp, string Tijd, string Datum, int maxDeelnemers)
         {
             connection.Open();
             string sessionId = GenerateId();
-            string query = $"INSERT INTO SessionsTable (SessieID, Naam, Locatie, Onderwerp, Tijd, Datum) VALUES ('{sessionId}', '{Naam}', '{Locatie}', '{Onderwerp}', '{Tijd}', '{Datum}')";
+            string query = $"INSERT INTO SessionsTable (SessieID, Naam, Locatie, Onderwerp, Tijd, Datum) VALUES ('{sessionId}', '{Naam}', '{Locatie}', '{Onderwerp}', '{Tijd}', '{Datum}'), {maxDeelnemers";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             try
             {
                 cmd.ExecuteNonQuery();
+                return true;
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return false;
             }
         }
         //Updates the Database

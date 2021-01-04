@@ -2,7 +2,9 @@
 @layout AdminLayout
 @using ClassLibrary.Models
 @using ClassLibrary
+@using ClassLibrary.Service
 @inject NavigationManager NavigationManager
+@inject ToastService toastService
 
 <h3>Een nieuwe sessie toevoegen</h3>
 <ul>
@@ -98,6 +100,7 @@ else
 
 
     DateTime? value = DateTime.Now;
+    public bool succes;
 
     public class Session
     {
@@ -107,6 +110,7 @@ else
         public string SessionTime { get; set; }
         public string SessionAdress { get; set; }
         public DateTime TodayDate { get; set; }
+        public int maxDeelnemers = 30;
     }
 
     Session session = new Session()
@@ -119,7 +123,7 @@ else
     void Submit(Session arg)
     {
         DbConnection addSession = new DbConnection();
-        addSession.InsertSession(SessionName, SessionAdress, SessionDesc, SessionTime.ToString("HH:mm"), SessionDate.Date.ToString("yyyy-MM-d"));
+        succes = addSession.InsertSession(SessionName, SessionAdress, SessionDesc, SessionTime.ToString("HH:mm"), SessionDate.Date.ToString("yyyy-MM-d"), maxDeelnemers);
     }
 
     void Cancel()
@@ -137,6 +141,16 @@ else
 
     public void loadSessions()
     {
+        ToastService toastService = new ToastService();
+        if (succes == true)
+        {
+
+            toastService.ShowToast("Sessie succesvol toegevoegd", ToastLevel.Success);
+        }
+        else
+        {
+            toastService.ShowToast("Er is een fout opgetreden, sessie niet toegevoegd", ToastLevel.Error);
+        }
         NavigationManager.NavigateTo("/Sessions");
     }
 
