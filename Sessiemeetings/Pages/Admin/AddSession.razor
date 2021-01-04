@@ -10,6 +10,8 @@
     <html>
     <head>
         <link rel="stylesheet" href="/css/CSS/style.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+
     </head>
     <body>
 
@@ -117,6 +119,7 @@
 
 
             DateTime? value = DateTime.Now;
+            public bool succes;
 
             public class Session
             {
@@ -127,6 +130,7 @@
                 public string SessionAdress { get; set; }
                 public string MaxDeelnemers { get; set; }
                 public DateTime TodayDate { get; set; }
+                public bool succes;
             }
 
             Session session = new Session()
@@ -139,7 +143,16 @@
             void Submit(Session arg)
             {
                 DbConnection addSession = new DbConnection();
-                addSession.InsertSession(SessionName, SessionAdress, SessionDesc, SessionTime.ToString("HH:mm"), SessionDate.Date.ToString("yyyy-MM-d"), MaxDeelnemers);
+                succes = addSession.InsertSession(SessionName, SessionAdress, SessionDesc, SessionTime.ToString("HH:mm"), SessionDate.Date.ToString("yyyy-MM-d"), MaxDeelnemers);
+                if (succes == true)
+                {
+
+                    toastService.ShowToast("Sessie succesvol toegevoegd", ToastLevel.Success);
+                }
+                else
+                {
+                    toastService.ShowToast("Er is een fout opgetreden, sessie niet toegevoegd", ToastLevel.Error);
+                }
             }
 
             void Cancel()
@@ -158,7 +171,8 @@
 
             public void loadSessions()
             {
-                NavigationManager.NavigateTo("/Sessions");
+
+                NavigationManager.NavigateTo("/SessiesBord");
             }
 
         }

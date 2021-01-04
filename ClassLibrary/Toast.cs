@@ -22,17 +22,17 @@ namespace ClassLibrary
             ToastService.OnHide += HideToast;
         }
 
-        private void ShowToast(string message, ToastLevel level)
+        public void ShowToast(string message, ToastLevel level)
         {
             BuildToastSettings(level, message);
             IsVisible = true;
-            StateHasChanged();
+            InvokeAsync(StateHasChanged);
         }
 
         private void HideToast()
         {
             IsVisible = false;
-            StateHasChanged();
+            InvokeAsync(StateHasChanged);
         }
 
         private void BuildToastSettings(ToastLevel level, string message)
