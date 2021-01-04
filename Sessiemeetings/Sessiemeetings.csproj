@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\Gebruikers pages\**" />
+    <Content Remove="Pages\Gebruikers pages\**" />
+    <EmbeddedResource Remove="Pages\Gebruikers pages\**" />
+    <None Remove="Pages\Gebruikers pages\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Migrations\20201117142641_identity.cs" />
     <Compile Remove="Migrations\20201117142641_identity.Designer.cs" />
   </ItemGroup>
@@ -30,15 +37,12 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.3" />
     <PackageReference Include="Radzen.Blazor" Version="2.17.1" />
+    <PackageReference Include="Syncfusion.Blazor" Version="18.1.0.36-beta" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj" />
     <PackageReference Include="Radzen.Blazor" Version="2.17.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\Gebruikers pages\" />
   </ItemGroup>
 
 </Project>

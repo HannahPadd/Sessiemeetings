@@ -1,6 +1,5 @@
-@page "/CreateForm"
+@page "/Formulier aanmaken"
 @using Sessiemeetings.Data
-@layout AdminLayout
 
 
 <EditForm Model="@Form">
@@ -22,12 +21,12 @@
         {
             int index = i;
             var field = Form.fields[i];
-            <h5>Veld @(i+1)</h5>
+            <h5>Field @(i+1)</h5>
 
             <div class="row">
 
                 <div class="col">
-                    <label>Titel:</label>
+                    <label>Title:</label>
                     <input @bind-value="field.title" @bind-value:event="oninput" />
                 </div>
                 <div class="col">
@@ -39,7 +38,7 @@
                 <div class="col">
                     <button type="button" class="btn btn-danger"
                             @onclick="@(() => Form.fields.RemoveAt(index))">
-                        Verwijderen
+                        Remove
                     </button>
                 </div>
             </div>
@@ -48,7 +47,7 @@
     </div>
 
 
-    <button class="btn btn-primary" type="submit" @onclick="@Send">Sturen</button>
+    <button class="btn btn-primary" type="submit" @onclick="@Send">Send</button>
     <button class="btn btn-secondary" type="button" @onclick="Clear">Clear</button>
 
 </EditForm>
@@ -56,7 +55,7 @@
 @code {
 
     EvaluationForm Form = new EvaluationForm { };
-    IEnumerable<string> types = new string[] { "Text Box", "Rate", "Date" };
+    IEnumerable<string> types = new string[] { "Text Box", "Rate", "Date"};
     public IList<EvaluationForm> forms = new List<EvaluationForm>();
 
     private void Send()

@@ -21,7 +21,7 @@
         <Authorized>
             @if (@context.User.IsInRole(AdminRole))
             {
-                
+
                 <h1>Beheerders pagina</h1>
 
                 <div class="card1">
@@ -52,11 +52,14 @@
 
                         <h3>Medewerkers beheren</h3>
                         <h4>Hier kunt u de geregistreerde mederwerkers bekijken en beheren</h4>
-                        <RadzenLink Path="evaluatieform1" Text="Klik hier" Style="color:#547733" />
+                        <RadzenLink Path="administration" Text="Klik hier" Style="color:#547733" />
                     </RadzenCard>
                 </div>
 
                 <div class="stick-to-right">
+                    @*<div class="text-center">
+                        <h3>@displayDate</h3>
+                    </div>*@
                     <RadzenRadialGauge Style="width: 100%; height: 300px;">
                         <RadzenRadialGaugeScale Step="1" Min="0" Max="12" StartAngle="0" EndAngle="360" ShowFirstTick="false"
                                                 MinorStep=@minorStep
@@ -69,15 +72,16 @@
                             <RadzenRadialGaugeScalePointer Value=@minutes Length="0.8" ShowValue="false" />
                         </RadzenRadialGaugeScale>
                     </RadzenRadialGauge>
+
                 </div>
 
 
-            }
-            else
-            {
-                <h3>U bent niet ingelogd als @AdminRole.</h3>
-            }
-        </Authorized>
+                    }
+                    else
+                    {
+                    <h3>U bent niet ingelogd als @AdminRole.</h3>
+                    }
+            </Authorized>
         <NotAuthorized>
             <h3>U bent niet ingelogd.</h3>
             <RadzenLink Path="/Identity/Account/Login" Text="Klik hier om in te loggen." />
@@ -118,28 +122,29 @@
         // Get the current logged in user
         CurrentUser = (await authenticationStateTask).User;
     }
-    // Able to edit current user
-    IdentityUser objUser = new IdentityUser();
+    //// Able to edit current user
+    //IdentityUser objUser = new IdentityUser();
 
-    // Gets role placement for current role
-    string CurrentUserRole { get; set; } = "Users";
+    //// Gets role placement for current role
+    //string CurrentUserRole { get; set; } = "Users";
 
-    // Collection to display the existing users
-    List<IdentityUser> ColUsers = new List<IdentityUser>();
+    //// Collection to display the existing users
+    //List<IdentityUser> ColUsers = new List<IdentityUser>();
 
-    // Options to display in the roles dropdown when editing a user
-    List<string> Options = new List<string>() { "Users", "administrator" };
+    //// Options to display in the roles dropdown when editing a user
+    //List<string> Options = new List<string>() { "Users", "administrator" };
 
-    // To hold any possible errors
-    string strError = "";
+    //// To hold any possible errors
+    //string strError = "";
 
-    // To enable showing the Popup
-    bool ShowPopup = false;
+    //// To enable showing the Popup
+    //bool ShowPopup = false;
 
     Timer timer;
     double hours;
     double minutes;
     double seconds;
+    private string displayDate;
 
     double minorStep = 12 / 60.0;
 
@@ -148,10 +153,11 @@
         timer = new Timer(state =>
         {
             var now = DateTime.Now;
-
+            displayDate = DateTime.Now.ToString();
             hours = now.Hour + now.Minute / 60.0;
             minutes = now.Minute * minorStep + now.Second * 12 / 3600.0;
             seconds = now.Second * minorStep;
+
             InvokeAsync(StateHasChanged);
         }, null, 0, 1000);
 
@@ -160,4 +166,7 @@
     {
         timer.Dispose();
     }
+
+
+
 }
