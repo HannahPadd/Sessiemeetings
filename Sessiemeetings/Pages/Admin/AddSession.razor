@@ -3,6 +3,7 @@
 @using ClassLibrary.Models
 @using ClassLibrary
 @inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
 
     <!DOCTYPE html>
     <html>
@@ -157,6 +158,8 @@
             public void loadSessions()
             {
                 NavigationManager.NavigateTo("/Sessions");
+                var msg = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Gelukt", Detail = "sessie toegevoegd", Duration = 4000 };
+                NotificationService.Notify(msg);
             }
 
         }
