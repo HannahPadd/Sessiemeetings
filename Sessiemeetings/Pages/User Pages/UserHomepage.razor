@@ -21,8 +21,21 @@
 </RadzenCard>
 
         </div>
-    
+
+    <div class="card2">
+        <RadzenCard Style="width:300px; margin-bottom:20px; margin-right:20px; margin-top:50px; height: 200px">
+
+
+            <h3>Mijn agenda</h3>
+            <h4>Hier kunt u de huidige de sessie zien waarvoor u zich heeft aangemeld.</h4>
+            <RadzenLink Path="scheduler" Text="Klik hier" Style="color:#547733;" />
+        </RadzenCard>
+    </div>
+
     <div class="stick-to-right">
+        <div class="text-center">
+            <h3>@displayDate</h3>
+        </div>
         <RadzenRadialGauge Style="width: 100%; height: 300px;">
             <RadzenRadialGaugeScale Step="1" Min="0" Max="12" StartAngle="0" EndAngle="360" ShowFirstTick="false"
                                     MinorStep=@minorStep
@@ -36,7 +49,7 @@
             </RadzenRadialGaugeScale>
         </RadzenRadialGauge>
     </div>
-    
+
     @*<div class="stick-to-right">
         <RadzenCard Style="width: 300px; margin-bottom: 20px; margin-right: 60px; margin-left: 20px; margin-top: 50px; height: 200px">
             <div class="row">
@@ -68,7 +81,7 @@
     double hours;
     double minutes;
     double seconds;
-
+    private string displayDate;
     double minorStep = 12 / 60.0;
 
     protected override void OnInitialized()
@@ -76,7 +89,7 @@
         timer = new Timer(state =>
         {
             var now = DateTime.Now;
-
+            displayDate = DateTime.Now.ToString();
             hours = now.Hour + now.Minute / 60.0;
             minutes = now.Minute * minorStep + now.Second * 12 / 3600.0;
             seconds = now.Second * minorStep;
