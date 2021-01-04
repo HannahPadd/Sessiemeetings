@@ -1,7 +1,7 @@
 ﻿@page "/sessieaanmeldpage"
 @inject NavigationManager NavigationManager
 @inject ClassLibrary.Services.AppData AppData
-@inject SignInManager<IdentityUser> SignInManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<IdentityUser> UserManager
 @using Microsoft.AspNetCore.Identity
 @using ClassLibrary.Models
@@ -43,15 +43,21 @@
     public SessionModel Sessie;
     public string opmerking;
     public SessieAanmelding Aanmelding;
+    public string User;
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationStateTask { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Sessie = AppData.Sessie;
+        var authState = await AuthenticationStateTask;
+        User = authState.User.Identity.Name;
+
     }
 
     void submitAanmelding()
     {
-        Aanmelding = new SessieAanmelding(Sessie.SessionId, "ToBeFilled", opmerking);
+        Aanmelding = new SessieAanmelding(Sessie.SessionId, User, opmerking);
         DbConnection AanmeldingVoltooien = new DbConnection();
         AanmeldingVoltooien.InsertAanmelding(Aanmelding.SessieId, Aanmelding.UserId, Aanmelding.Opmerking);
         AanmeldingVoltooien.updateAvailableSpots(Sessie.SessionId);
