@@ -332,14 +332,11 @@
 
     async Task EditUser(IdentityUser _IdentityUser)
     {
-        // Set the selected user
-        // as the current user
+        // Set the selected user as the current user
         objUser = _IdentityUser;
-        // Get the user
         var user = await _UserManager.FindByIdAsync(objUser.Id);
         if (user != null)
         {
-            // Is user in administrator role?
             var UserResult =
                 await _UserManager
                 .IsInRoleAsync(user, AdminRole);
@@ -352,22 +349,18 @@
                 CurrentUserRole = "Users";
             }
         }
-        // Open the Popup
         ShowPopup = true;
     }
 
     async Task DeleteUser()
     {
-        // Close the Popup
         ShowPopup = false;
         // Get the user
         var user = await _UserManager.FindByIdAsync(objUser.Id);
         if (user != null)
         {
-            // Delete the user
             await _UserManager.DeleteAsync(user);
         }
-        // Refresh Users
         GetUsers();
     }
 }
