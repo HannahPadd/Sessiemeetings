@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Sessiemeetings.Areas.Identity;
 using Sessiemeetings.Data;
+using Radzen;
 using ClassLibrary;
 
 namespace Sessiemeetings

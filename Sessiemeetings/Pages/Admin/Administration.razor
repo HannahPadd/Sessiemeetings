@@ -11,22 +11,116 @@
     <Authorized>
         @if (@context.User.IsInRole(AdminRole))
         {
-            <p>You are in @AdminRole </p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>User Name</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in ColUsers)
+                    {
+                        <tr>
+                            <td>@user.Id.Substring(0, 5) ...</td>
+                            <td>@user.UserName</td>
+                            <td>@user.Email</td>
+                            <td>
+                                <button class="btn btn-primary"
+                                        @onclick="(() => EditUser(user))">
+                                    Edit
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (ShowPopup)
+                {
+                 //This is the popup to create or edit a user 
+                <div class="modal" tabindex="-1" style="display:block" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title">Edit User</h3>
+                                 @*Button to close the popup*@ 
+                                <button type="button" class="close"
+                                        @onclick="ClosePopup">
+                                    <span aria-hidden="true">X</span>
+                                </button>
+                            </div>
+                             @*Edit form for the current user*@ 
+                            <div class="modal-body">
+                                 @*Only show Id if not a new user*@ 
+                                @if (objUser.Id != "")
+                                {
+                                    <p>@objUser.Id</p>
+                                }
+                                 @*Only allow edit if a new user*@ 
+                                @if (objUser.Id != "")
+                                {
+                                    <p>@objUser.UserName</p>
+                                }
+                                else
+                                {
+                                    <input class="form-control" type="text"
+                                           placeholder="UserName"
+                                           @bind="objUser.UserName" />
+                                }
+                                <input class="form-control" type="text"
+                                       placeholder="Email"
+                                       @bind="objUser.Email" />
+                                <input class="form-control" type="password"
+                                       placeholder="Password"
+                                       @bind="objUser.PasswordHash" />
+                                <select class="form-control"
+                                        @bind="@CurrentUserRole">
+                                    @foreach (var option in Options)
+                                    {
+                                        <option value="@option">
+                                            @option
+                                        </option>
+                                    }
+                                </select>
+                                <br /><br />
+                                
+                                <button class="btn btn-primary"
+                                        @onclick="SaveUser">
+                                    Save
+                                </button>
+                                 @*Only show delete button if not a new record*@ 
+                                @if (objUser.Id != "")
+                                {
+                                    //Button to delete the forecast 
+                                    <button class="btn btn-danger"
+                                            @onclick="DeleteUser">
+                                        Delete
+                                    </button>
+                                }
+                                <br />
+                                <span style="color:red">@strError</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <button class="btn btn-success" @onclick="AddNewUser">Add User</button>
         }
         else
         {
-            <p>You're not signed in as a user in @AdminRole.</p>
+            <p>U bent niet ingelogd als @AdminRole.</p>
         }
     </Authorized>
     <NotAuthorized>
-        <p>You're not loggged in.</p>
+        <p>U bent niet ingelogd.</p>
     </NotAuthorized>
 </AuthorizeView>
 
 @code {
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
-    string AdminRole = "Administrators";
+    string AdminRole = "administrator";
     System.Security.Claims.ClaimsPrincipal CurrentUser;
     protected override async Task OnInitializedAsync()
     {
@@ -51,5 +145,163 @@
         }
         // Get the current logged in user
         CurrentUser = (await authenticationStateTask).User;
+
+
+        GetUsers();
+    }
+
+    // Able to edit current user
+    IdentityUser objUser = new IdentityUser();
+
+    // Gets role placement for current role
+    string CurrentUserRole { get; set; } = "Users";
+
+    // Collection to display the existing users
+    List<IdentityUser> ColUsers = new List<IdentityUser>();
+
+    // Options to display in the roles dropdown when editing a user
+    List<string> Options = new List<string>() { "Users", "administrator" };
+
+    // To hold any possible errors
+    string strError = "";
+
+    // To enable showing the Popup
+    bool ShowPopup = false;
+
+    void ClosePopup()
+    {
+        // Close the Popup
+        ShowPopup = false;
+    }
+
+    public void GetUsers()
+    {
+        // clear any error messages
+        strError = "";
+        // Collection to hold users
+        ColUsers = new List<IdentityUser>();
+        // get users from _UserManager
+        var user = _UserManager.Users.Select(x => new IdentityUser
+        {
+            Id = x.Id,
+            UserName = x.UserName,
+            Email = x.Email,
+            PasswordHash = "*****"
+        });
+        foreach (var item in user)
+        {
+            ColUsers.Add(item);
+        }
+    }
+    void AddNewUser()
+    {
+        // Make new user
+        objUser = new IdentityUser();
+        objUser.PasswordHash = "*****";
+        // Set Id to blank
+        objUser.Id = "";
+        // Open the Popup
+        ShowPopup = true;
+    }
+
+    async Task SaveUser()
+    {
+        try
+        {
+            if (objUser.Id != "")
+            {
+            }
+            else
+            {
+                // Insert new user
+                var NewUser =
+                    new IdentityUser
+                    {
+                        UserName = objUser.UserName,
+                        Email = objUser.Email
+                    };
+                var CreateResult =
+                    await _UserManager
+                    .CreateAsync(NewUser, objUser.PasswordHash);
+                if (!CreateResult.Succeeded)
+                {
+                    if (CreateResult
+                        .Errors
+                        .FirstOrDefault() != null)
+                    {
+                        strError =
+                            CreateResult
+                            .Errors
+                            .FirstOrDefault()
+                            .Description;
+                    }
+                    else
+                    {
+                        strError = "Create error";
+                    }
+                    // Keep the popup opened
+                    return;
+                }
+                else
+                {
+                    // Handle Roles
+                    if (CurrentUserRole == AdminRole)
+                    {
+                        // Put admin in Administrator role
+                        await _UserManager
+                            .AddToRoleAsync(NewUser, AdminRole);
+                    }
+                }
+            }
+            // Close the Popup
+            ShowPopup = false;
+            // Refresh Users
+            GetUsers();
+        }
+        catch (Exception ex)
+        {
+            strError = ex.GetBaseException().Message;
+        }
+    }
+
+    async Task EditUser(IdentityUser _IdentityUser)
+    {
+        // Set the selected user
+        // as the current user
+        objUser = _IdentityUser;
+        // Get the user
+        var user = await _UserManager.FindByIdAsync(objUser.Id);
+        if (user != null)
+        {
+            // Is user in administrator role?
+            var UserResult =
+                await _UserManager
+                .IsInRoleAsync(user, AdminRole);
+            if (UserResult)
+            {
+                CurrentUserRole = AdminRole;
+            }
+            else
+            {
+                CurrentUserRole = "Users";
+            }
+        }
+        // Open the Popup
+        ShowPopup = true;
+    }
+
+    async Task DeleteUser()
+    {
+        // Close the Popup
+        ShowPopup = false;
+        // Get the user
+        var user = await _UserManager.FindByIdAsync(objUser.Id);
+        if (user != null)
+        {
+            // Delete the user
+            await _UserManager.DeleteAsync(user);
+        }
+        // Refresh Users
+        GetUsers();
     }
 }
