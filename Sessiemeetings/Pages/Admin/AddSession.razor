@@ -2,7 +2,6 @@
 @layout AdminLayout
 @using ClassLibrary.Models
 @using ClassLibrary
-@using ClassLibrary.Service
 @inject NavigationManager NavigationManager
 @inject NotificationService NotificationService
 
@@ -10,8 +9,6 @@
     <html>
     <head>
         <link rel="stylesheet" href="/css/CSS/style.css">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
-
     </head>
     <body>
 
@@ -172,8 +169,7 @@
 
             public void loadSessions()
             {
-
-                NavigationManager.NavigateTo("/SessiesBord");
+                NavigationManager.NavigateTo("/Sessions");
             }
 
         }

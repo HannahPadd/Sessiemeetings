@@ -26,55 +26,37 @@
                 <LoginDisplay />
             </div>
 
-        <Authorized>
-            @if (@context.User.IsInRole(AdminRole))
-            {
-                <div class="sidebar">
-                    <AdminNavMenu />
-                </div>
-            }
-            else
-            {
-                <div class="sidebar">
-                    <NavMenu />
-                </div>
-            }
-            <div class="main">
-                <div class="top-row px-4 auth">
-                    <LoginDisplay />
-                </div>
-
-                <div class="content px-4">
-                    @Body
-                </div>
+            <div class="content px-4">
+                @Body
             </div>
-        </Authorized>
+        </div>
+    </Authorized>
 
-        <NotAuthorized>
-            <div class="sidebar">
-                <NavMenu />
+    <NotAuthorized>
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+        <div class="main">
+            <div class="top-row px-4 auth">
+                <LoginDisplay />
             </div>
-            <div class="main">
-                <div class="top-row px-4 auth">
-                    <LoginDisplay />
-                </div>
 
-                <div class="content px-4">
-                    @Body
-                </div>
+            <div class="content px-4">
+                @Body
             </div>
-        </NotAuthorized>
-    </AuthorizeView>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
 
-    @code{
-        [CascadingParameter]
-        private Task<AuthenticationState> authenticationStateTask { get; set; }
-        string AdminRole = "administrator";
-        System.Security.Claims.ClaimsPrincipal CurrentUser;
-        protected override async Task OnInitializedAsync()
-        {
-            // Get the current logged in user
-            CurrentUser = (await authenticationStateTask).User;
-        }
-
+@code{
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+    string AdminRole = "administrator";
+    System.Security.Claims.ClaimsPrincipal CurrentUser;
+    protected override async Task OnInitializedAsync()
+    {
+        // Get the current logged in user
+        CurrentUser = (await authenticationStateTask).User;
     }
+
+}
