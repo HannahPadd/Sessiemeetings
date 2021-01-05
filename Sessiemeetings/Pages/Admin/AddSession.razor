@@ -116,6 +116,7 @@
 
 
             DateTime? value = DateTime.Now;
+            public bool succes;
 
             public class Session
             {
@@ -126,6 +127,7 @@
                 public string SessionAdress { get; set; }
                 public string MaxDeelnemers { get; set; }
                 public DateTime TodayDate { get; set; }
+                public bool succes;
             }
 
             Session session = new Session()
@@ -138,7 +140,17 @@
             void Submit(Session arg)
             {
                 DbConnection addSession = new DbConnection();
-                addSession.InsertSession(SessionName, SessionAdress, SessionDesc, SessionTime.ToString("HH:mm"), SessionDate.Date.ToString("yyyy-MM-d"), MaxDeelnemers);
+                succes = addSession.InsertSession(SessionName, SessionAdress, SessionDesc, SessionTime.ToString("HH:mm"), SessionDate.Date.ToString("yyyy-MM-d"), MaxDeelnemers);
+                if (succes == true)
+                {
+                    var successMsg = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Gelukt", Detail = "sessie toegevoegd", Duration = 4000 };
+                    NotificationService.Notify(successMsg);
+                }
+                else
+                {
+                    var errorMsg = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "kut", Detail = "sessie toegevoegd", Duration = 4000 };
+                    NotificationService.Notify(errorMsg);
+                }
             }
 
             void Cancel()
@@ -158,8 +170,6 @@
             public void loadSessions()
             {
                 NavigationManager.NavigateTo("/Sessions");
-                var msg = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Gelukt", Detail = "sessie toegevoegd", Duration = 4000 };
-                NotificationService.Notify(msg);
             }
 
         }
