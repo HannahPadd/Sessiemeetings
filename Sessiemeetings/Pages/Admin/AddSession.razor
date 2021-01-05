@@ -143,12 +143,12 @@
                 succes = addSession.InsertSession(SessionName, SessionAdress, SessionDesc, SessionTime.ToString("HH:mm"), SessionDate.Date.ToString("yyyy-MM-d"), MaxDeelnemers);
                 if (succes == true)
                 {
-                    var successMsg = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Gelukt", Detail = "sessie toegevoegd", Duration = 4000 };
+                    var successMsg = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Gelukt", Detail = "De sessie is toegevoegd", Duration = 4000 };
                     NotificationService.Notify(successMsg);
                 }
                 else
                 {
-                    var errorMsg = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "kut", Detail = "sessie toegevoegd", Duration = 4000 };
+                    var errorMsg = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Mislukt", Detail = "De sessie NIET toegevoegd", Duration = 4000 };
                     NotificationService.Notify(errorMsg);
                 }
             }
