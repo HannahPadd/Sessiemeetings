@@ -9,7 +9,7 @@ namespace ClassLibrary.Models
         public string SessieId { get; set; }
         public string UserId { get; set; }
         public string Opmerking { get; set; }
-        public SessieAanmelding(string sessieId, string userId, string opmerking)
+        public SessieAanmelding(string userId, string sessieId, string opmerking)
         {
             this.SessieId = sessieId;
             this.UserId = userId;

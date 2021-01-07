@@ -236,5 +236,38 @@ namespace ClassLibrary
             }
 
         }
+
+        public List<string>[] GetAanmeldingen()
+        {
+            string query = "SELECT * from SessieAanmeldingen";
+
+            List<string>[] list = new List<string>[6];
+            list[0] = new List<string>();
+            list[1] = new List<string>();
+            list[2] = new List<string>();
+
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    list[0].Add(dataReader["UserId"] + "");
+                    list[1].Add(dataReader["SessieId"] + "");
+                    list[2].Add(dataReader["Opmerking"] + "");
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+
+                return list;
+            }
+            else
+            {
+                return list;
+            }
+
+        }
     }
 }
