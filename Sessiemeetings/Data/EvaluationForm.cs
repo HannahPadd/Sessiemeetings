@@ -23,6 +23,7 @@ namespace Sessiemeetings.Data
     {
         public string title { get; set; }
         public string type { get; set; }
+        public string data { get; set; }
 
         public List<string> types = new List<string>();
         

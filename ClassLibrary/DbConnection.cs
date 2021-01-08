@@ -113,6 +113,22 @@ namespace ClassLibrary
             }
         }
 
+        public void InsertData( string formName, string Fields)
+        {
+            connection.Open();
+            string userID = GenerateId();
+            string query = $"INSERT INTO FormsDataTable (UserID, FormName, FieldsData) VALUES ('{userID}', '{formName}', '{Fields}')";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+            }
+        }
+
 
 
         //Updates the Database
