@@ -65,17 +65,10 @@
                                         {
                                             <p>@objUser.Id</p>
                                         }
-                                        @*Only allow edit if a new user*@
-                                        @if (objUser.Id != "")
-                                        {
-                                            <p>@objUser.UserName</p>
-                                        }
-                                        else
-                                        {
-                                            <input class="form-control" type="text"
+
+                                        <input class="form-control" type="text"
                                                    placeholder="UserName"
                                                    @bind="objUser.UserName" />
-                                        }
                                         <input class="form-control" type="text"
                                                placeholder="Email"
                                                @bind="objUser.Email" />
@@ -221,6 +214,8 @@
                     {
                         // Get the user
                         var user = await _UserManager.FindByIdAsync(objUser.Id);
+                        // Update Username
+                        user.UserName = objUser.UserName;
                         // Update Email
                         user.Email = objUser.Email;
                         // Update the user

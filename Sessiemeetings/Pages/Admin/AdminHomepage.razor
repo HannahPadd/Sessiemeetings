@@ -22,7 +22,7 @@
             @if (@context.User.IsInRole(AdminRole))
             {
 
-                <h1>Beheerders pagina</h1>
+            <h1>Welkom @context.User.Identity.Name!</h1>
 
                 <div class="card1">
                     <RadzenCard Style="width:300px; margin-bottom:20px; margin-right:20px; margin-top:50px; height: 200px">
@@ -93,11 +93,12 @@
 </html>
 
 @code {
-
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
     string AdminRole = "administrator";
     System.Security.Claims.ClaimsPrincipal CurrentUser;
+
+
     protected override async Task OnInitializedAsync()
     {
         // ensure there is a AdminRole
@@ -122,23 +123,6 @@
         // Get the current logged in user
         CurrentUser = (await authenticationStateTask).User;
     }
-    //// Able to edit current user
-    //IdentityUser objUser = new IdentityUser();
-
-    //// Gets role placement for current role
-    //string CurrentUserRole { get; set; } = "Users";
-
-    //// Collection to display the existing users
-    //List<IdentityUser> ColUsers = new List<IdentityUser>();
-
-    //// Options to display in the roles dropdown when editing a user
-    //List<string> Options = new List<string>() { "Users", "administrator" };
-
-    //// To hold any possible errors
-    //string strError = "";
-
-    //// To enable showing the Popup
-    //bool ShowPopup = false;
 
     Timer timer;
     double hours;

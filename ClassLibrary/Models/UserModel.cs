@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ClassLibrary.Models
 {
-   public class UserModel
+    public class UserModel
     {
         public string Id { get; set; }
         public string UserName { get; set; }

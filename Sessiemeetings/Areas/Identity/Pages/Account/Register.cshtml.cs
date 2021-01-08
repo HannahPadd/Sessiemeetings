@@ -51,6 +51,11 @@ namespace Sessiemeetings.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
+            [StringLength(20)]
+            [Display(Name = "Naam")]
+            public string FirstName { get; set; }
+
+            [Required]
             [StringLength(100, ErrorMessage = "Het {0} mag minimaal {2} en maximaal {1} karakters lang zijn", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Wachtwoord")]
@@ -74,7 +79,7 @@ namespace Sessiemeetings.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+                var user = new IdentityUser { UserName = Input.FirstName, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
