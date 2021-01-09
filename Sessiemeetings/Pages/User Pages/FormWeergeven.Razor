@@ -1,4 +1,5 @@
 @page "/Form/{text}"
+@inject NavigationManager NavigationManager
 @using Radzen
 @using Radzen.Blazor
 @using Sessiemeetings.Data
@@ -32,13 +33,13 @@
         @if (field.type == "Rate")
         {
             <div class="col-md-9">
-                <RadzenRating Name="Rating0"> </RadzenRating>
+                <RadzenRating Change=@(val => OnChange(val ,field)) />
             </div>
         }
         @if (field.type == "Date")
         {
             <div class="col-md-9">
-                <RadzenDatePicker Name="Datepicker0" TValue="DateTime"> </RadzenDatePicker>
+                <RadzenDatePicker TValue="DateTime?" ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" Change=@(value => OnChange(value, field)) DateFormat="MM/dd/yyyy HH:mm" />
             </div>
         }
     </div>
@@ -63,11 +64,11 @@
     private EvaluationForm form;
 
 
-    protected override async Task OnInitializedAsync()
-    {
-        var authState = await AuthenticationStateTask;
-                User = authState.User.Identity.Name;
-    }
+    //protected override async Task OnInitializedAsync()
+    //{
+    //var authState = await AuthenticationStateTask;
+    //User = authState.User.Identity.Name;
+    //}
 
     protected override void OnInitialized()
     {
@@ -83,17 +84,24 @@
         form = forms.Find(form => form.formName == Text);
     }
 
+    void OnChange(object value, Field field)
+    {
+        field.data = value.ToString();
+    }
+
+
     public void Submit()
     {
         var jsonFields = JsonSerializer.Serialize(form.fields);
         DbConnection insertData = new DbConnection();
-        insertData.InsertData( form.formName, jsonFields);
+        insertData.InsertData(form.formName, jsonFields);
         Clear();
     }
 
     private void Clear()
     {
         form = new EvaluationForm();
+        NavigationManager.NavigateTo("/");
     }
 
 }
