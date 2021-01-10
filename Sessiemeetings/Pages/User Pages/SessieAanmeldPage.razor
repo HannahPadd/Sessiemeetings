@@ -57,7 +57,7 @@
 
     void submitAanmelding()
     {
-        Aanmelding = new SessieAanmelding(Sessie.SessionId, User, opmerking);
+        Aanmelding = new SessieAanmelding(User, Sessie.SessionId, opmerking);
         DbConnection AanmeldingVoltooien = new DbConnection();
         AanmeldingVoltooien.InsertAanmelding(Aanmelding.SessieId, Aanmelding.UserId, Aanmelding.Opmerking);
         AanmeldingVoltooien.updateAvailableSpots(Sessie.SessionId);

@@ -25,7 +25,7 @@ else
             <RadzenGridColumn TItem="SessionModel" Property="AvailableSpots" Title="Beschikbare plekken" />
             <RadzenGridColumn TItem="SessionModel" Title="Aanmelden" Context="sessie" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
                 <Template Context="sessie">
-                    @if (Int32.Parse(sessie.AvailableSpots) > 0)
+                    @if (Int32.Parse(sessie.AvailableSpots) > 0 & AanmeldingBeschikbaar(sessie))
                     {
                         <RadzenButton Icon="done" Size="ButtonSize.Small" Click="@(args => loadAanmeldPagina(sessie))">
                         </RadzenButton>
@@ -70,11 +70,12 @@ else
 
         for (int i = 0; i < AanmeldingenList[0].Count(); i++)
         {
-            if (AanmeldingenList[0].ElementAt(i) != User)
+            if (AanmeldingenList[0].ElementAt(i) == User)
             {
                 Aanmeldingen.Add(new SessieAanmelding(AanmeldingenList[0].ElementAt(i), AanmeldingenList[1].ElementAt(i), AanmeldingenList[2].ElementAt(i)));
             }
         }
+
 
     }
 
@@ -82,7 +83,7 @@ else
     {
         foreach (SessieAanmelding aanmelding in Aanmeldingen)
         {
-            if (aanmelding.UserId == User && aanmelding.SessieId == Sessie.SessionId)
+            if (aanmelding.UserId == User & aanmelding.SessieId == Sessie.SessionId)
             {
                 return false;
             }
