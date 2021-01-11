@@ -134,7 +134,7 @@
                     await _RoleManager.CreateAsync(new IdentityRole(AdminRole));
                 }
                 // Zorg dat admin@cimsolution.nl een admin is
-                var user = await _UserManager.FindByNameAsync("admin@cimsolution.nl");
+                var user = await _UserManager.FindByNameAsync("admin@cimsolutions.nl");
                 if (user != null)
                 {
                     //  Is admin@cimsolutions.nl admin?

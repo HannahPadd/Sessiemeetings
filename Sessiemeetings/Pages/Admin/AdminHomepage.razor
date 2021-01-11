@@ -101,26 +101,26 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // ensure there is a AdminRole
+        // Is er een AdminRole?
         var RoleResult = await _RoleManager.FindByNameAsync(AdminRole);
         if (RoleResult == null)
         {
-            // Create AdminRole
+            // AdminRole aanmaken
             await _RoleManager.CreateAsync(new IdentityRole(AdminRole));
         }
-        // Ensure a user named admin@cimsolution.nl is an Administrator
+        // Zorg dat admin@cimsolution.nl een admin is
         var user = await _UserManager.FindByNameAsync("admin@cimsolutions.nl");
         if (user != null)
         {
-            // Is admin@cimsolutions.nl in administrator role?
+            // Is admin@cimsolutions.nl admin?
             var UserResult = await _UserManager.IsInRoleAsync(user, AdminRole);
             if (!UserResult)
             {
-                // Put admin in Administrator role
+                // Voeg toe aan AdminRole
                 await _UserManager.AddToRoleAsync(user, AdminRole);
             }
         }
-        // Get the current logged in user
+        // Huidige user ophalen
         CurrentUser = (await authenticationStateTask).User;
     }
 

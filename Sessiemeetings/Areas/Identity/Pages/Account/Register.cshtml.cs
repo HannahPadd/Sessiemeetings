@@ -24,7 +24,7 @@ namespace Sessiemeetings.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
-        public RegisterModel(
+    public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
@@ -43,6 +43,8 @@ namespace Sessiemeetings.Areas.Identity.Pages.Account
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
+
+
         public class InputModel
         {
             [Required]
@@ -54,6 +56,13 @@ namespace Sessiemeetings.Areas.Identity.Pages.Account
             [StringLength(20)]
             [Display(Name = "Naam")]
             public string FirstName { get; set; }
+            
+            [Required]
+            [StringLength(20)]
+            [Display(Name = "Achternaam")]
+            public string LastName { get; set; }
+
+
 
             [Required]
             [StringLength(100, ErrorMessage = "Het {0} mag minimaal {2} en maximaal {1} karakters lang zijn", MinimumLength = 6)]
@@ -79,7 +88,8 @@ namespace Sessiemeetings.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.FirstName, Email = Input.Email };
+                
+                var user = new IdentityUser { UserName = Input.FirstName + " " + Input.LastName, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

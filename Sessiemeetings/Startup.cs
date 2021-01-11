@@ -39,7 +39,13 @@ namespace Sessiemeetings
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddRazorPages();
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Alle karakters toestaan in userName
+                options.User.AllowedUserNameCharacters =
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789- ";
+            });
+                services.AddRazorPages(); 
             services.AddServerSideBlazor();
             services.AddScoped<NotificationService>();
             services.AddScoped<DialogService>();
