@@ -22,6 +22,12 @@
                 <h5> @field.data /5</h5>
             </div>
         }
+        @if (field.type == "Date")
+        {
+            <div class="col-md-9">
+                <h5> @field.data</h5> 
+            </div>
+        }
         else
         {
             <div class="col-md-9">
@@ -51,9 +57,6 @@
         List<Field> jsonDe = JsonSerializer.Deserialize<List<Field>>(list[3]);
         form = new EvaluationForm(list[0], list[1], list[2], jsonDe);
     }
-
-
-
 
 
 }

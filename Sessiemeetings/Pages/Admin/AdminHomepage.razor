@@ -58,8 +58,8 @@
 
                 <div class="stick-to-right">
                     @*<div class="text-center">
-                        <h3>@displayDate</h3>
-                    </div>*@
+                            <h3>@displayDate</h3>
+                        </div>*@
                     <RadzenRadialGauge Style="width: 100%; height: 300px;">
                         <RadzenRadialGaugeScale Step="1" Min="0" Max="12" StartAngle="0" EndAngle="360" ShowFirstTick="false"
                                                 MinorStep=@minorStep
@@ -76,12 +76,12 @@
                 </div>
 
 
-                    }
-                    else
-                    {
-                    <h3>U bent niet ingelogd als @AdminRole.</h3>
-                    }
-            </Authorized>
+            }
+            else
+            {
+                <h3>U bent niet ingelogd als @AdminRole.</h3>
+            }
+        </Authorized>
         <NotAuthorized>
             <h3>U bent niet ingelogd.</h3>
             <RadzenLink Path="/Identity/Account/Login" Text="Klik hier om in te loggen." />

@@ -39,7 +39,7 @@
         @if (field.type == "Date")
         {
             <div class="col-md-9">
-                <RadzenDatePicker TValue="DateTime?" ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" Change=@(value => OnChange(value, field)) DateFormat="MM/dd/yyyy" />
+                <RadzenDatePicker TValue="DateTime" ShowTime="true" ShowSeconds="false" Change=@(value => OnChange(value, field)) DateFormat="MM/dd/yyyy HH:mm" />
             </div>
         }
     </div>
@@ -89,6 +89,11 @@
     void OnChange(object value, Field field)
     {
         field.data = value.ToString();
+        if (field.type == "Date")
+        {
+
+            field.data = field.data.Remove(field.data.Length - 3, 3);
+        }
     }
 
 
