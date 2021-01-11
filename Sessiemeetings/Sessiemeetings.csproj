@@ -13,6 +13,7 @@
   <ItemGroup>
     <Content Remove="Pages\Admin\Forms bord.Razor" />
     <Content Remove="Pages\EvaluatieForm2.Razor" />
+    <Content Remove="Pages\User Pages\FormsDataWeergeven.Razor" />
   </ItemGroup>
 
   <ItemGroup>

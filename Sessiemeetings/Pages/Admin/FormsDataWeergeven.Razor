@@ -1,0 +1,70 @@
+@page "/FormsData/{text}"
+@inject NavigationManager NavigationManager
+@using Radzen.Blazor
+@using Sessiemeetings.Data
+@using ClassLibrary
+@using System.Text.Json;
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@layout AdminLayout;
+
+
+
+@foreach (Field field in form.fields)
+{
+    <div class="row">
+        <div class="col-md-3">
+            <RadzenLabel Component="textBox1" style="width: 100%" Text="@field.title"> </RadzenLabel>
+        </div>
+        @if (field.type == "Text Box")
+        {
+            <div class="col-md-9">
+                <RadzenLabel Component="textBox1" style="width: 100%" Text="@field.data"> </RadzenLabel>
+            </div>
+        }
+        @if (field.type == "Text Area")
+        {
+            <div class="col-md-9">
+                <RadzenLabel Component="textBox1" style="width: 100%" Text="@field.data"> </RadzenLabel>
+            </div>
+        }
+        @if (field.type == "Rate")
+        {
+            <div class="col-md-9">
+                <RadzenLabel Component="textBox1" style="width: 100%" Text="@field.data"> </RadzenLabel>
+            </div>
+        }
+        @if (field.type == "Date")
+        {
+            <div class="col-md-9">
+                <RadzenLabel Component="textBox1" style="width: 100%" Text="@field.data"> </RadzenLabel>
+            </div>
+        }
+    </div>
+
+
+}
+
+
+
+@code {
+    [Parameter]
+    public string Text { get; set; }
+    public EvaluationForm form;
+    List<string> list = new List<string>();
+
+
+
+    protected override void OnInitialized()
+    {
+
+        DbConnection getFormData = new DbConnection();
+        list = getFormData.GetFormData(Text);
+        List<Field> jsonDe = JsonSerializer.Deserialize<List<Field>>(list[3]);
+        form = new EvaluationForm(list[0], list[1], list[2], jsonDe);
+    }
+
+
+
+
+
+}

@@ -117,7 +117,7 @@ namespace ClassLibrary
         {
             connection.Open();
             string dataID = GenerateId();
-            string query = $"INSERT INTO FormsDataTable (DataID, UserID, FormName, FieldsData) VALUES ('{user}', '{formName}', '{Fields}')";
+            string query = $"INSERT INTO FormsDataTable (DataID, UserID, FormName, FieldsData) VALUES ('{dataID}','{user}', '{formName}', '{Fields}')";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             try
             {
@@ -253,6 +253,35 @@ namespace ClassLibrary
 
         }
 
+        public List<string> GetFormData(string DataID)
+        {
+            string query = "SELECT * FROM FormsDataTable WHERE DataID LIKE" + "'" + DataID + "'";
+            List<string> list = new List<string>(4);
+
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                //Puts the sessiontable into a list for display into the application
+                while (dataReader.Read())
+                {
+                    list.Add(dataReader["DataID"] + "");
+                    list.Add(dataReader["UserID"] + "");
+                    list.Add(dataReader["FormName"] + "");
+                    list.Add(dataReader["FieldsData"] + "");
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+
+                return list;
+            }
+            else
+            {
+                return list;
+            }
+        }
 
 
         //Count statement
