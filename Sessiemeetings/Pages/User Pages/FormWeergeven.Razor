@@ -27,7 +27,7 @@
         @if (field.type == "Text Area")
         {
             <div class="col-md-9">
-                <RadzenTextArea Cols="30" Rows="3" @bind-value="field.data" @bind-value:event="on" Name="Textarea0"> </RadzenTextArea>
+                <RadzenTextArea Cols="30" Rows="3" @bind-value="field.data" Name="Textarea0"> </RadzenTextArea>
             </div>
         }
         @if (field.type == "Rate")
@@ -39,7 +39,7 @@
         @if (field.type == "Date")
         {
             <div class="col-md-9">
-                <RadzenDatePicker TValue="DateTime?" ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" Change=@(value => OnChange(value, field)) DateFormat="MM/dd/yyyy HH:mm" />
+                <RadzenDatePicker TValue="DateTime?" ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" Change=@(value => OnChange(value, field)) DateFormat="MM/dd/yyyy" />
             </div>
         }
     </div>

@@ -13,30 +13,19 @@
 {
     <div class="row">
         <div class="col-md-3">
-            <RadzenLabel Component="textBox1" style="width: 100%" Text="@field.title"> </RadzenLabel>
+            <h3> @field.title </h3>
         </div>
-        @if (field.type == "Text Box")
-        {
-            <div class="col-md-9">
-                <RadzenLabel Component="textBox1" style="width: 100%" Text="@field.data"> </RadzenLabel>
-            </div>
-        }
-        @if (field.type == "Text Area")
-        {
-            <div class="col-md-9">
-                <RadzenLabel Component="textBox1" style="width: 100%" Text="@field.data"> </RadzenLabel>
-            </div>
-        }
+
         @if (field.type == "Rate")
         {
             <div class="col-md-9">
-                <RadzenLabel Component="textBox1" style="width: 100%" Text="@field.data">  </RadzenLabel>
+                <h5> @field.data /5</h5>
             </div>
         }
-        @if (field.type == "Date")
+        else
         {
             <div class="col-md-9">
-                <RadzenLabel Component="textBox1" style="width: 100%" Text="@field.data"> </RadzenLabel>
+                <h5> @field.data </h5>
             </div>
         }
     </div>
