@@ -89,7 +89,7 @@ namespace Sessiemeetings.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 
-                var user = new IdentityUser { UserName = Input.FirstName + " " + Input.LastName, Email = Input.Email };
+                var user = new IdentityUser {UserName = Input.FirstName + " " + Input.LastName, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
