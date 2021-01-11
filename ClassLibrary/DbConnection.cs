@@ -113,11 +113,11 @@ namespace ClassLibrary
             }
         }
 
-        public void InsertData( string formName, string Fields)
+        public void InsertFormsData( string user, string formName, string Fields)
         {
             connection.Open();
-            string userID = GenerateId();
-            string query = $"INSERT INTO FormsDataTable (UserID, FormName, FieldsData) VALUES ('{userID}', '{formName}', '{Fields}')";
+            string dataID = GenerateId();
+            string query = $"INSERT INTO FormsDataTable (DataID, UserID, FormName, FieldsData) VALUES ('{user}', '{formName}', '{Fields}')";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             try
             {
@@ -203,6 +203,42 @@ namespace ClassLibrary
                     list[0].Add(dataReader["FormID"] + "");
                     list[1].Add(dataReader["Name"] + "");
                     list[2].Add(dataReader["Fields"] + "");
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+
+                return list;
+            }
+            else
+            {
+                return list;
+            }
+
+        }
+
+        public List<string>[] GetFormsDataList()
+        {
+            string query = "SELECT * FROM FormsDataTable";
+
+            List<string>[] list = new List<string>[4];
+            list[0] = new List<string>();
+            list[1] = new List<string>();
+            list[2] = new List<string>();
+            list[3] = new List<string>();
+
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                //Puts the sessiontable into a list for display into the application
+                while (dataReader.Read())
+                {
+                    list[0].Add(dataReader["DataID"] + "");
+                    list[1].Add(dataReader["UserID"] + "");
+                    list[2].Add(dataReader["FormName"] + "");
+                    list[3].Add(dataReader["FieldsData"] + "");
                 }
                 dataReader.Close();
 

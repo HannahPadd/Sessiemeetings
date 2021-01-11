@@ -1,11 +1,10 @@
 @page "/FormsBoard"
 @inject NavigationManager NavigationManager
 @using System.Text.Json;
-@using System.Text.Json.Serialization;
-@using ClassLibrary.Models
 @using ClassLibrary
 @using Sessiemeetings.Data
-<h1>Forms Bord</h1>
+@layout AdminLayout
+<h1>Formulier Bord</h1>
 
 
 @if (forms == null)
@@ -23,12 +22,18 @@ else
                     </RadzenButton>
                 </Template>
             </RadzenGridColumn>
+            <RadzenGridColumn TItem="EvaluationForm" Title="Data Weergeven" Context="form" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Left" Width="100px">
+                <Template Context="forms">
+                    <RadzenButton Icon="done" ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" Click="@(args => loadDataBord(forms.formName))">
+                    </RadzenButton>
+                </Template>
+            </RadzenGridColumn>
         </Columns>
     </RadzenGrid>
 }
 @code {
 
-    private IEnumerable<string>[] List;
+    private IEnumerable<string>[] formsList;
     private List<EvaluationForm> forms;
 
 
@@ -36,11 +41,11 @@ else
     {
         forms = new List<EvaluationForm>();
         DbConnection getFormsList = new DbConnection();
-        List = getFormsList.GetFormsList();
-        for (int i = 0; i < List[0].Count(); i++)
+        formsList = getFormsList.GetFormsList();
+        for (int i = 0; i < formsList[0].Count(); i++)
         {
-            List<Field> jsonDe = JsonSerializer.Deserialize<List<Field>>(List[2].ElementAt(i));
-            forms.Add(new EvaluationForm(List[0].ElementAt(i), List[1].ElementAt(i), jsonDe));
+            List<Field> jsonDe = JsonSerializer.Deserialize<List<Field>>(formsList[2].ElementAt(i));
+            forms.Add(new EvaluationForm(formsList[0].ElementAt(i), formsList[1].ElementAt(i), jsonDe));
         }
 
     }
@@ -50,4 +55,8 @@ else
         NavigationManager.NavigateTo("/Form/" + formName);
     }
 
+    public void loadDataBord(string formName)
+    {
+        NavigationManager.NavigateTo("/DataBord/" + formName);
+    }
 }

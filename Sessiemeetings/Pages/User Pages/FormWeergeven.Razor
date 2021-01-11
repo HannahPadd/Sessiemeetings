@@ -9,7 +9,7 @@
 
 
 
-<h1>Form Name : @Text</h1>
+<h1>Formulier Naam : @Text</h1>
 
 
 @foreach (Field field in form.fields)
@@ -62,13 +62,14 @@
     private IEnumerable<string>[] List;
     private List<EvaluationForm> forms;
     private EvaluationForm form;
+    public string user;
 
 
-    //protected override async Task OnInitializedAsync()
-    //{
-    //var authState = await AuthenticationStateTask;
-    //User = authState.User.Identity.Name;
-    //}
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User.Identity.Name;
+    }
 
     protected override void OnInitialized()
     {
@@ -94,7 +95,7 @@
     {
         var jsonFields = JsonSerializer.Serialize(form.fields);
         DbConnection insertData = new DbConnection();
-        insertData.InsertData(form.formName, jsonFields);
+        insertData.InsertFormsData(user, form.formName, jsonFields);
         Clear();
     }
 
