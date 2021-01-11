@@ -81,11 +81,26 @@ namespace ClassLibrary
             }
         }
         //Inserts into the Database
-        public void InsertSession(string Naam, string Locatie, string Onderwerp, string Tijd, string Datum)
+        public void InsertSession(string Naam, string Locatie, string Onderwerp, string Tijd, string Datum, int maxDeelnemers)
         {
             connection.Open();
             string sessionId = GenerateId();
-            string query = $"INSERT INTO SessionsTable (SessieID, Naam, Locatie, Onderwerp, Tijd, Datum) VALUES ('{sessionId}', '{Naam}', '{Locatie}', '{Onderwerp}', '{Tijd}', '{Datum}')";
+            string query = $"INSERT INTO SessionsTable (SessieID, Naam, Locatie, Onderwerp, Tijd, Datum, MaxDeelnemers, BeschikbarePlekken) VALUES ('{sessionId}', '{Naam}', '{Locatie}', '{Onderwerp}', '{Tijd}', '{Datum}', '{maxDeelnemers}', '{maxDeelnemers}')";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+            }
+        }
+
+        public void InsertAanmelding(string SessionId, string UserId, string Opmerking)
+        {
+            connection.Open();
+            string query = $"INSERT INTO SessieAanmeldingen (UserId, SessieId, Opmerking) VALUES ('{UserId}', '{SessionId}', '{Opmerking}')";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             try
             {
@@ -128,8 +143,19 @@ namespace ClassLibrary
                 System.Diagnostics.Debug.WriteLine(ex.ToString());
             }
         }
-
-
+        public void updateAvailableSpots(string SessionId)
+        {
+            string query = $"UPDATE SessionsTable SET BeschikbarePlekken = BeschikbarePlekken - 1 WHERE SessieID = '{SessionId}'";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+            }
+        }
 
         //Updates the Database
         public void Update()
@@ -146,13 +172,15 @@ namespace ClassLibrary
          {
             string query = "SELECT * FROM SessionsTable";
 
-            List<string>[] list = new List<string>[6];
+            List<string>[] list = new List<string>[8];
             list[0] = new List<string>();
             list[1] = new List<string>();
             list[2] = new List<string>();
             list[3] = new List<string>();
             list[4] = new List<string>();
             list[5] = new List<string>();
+            list[6] = new List<string>();
+            list[7] = new List<string>();
 
             if (this.OpenConnection() == true)
             {
@@ -168,6 +196,8 @@ namespace ClassLibrary
                     list[3].Add(dataReader["Onderwerp"] + "");
                     list[4].Add(dataReader["Tijd"] + "");
                     list[5].Add(dataReader["Datum"] + "");
+                    list[6].Add(dataReader["MaxDeelnemers"] + "");
+                    list[7].Add(dataReader["BeschikbarePlekken"] + "");
                 }
                 dataReader.Close();
 
@@ -304,6 +334,76 @@ namespace ClassLibrary
         public string GenerateId()
         {
             return Guid.NewGuid().ToString("N");
+        }
+
+
+
+
+        //Select users from the Database and returns them
+        public List<string>[] GetUsersList()
+        {
+            string query = "SELECT * from AspNetUsers";
+
+            List<string>[] list = new List<string>[6];
+            list[0] = new List<string>();
+            list[1] = new List<string>();
+            list[2] = new List<string>();
+
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    list[0].Add(dataReader["Id"] + "");
+                    list[1].Add(dataReader["UserName"] + "");
+                    list[2].Add(dataReader["Email"] + "");
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+
+                return list;
+            }
+            else
+            {
+                return list;
+            }
+
+        }
+
+        public List<string>[] GetAanmeldingen()
+        {
+            string query = "SELECT * from SessieAanmeldingen";
+
+            List<string>[] list = new List<string>[6];
+            list[0] = new List<string>();
+            list[1] = new List<string>();
+            list[2] = new List<string>();
+
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    list[0].Add(dataReader["UserId"] + "");
+                    list[1].Add(dataReader["SessieId"] + "");
+                    list[2].Add(dataReader["Opmerking"] + "");
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+
+                return list;
+            }
+            else
+            {
+                return list;
+            }
+
         }
     }
 }
