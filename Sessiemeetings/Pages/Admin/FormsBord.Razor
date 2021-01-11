@@ -45,7 +45,7 @@ else
         for (int i = 0; i < formsList[0].Count(); i++)
         {
             List<Field> jsonDe = JsonSerializer.Deserialize<List<Field>>(formsList[2].ElementAt(i));
-            forms.Add(new EvaluationForm(formsList[0].ElementAt(i), formsList[1].ElementAt(i), jsonDe));
+            forms.Add(new EvaluationForm("", formsList[0].ElementAt(i), formsList[1].ElementAt(i), jsonDe));
         }
 
     }

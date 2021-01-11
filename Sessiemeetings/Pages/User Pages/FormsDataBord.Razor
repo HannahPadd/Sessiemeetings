@@ -16,11 +16,11 @@ else
 {
     <RadzenGrid PageSize="10" AllowPaging="true" Data="@forms" TItem="EvaluationForm" ColumnWidth="200px">
         <Columns>
-            <RadzenGridColumn TItem="EvaluationForm" Property="forms.formName" Title="Gebruiker Naam" />
-            <RadzenGridColumn TItem="EvaluationForm" Property="forms.formName" Title="Formulier Naam" />
+            <RadzenGridColumn TItem="EvaluationForm" Property="form.FormID" Title="Gebruiker Naam" />
+            <RadzenGridColumn TItem="EvaluationForm" Property="form.formName" Title="Formulier Naam" />
             <RadzenGridColumn TItem="EvaluationForm" Title="Weergeven" Context="form" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Left" Width="100px">
-                <Template Context="forms">
-                    <RadzenButton Icon="done" ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" Click="@(args => loadFormPagina(forms))">
+                <Template Context="form">
+                    <RadzenButton Icon="done" ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" Click="@(args => loadFormPagina(form.DataID))">
                     </RadzenButton>
                 </Template>
             </RadzenGridColumn>
@@ -38,18 +38,19 @@ else
     {
         forms = new List<EvaluationForm>();
         DbConnection getDataList = new DbConnection();
-        dataList = getDataList.GetFormsDataList();
+        dataList = getDataList.GetFormsDataList(Text);
         for (int i = 0; i < dataList[0].Count(); i++)
         {
-            List<Field> jsonDe = JsonSerializer.Deserialize<List<Field>>(dataList[2].ElementAt(i));
-            forms.Add(new EvaluationForm(dataList[0].ElementAt(i), dataList[1].ElementAt(i), jsonDe));
+            List<Field> jsonDe = JsonSerializer.Deserialize<List<Field>>(dataList[3].ElementAt(i));
+            forms.Add(new EvaluationForm(dataList[0].ElementAt(i), dataList[1].ElementAt(i), dataList[2].ElementAt(i), jsonDe));
         }
+
 
     }
 
-    public void loadFormPagina(EvaluationForm form)
+    public void loadFormPagina(string data)
     {
-        NavigationManager.NavigateTo("/Form/" + form.formName);
+        NavigationManager.NavigateTo("/Form/" + data);
     }
 
 

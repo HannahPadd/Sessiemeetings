@@ -80,7 +80,7 @@
         for (int i = 0; i < List[0].Count(); i++)
         {
             List<Field> jsonDe = JsonSerializer.Deserialize<List<Field>>(List[2].ElementAt(i));
-            forms.Add(new EvaluationForm(List[0].ElementAt(i), List[1].ElementAt(i), jsonDe));
+            forms.Add(new EvaluationForm("", List[0].ElementAt(i), List[1].ElementAt(i), jsonDe));
         }
         form = forms.Find(form => form.formName == Text);
     }

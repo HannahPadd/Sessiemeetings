@@ -217,9 +217,9 @@ namespace ClassLibrary
 
         }
 
-        public List<string>[] GetFormsDataList()
+        public List<string>[] GetFormsDataList(string formName)
         {
-            string query = "SELECT * FROM FormsDataTable";
+            string query = "SELECT * FROM FormsDataTable WHERE FormName LIKE" + "'" + formName + "'";
 
             List<string>[] list = new List<string>[4];
             list[0] = new List<string>();
