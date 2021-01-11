@@ -46,21 +46,21 @@
                     </table>
                     @if (ShowPopup)
                     {
-                        //This is the popup to create or edit a user
+                        //Popup voor edit of nieuwe gebruiker
                         <div class="modal" tabindex="-1" style="display:block" role="dialog">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h3 class="modal-title">Edit User</h3>
-                                        @*Button to close the popup*@
+                                        @*Knop om popup te sluiten*@
                                         <button type="button" class="close"
                                                 @onclick="ClosePopup">
                                             <span aria-hidden="true">X</span>
                                         </button>
                                     </div>
-                                    @*Edit form for the current user*@
+
                                     <div class="modal-body">
-                                        @*Only show Id if not a new user*@
+
                                         @if (objUser.Id != "")
                                         {
                                             <p>@objUser.Id</p>
@@ -90,10 +90,10 @@
                                                 @onclick="SaveUser">
                                             Opslaan
                                         </button>
-                                        @*Only show delete button if not a new record*@
+
                                         @if (objUser.Id != "")
                                         {
-                                            //Button to delete the forecast
+                                            //Knop om te deleten
                                             <button class="btn btn-danger"
                                                     @onclick="DeleteUser">
                                                 Verwijderen
@@ -126,63 +126,62 @@
             System.Security.Claims.ClaimsPrincipal CurrentUser;
             protected override async Task OnInitializedAsync()
             {
-                // ensure there is a AdminRole
+                // Is er een AdminRole?
                 var RoleResult = await _RoleManager.FindByNameAsync(AdminRole);
                 if (RoleResult == null)
                 {
-                    // Create AdminRole
+                    // AdminRole aanmaken
                     await _RoleManager.CreateAsync(new IdentityRole(AdminRole));
                 }
-                // Ensure a user named admin@cimsolution.nl is an Administrator
+                // Zorg dat admin@cimsolution.nl een admin is
                 var user = await _UserManager.FindByNameAsync("admin@cimsolution.nl");
                 if (user != null)
                 {
-                    // Is Admin@BlazorHelpWebsite.com in administrator role?
+                    //  Is admin@cimsolutions.nl admin?
                     var UserResult = await _UserManager.IsInRoleAsync(user, AdminRole);
                     if (!UserResult)
                     {
-                        // Put admin in Administrator role
+                        // Voeg toe aan AdminRole
                         await _UserManager.AddToRoleAsync(user, AdminRole);
                     }
                 }
-                // Get the current logged in user
+                // Huidige user ophalen
                 CurrentUser = (await authenticationStateTask).User;
 
 
                 GetUsers();
             }
 
-            // Able to edit current user
+            // Mogelijkheid user aan te passen
             IdentityUser objUser = new IdentityUser();
 
-            // Gets role placement for current role
+            // Wat is de role van currentuser?
             string CurrentUserRole { get; set; } = "Users";
 
-            // Collection to display the existing users
+            // Display currentusers
             List<IdentityUser> ColUsers = new List<IdentityUser>();
 
-            // Options to display in the roles dropdown when editing a user
+            // Role dropdown
             List<string> Options = new List<string>() { "Users", "administrator" };
 
-            // To hold any possible errors
+            // Error check
             string strError = "";
 
-            // To enable showing the Popup
+            // Pop up showen
             bool ShowPopup = false;
 
             void ClosePopup()
             {
-                // Close the Popup
+                // Popup sluiten
                 ShowPopup = false;
             }
 
             public void GetUsers()
             {
-                // clear any error messages
+                // Errors clearen
                 strError = "";
-                // Collection to hold users
                 ColUsers = new List<IdentityUser>();
-                // get users from _UserManager
+                // Users uit User_Manager
                 var user = _UserManager.Users.Select(x => new IdentityUser
                 {
                     Id = x.Id,
@@ -197,12 +196,12 @@
             }
             void AddNewUser()
             {
-                // Make new user
+                // Maak user aan
                 objUser = new IdentityUser();
                 objUser.PasswordHash = "*****";
-                // Set Id to blank
+                // Id = blank
                 objUser.Id = "";
-                // Open the Popup
+                // Open popup
                 ShowPopup = true;
             }
 
@@ -212,15 +211,14 @@
                 {
                     if (objUser.Id != "")
                     {
-                        // Get the user
+                        // Huidige useer
                         var user = await _UserManager.FindByIdAsync(objUser.Id);
                         // Update Username
                         user.UserName = objUser.UserName;
                         // Update Email
                         user.Email = objUser.Email;
-                        // Update the user
+                        // Update user
                         await _UserManager.UpdateAsync(user);
-                        // Only update password if the current value is not the default value
                         if (objUser.PasswordHash != "*****")
                         {
                             var resetToken =
@@ -248,28 +246,28 @@
                             }
                         }
 
-                        // Is user in administrator role?
+                        // Is user in AdminRole?
                         var UserResult =
                             await _UserManager
                             .IsInRoleAsync(user, AdminRole);
-                        // Is Administrator role selected but user is not an Administrator?
+                        // Is Admin geselecteerd maar user is geen admin?
                         if (
                             (CurrentUserRole == AdminRole)
                             &
                             (!UserResult))
                         {
-                            // Put admin in Administrator role
+                            // voeg toe aan AdminRole
                             await _UserManager
                                 .AddToRoleAsync(user, AdminRole);
                         }
                         else
                         {
-                            // Is Administrator role not selected but user is an Administrator?
+                            // Is AdminRole niet geselecteerd maar de user is admin?
                             if ((CurrentUserRole != AdminRole)
                                 &
                                 (UserResult))
                             {
-                                // Remove user from Administrator role
+                                // Verwijder uit AdminRole
                                 await _UserManager
                                     .RemoveFromRoleAsync(user, AdminRole);
                             }
@@ -277,7 +275,7 @@
                     }
                     else
                     {
-                        // Insert new user
+                        // Voeg nieuwe gebruiker toe
                         var NewUser =
                             new IdentityUser
                             {
@@ -307,10 +305,10 @@
                         }
                         else
                         {
-                            // Handle Roles
+
                             if (CurrentUserRole == AdminRole)
                             {
-                                // Put admin in Administrator role
+
                                 await _UserManager
                                     .AddToRoleAsync(NewUser, AdminRole);
                             }
@@ -327,13 +325,13 @@
 
             async Task EditUser(IdentityUser _IdentityUser)
             {
-                // Set the selected user as the current user
+
                 objUser = _IdentityUser;
-                // Get the user
+
                 var user = await _UserManager.FindByIdAsync(objUser.Id);
                 if (user != null)
                 {
-                    // Is user in administrator role?
+
                     var UserResult =
                         await _UserManager
                         .IsInRoleAsync(user, AdminRole);
@@ -352,11 +350,11 @@
             async Task DeleteUser()
             {
                 ShowPopup = false;
-                // Get the user
+
                 var user = await _UserManager.FindByIdAsync(objUser.Id);
                 if (user != null)
                 {
-                    // Delete the user
+
                     await _UserManager.DeleteAsync(user);
                 }
                 GetUsers();
