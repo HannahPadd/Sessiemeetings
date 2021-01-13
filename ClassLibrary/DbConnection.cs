@@ -149,7 +149,7 @@ namespace ClassLibrary
         //Gets the sessions back from the current user
         public List<string>[] GetSessionsOfUser(string currentUser) 
         {
-            string query = $"SELECT * from SessieAanmeldingen WHERE UserId='{currentUser}'";
+            string query = $"SELECT * FROM SessieAanmeldingen WHERE UserId='{currentUser}'";
             List<string> list = new List<string>();
 
             List<string>[] sessionsList = new List<string>[6];
@@ -171,19 +171,19 @@ namespace ClassLibrary
                 }
                 dataReader.Close();
                 for (int i = 0; i < list.Count; i++) {
-                    string query2 = $"SELECT * from SessionsTable WHERE SessieID='{list[i]}'";
+                    string query2 = $"SELECT * FROM SessionsTable WHERE SessieID='{list[i]}'";
 
                     MySqlCommand cmd2 = new MySqlCommand(query2, connection);
-                    MySqlDataReader dataReader2 = cmd.ExecuteReader();
+                    MySqlDataReader dataReader2 = cmd2.ExecuteReader();
 
                     while (dataReader2.Read())
                     {
-                       sessionsList[0].Add(dataReader["SessieId"] + "");
-                       sessionsList[1].Add(dataReader["Naam"] + "");
-                       sessionsList[2].Add(dataReader["Locatie"] + "");
-                       sessionsList[3].Add(dataReader["Onderwerp"] + "");
-                       sessionsList[4].Add(dataReader["Tijd"] + "");
-                       sessionsList[5].Add(dataReader["Datum"] + "");
+                       sessionsList[0].Add(dataReader2["SessieId"] + "");
+                       sessionsList[1].Add(dataReader2["Naam"] + "");
+                       sessionsList[2].Add(dataReader2["Locatie"] + "");
+                       sessionsList[3].Add(dataReader2["Onderwerp"] + "");
+                       sessionsList[4].Add(dataReader2["Tijd"] + "");
+                       sessionsList[5].Add(dataReader2["Datum"] + "");
                     }
                  }
                 return sessionsList;

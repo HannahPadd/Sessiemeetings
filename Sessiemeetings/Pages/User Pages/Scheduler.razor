@@ -26,24 +26,15 @@
 </RadzenTemplateForm>
 
 @code {
-    RadzenScheduler<Appointment> scheduler;
-    //EventConsole console;
-    Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
+        RadzenScheduler<Appointment> scheduler;
+        //EventConsole console;
+        Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
     private IEnumerable<string>[] List;
     public string User;
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationStateTask { get; set; }
 
-    IList<Appointment> appointments = new List<Appointment>
-{
-    new Appointment { Start = DateTime.Today.AddDays(-2), End = DateTime.Today.AddDays(-2), Text = "Birthday" },
-    new Appointment { Start = DateTime.Today.AddDays(-11), End = DateTime.Today.AddDays(-10), Text = "Day off" },
-    new Appointment { Start = DateTime.Today.AddDays(-10), End = DateTime.Today.AddDays(-8), Text = "Work from home" },
-    new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(12), Text = "Online meeting" },
-    new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(13), Text = "Skype call" },
-    new Appointment { Start = DateTime.Today.AddHours(14), End = DateTime.Today.AddHours(14).AddMinutes(30), Text = "Dentist appointment" },
-    new Appointment { Start = DateTime.Today.AddDays(1), End = DateTime.Today.AddDays(12), Text = "Vacation" },
-    };
+    IList<Appointment> appointments = new List<Appointment> { };
 
     protected override async Task OnInitializedAsync()
     {
@@ -53,7 +44,7 @@
         List = GetAppointment.GetSessionsOfUser(User);
         for (int i = 0; i < List[0].Count(); i++)
         {
-            appointments.Add(new Appointment(List[0].ElementAt(i), DateTime.Parse(List[1].ElementAt(i)), DateTime.Parse(List[2].ElementAt(i))));
+            appointments.Add(new Appointment(List[0].ElementAt(i), List[2].ElementAt(i), DateTime.Parse(List[4].ElementAt(i)), DateTime.Parse(List[5].ElementAt(i))));
         }
     }
 
