@@ -91,7 +91,6 @@
         field.data = value.ToString();
         if (field.type == "Date")
         {
-
             field.data = field.data.Remove(field.data.Length - 3, 3);
         }
     }
@@ -99,6 +98,7 @@
 
     public void Submit()
     {
+
         var jsonFields = JsonSerializer.Serialize(form.fields);
         DbConnection insertData = new DbConnection();
         insertData.InsertFormsData(user, form.formName, jsonFields);

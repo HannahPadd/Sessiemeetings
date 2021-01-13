@@ -4,9 +4,10 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<IdentityUser> UserManager
 @using Microsoft.AspNetCore.Identity
+@using System.Text.Json;
+@using Sessiemeetings.Data
 @using ClassLibrary.Models
 @using ClassLibrary
-@using Sessiemeetings.Data
 @using ClassLibrary.Services
 <h1>Sessies Bord</h1>
 
@@ -37,6 +38,12 @@ else
                     }
                 </Template>
             </RadzenGridColumn>
+            <RadzenGridColumn TItem="SessionModel" Property="FormID" Title="Sessie Evalueren" Context="form" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Left" Width="100px">
+                <Template Context="Sessie">
+                    <RadzenButton Icon="done" ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" Click="@(args => loadFormPagina(Sessie.FormID))">
+                    </RadzenButton>
+                </Template>
+            </RadzenGridColumn>
         </Columns>
     </RadzenGrid>
 }
@@ -50,6 +57,9 @@ else
     public string User;
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationStateTask { get; set; }
+    private IEnumerable<string>[] formsList;
+    private List<EvaluationForm> forms;
+    private EvaluationForm form;
 
 
     protected override async Task OnInitializedAsync()
@@ -78,6 +88,19 @@ else
 
     }
 
+    protected override void OnInitialized()
+    {
+        forms = new List<EvaluationForm>();
+        DbConnection getFormsList = new DbConnection();
+        formsList = getFormsList.GetFormsList();
+        for (int i = 0; i < formsList[0].Count(); i++)
+        {
+            List<Field> jsonDe = JsonSerializer.Deserialize<List<Field>>(formsList[2].ElementAt(i));
+            forms.Add(new EvaluationForm("", formsList[0].ElementAt(i), formsList[1].ElementAt(i), jsonDe));
+        }
+
+    }
+
     public bool AanmeldingBeschikbaar(SessionModel Sessie)
     {
         foreach (SessieAanmelding aanmelding in Aanmeldingen)
@@ -95,5 +118,11 @@ else
     {
         AppData.Sessie = Sessie;
         NavigationManager.NavigateTo("/SessieAanmeldPage");
+    }
+
+    public void loadFormPagina(string ID)
+    {
+        form = forms.Find(form => form.FormID == ID);
+        NavigationManager.NavigateTo("/Form/" + form.formName);
     }
 }
