@@ -16,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Sessiemeetings.Areas.Identity;
 using Sessiemeetings.Data;
 using Radzen;
+using ClassLibrary;
 
 namespace Sessiemeetings
 {
@@ -35,13 +36,15 @@ namespace Sessiemeetings
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<DialogService>();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddScoped<DialogService>();
+            services.AddScoped<ClassLibrary.Services.AppData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

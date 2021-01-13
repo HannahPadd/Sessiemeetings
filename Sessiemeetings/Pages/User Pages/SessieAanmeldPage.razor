@@ -1,60 +1,65 @@
 ﻿@page "/sessieaanmeldpage"
 @inject NavigationManager NavigationManager
-@inject DialogService DialogService
-@using ClassLibrary.Models 
+@inject ClassLibrary.Services.AppData AppData
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<IdentityUser> UserManager
+@using Microsoft.AspNetCore.Identity
+@using ClassLibrary.Models
+@using ClassLibrary
 
 <h1>Shrijf je in</h1>
 
 <div class="row">
     <div class="col-md-6">
         <h2>Sessie Info</h2>
-        <RadzenCard Style="width:350px;">
+        <RadzenCard Style="width:400px;">
             <div class="row">
                 <div class="col-md-6">
                     <div>SessieNaam:</div>
-                    <b>(SessieNaam)</b>
+                    <b>@Sessie.SessionName</b>
                     <div style="margin-top:20px">Description:</div>
-                    <b>(Description)</b>
+                    <b>@Sessie.SessionDesc</b>
                 </div>
                 <div class="col-md-6">
                     <div>Location:</div>
-                    <b>(Location)</b>
+                    <b>@Sessie.SessionAddress</b>
                     <div style="margin-top:20px">Date:</div>
-                    <b>(Date)</b>
+                    <b>@Sessie.SessionDate</b>
                     <div style="margin-top:20px">Starting Time</div>
-                    <b>(Starting Time)</b>
+                    <b>@Sessie.StartingTime</b>
                 </div>
             </div>
 
         </RadzenCard>
         <h3>Laat hier opmerkingen achter(Dieet voorkeuren)</h3>
-        <RadzenTextArea Cols="50" Rows="3" Style="margin-bottom: 20px" Change="@(args => OnInput(args))" />
-        <RadzenButton Click="@submitAanmelding" Text="Voltooi Aanmelding" Style="margin-bottom: 20px; width: 150px" />
+        <RadzenTextArea Cols="50" Rows="3" Style="margin-bottom: 20px" @bind-Value=@opmerking />
+        <RadzenButton Click="@submitAanmelding" Text="Aanmelden" Style="margin-bottom: 20px; width: 150px" />
     </div>
 </div>
 
 
 @code {
 
-    [Parameter] public string sessie { get; set; }
     public SessionModel Sessie;
-
     public string opmerking;
+    public SessieAanmelding Aanmelding;
+    public string User;
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationStateTask { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        Sessie = Newtonsoft.Json.JsonConvert.DeserializeObject<SessionModel>(sessie);
+        Sessie = AppData.Sessie;
+        var authState = await AuthenticationStateTask;
+        User = authState.User.Identity.Name;
     }
 
-
-
-    void OnInput(string value)
-    {
-        string opmerking = value;
-    }
     void submitAanmelding()
     {
-        //aantemeldenSessie.Deelnemers add deelnemer
+        Aanmelding = new SessieAanmelding(User, Sessie.SessionId, opmerking, false);
+        DbConnection AanmeldingVoltooien = new DbConnection();
+        AanmeldingVoltooien.InsertAanmelding(Aanmelding.SessieId, Aanmelding.UserId, Aanmelding.Opmerking);
+        AanmeldingVoltooien.updateAvailableSpots(Sessie.SessionId);
         NavigationManager.NavigateTo("/SessiesBord");
     }
 }
