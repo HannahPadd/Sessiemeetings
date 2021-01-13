@@ -13,8 +13,12 @@ namespace ClassLibrary.Models
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
 
-
-
+        public Appointment(string text, DateTime start, DateTime end)
+        {
+            this.Text = text;
+            this.Start = start;
+            this.End = end;
+        }
         
     }
 }

@@ -1,6 +1,7 @@
 ﻿@page "/scheduler"
 @inject DialogService DialogService
 @using ClassLibrary.Models
+@using ClassLibrary
 @using Radzen.Blazor
 @using Radzen
 
@@ -19,18 +20,22 @@
             </RadzenScheduler>
         </div>
         <div class="col-xl-6">
-            
+
         </div>
     </div>
 </RadzenTemplateForm>
 
-    @code {
-        RadzenScheduler<Appointment> scheduler;
-        //EventConsole console;
-        Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
+@code {
+    RadzenScheduler<Appointment> scheduler;
+    //EventConsole console;
+    Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
+    private IEnumerable<string>[] List;
+    public string User;
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationStateTask { get; set; }
 
-        IList<Appointment> appointments = new List<Appointment>
-    {
+    IList<Appointment> appointments = new List<Appointment>
+{
     new Appointment { Start = DateTime.Today.AddDays(-2), End = DateTime.Today.AddDays(-2), Text = "Birthday" },
     new Appointment { Start = DateTime.Today.AddDays(-11), End = DateTime.Today.AddDays(-10), Text = "Day off" },
     new Appointment { Start = DateTime.Today.AddDays(-10), End = DateTime.Today.AddDays(-8), Text = "Work from home" },
@@ -40,38 +45,50 @@
     new Appointment { Start = DateTime.Today.AddDays(1), End = DateTime.Today.AddDays(12), Text = "Vacation" },
     };
 
-        async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateTask;
+        User = authState.User.Identity.Name;
+        DbConnection GetAppointment = new DbConnection();
+        List = GetAppointment.GetSessionsOfUser(User);
+        for (int i = 0; i < List[0].Count(); i++)
         {
-            //console.Log($"SlotSelect: Start={args.Start} End={args.End}");
-
-            Appointment data = await DialogService.OpenAsync<AddAppointmentPage>("Add Appointment",
-                new Dictionary<string, object> { { "Start", args.Start }, { "End", args.End } });
-
-            if (data != null)
-            {
-                appointments.Add(data);
-                // Either call the Reload method or reassign the Data property of the Scheduler
-                //??
-                await scheduler.Reload();
-            }
-        }
-
-        async Task OnAppointmentSelect(SchedulerAppointmentSelectEventArgs<Appointment> args)
-        {
-            //console.Log($"AppointmentSelect: Appointment={args.Data.Text}");
-
-            await DialogService.OpenAsync<EditAppointmentPage>("Edit Appointment", new Dictionary<string, object> { { "Appointment", args.Data } });
-
-            await scheduler.Reload();
-        }
-
-        void OnAppointmentRender(SchedulerAppointmentRenderEventArgs<Appointment> args)
-        {
-            // Never call StateHasChanged in AppointmentRender - would lead to infinite loop
-
-            if (args.Data.Text == "Birthday")
-            {
-                args.Attributes["style"] = "background: red";
-            }
+            appointments.Add(new Appointment(List[0].ElementAt(i), DateTime.Parse(List[1].ElementAt(i)), DateTime.Parse(List[2].ElementAt(i))));
         }
     }
+
+    async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
+    {
+        //console.Log($"SlotSelect: Start={args.Start} End={args.End}");
+
+        Appointment data = await DialogService.OpenAsync<AddAppointmentPage>("Add Appointment",
+            new Dictionary<string, object> { { "Start", args.Start }, { "End", args.End } });
+
+        if (data != null)
+        {
+            appointments.Add(data);
+            // Either call the Reload method or reassign the Data property of the Scheduler
+            //??
+            await scheduler.Reload();
+        }
+    }
+
+    async Task OnAppointmentSelect(SchedulerAppointmentSelectEventArgs<Appointment> args)
+    {
+        //console.Log($"AppointmentSelect: Appointment={args.Data.Text}");
+
+        await DialogService.OpenAsync<EditAppointmentPage>("Edit Appointment", new Dictionary<string, object> { { "Appointment", args.Data } });
+
+        await scheduler.Reload();
+    }
+
+    void OnAppointmentRender(SchedulerAppointmentRenderEventArgs<Appointment> args)
+    {
+        // Never call StateHasChanged in AppointmentRender - would lead to infinite loop
+
+        if (args.Data.Text == "Birthday")
+        {
+            args.Attributes["style"] = "background: red";
+        }
+    }
+}

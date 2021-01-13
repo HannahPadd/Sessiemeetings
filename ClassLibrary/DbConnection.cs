@@ -171,7 +171,7 @@ namespace ClassLibrary
                 }
                 dataReader.Close();
                 for (int i = 0; i < list.Count; i++) {
-                    string query2 = $"SELECT * from SessionsTale WHERE SessieID='{list[i]}'";
+                    string query2 = $"SELECT * from SessionsTable WHERE SessieID='{list[i]}'";
 
                     MySqlCommand cmd2 = new MySqlCommand(query2, connection);
                     MySqlDataReader dataReader2 = cmd.ExecuteReader();
