@@ -65,7 +65,7 @@ namespace Sessiemeetings
             {
                 // Alle karakters toestaan in userName
                 options.User.AllowedUserNameCharacters =
-                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789- ";
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789- _@";
             });
                 services.AddRazorPages(); 
             services.AddServerSideBlazor();
