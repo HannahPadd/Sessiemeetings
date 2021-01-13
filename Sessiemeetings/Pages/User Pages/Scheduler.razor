@@ -11,7 +11,7 @@
 <RadzenTemplateForm TItem="Appointment" Name="Scheduler" AdditionalSourceCodePages=@(new List<string>() { "AddAppointmentPage.razor", "EditAppointmentPage.razor" })>
     <div class="row">
         <div class="col-xl-6">
-            <RadzenScheduler @ref=@scheduler style="height: 768px;" TItem="Appointment" Data=@appointments StartProperty="Start" EndProperty="End"
+            <RadzenScheduler @ref=@scheduler style="height: 768px;" TItem="Appointment" Data="@appointments" StartProperty="Start" EndProperty="End"
                              TextProperty="Text" SelectedIndex="2"
                              SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect AppointmentRender=@OnAppointmentRender>
                 <RadzenDayView />
@@ -33,7 +33,6 @@
     public string User;
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationStateTask { get; set; }
-
     IList<Appointment> appointments = new List<Appointment> { };
 
     protected override async Task OnInitializedAsync()
@@ -42,9 +41,11 @@
         User = authState.User.Identity.Name;
         DbConnection GetAppointment = new DbConnection();
         List = GetAppointment.GetSessionsOfUser(User);
+
+
         for (int i = 0; i < List[0].Count(); i++)
         {
-            appointments.Add(new Appointment(List[0].ElementAt(i), List[2].ElementAt(i), DateTime.Parse(List[4].ElementAt(i)), DateTime.Parse(List[5].ElementAt(i))));
+            new Appointment { Text = (List[1].ElementAt(i)), Start = DateTime.Parse(List[4].ElementAt(i)), End = DateTime.Parse(List[5].ElementAt(i)) };
         }
     }
 

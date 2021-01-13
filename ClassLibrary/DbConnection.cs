@@ -219,6 +219,7 @@ namespace ClassLibrary
                        sessionsList[4].Add(dataReader2["Tijd"] + "");
                        sessionsList[5].Add(dataReader2["Datum"] + "");
                     }
+                    dataReader2.Close();
                  }
                 return sessionsList;
             }
