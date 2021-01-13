@@ -144,6 +144,57 @@ namespace ClassLibrary
             }
              
          }
+
+
+        //Gets the sessions back from the current user
+        public List<string>[] GetSessionsOfUser(string currentUser) 
+        {
+            string query = $"SELECT * from SessieAanmeldingen WHERE UserId='{currentUser}'";
+            List<string> list = new List<string>();
+
+            List<string>[] sessionsList = new List<string>[6];
+            sessionsList[0] = new List<string>();
+            sessionsList[1] = new List<string>();
+            sessionsList[2] = new List<string>();
+            sessionsList[3] = new List<string>();
+            sessionsList[4] = new List<string>();
+            sessionsList[5] = new List<string>();
+
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    list.Add(dataReader["SessieId"] + "");
+                }
+                dataReader.Close();
+                for (int i = 0; i < list.Count; i++) {
+                    string query2 = $"SELECT * from SessionsTale WHERE SessieID='{list[i]}'";
+
+                    MySqlCommand cmd2 = new MySqlCommand(query2, connection);
+                    MySqlDataReader dataReader2 = cmd.ExecuteReader();
+
+                    while (dataReader2.Read())
+                    {
+                       sessionsList[0].Add(dataReader["SessieId"] + "");
+                       sessionsList[1].Add(dataReader["Naam"] + "");
+                       sessionsList[2].Add(dataReader["Locatie"] + "");
+                       sessionsList[3].Add(dataReader["Onderwerp"] + "");
+                       sessionsList[4].Add(dataReader["Tijd"] + "");
+                       sessionsList[5].Add(dataReader["Datum"] + "");
+                    }
+                 }
+                return sessionsList;
+            }
+                
+            else
+            {
+                return sessionsList;
+            }
+
+        }
          //Count statement
         public int Count()
         {
