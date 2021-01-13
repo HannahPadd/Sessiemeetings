@@ -5,6 +5,8 @@
 @inject RoleManager<IdentityRole> _RoleManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
+
+<RadzenNotification/>
 <AuthorizeView>
     <Authorized>
         @if (@context.User.IsInRole(AdminRole))
