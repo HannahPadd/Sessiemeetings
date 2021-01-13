@@ -98,7 +98,7 @@ namespace ClassLibrary
         public void InsertAanmelding(string SessionId, string UserId, string Opmerking)
         {
             connection.Open();
-            string query = $"INSERT INTO SessieAanmeldingen (UserId, SessieId, Opmerking) VALUES ('{UserId}', '{SessionId}', '{Opmerking}')";
+            string query = $"INSERT INTO SessieAanmeldingen (UserId, SessieId, Opmerking, IsAanwezig) VALUES ('{UserId}', '{SessionId}', '{Opmerking}', 'False')";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             try
             {
@@ -245,6 +245,7 @@ namespace ClassLibrary
             list[0] = new List<string>();
             list[1] = new List<string>();
             list[2] = new List<string>();
+            list[3] = new List<string>();
 
             if (this.OpenConnection() == true)
             {
@@ -256,6 +257,7 @@ namespace ClassLibrary
                     list[0].Add(dataReader["UserId"] + "");
                     list[1].Add(dataReader["SessieId"] + "");
                     list[2].Add(dataReader["Opmerking"] + "");
+                    list[3].Add(dataReader["IsAanwezig"] + "");
                 }
                 dataReader.Close();
 
@@ -266,6 +268,37 @@ namespace ClassLibrary
             else
             {
                 return list;
+            }
+        }
+
+        public void DeelnemerAanwezig(string UserId, string SessionId)
+        {
+            connection.Open();
+            string query = $"UPDATE SessieAanmeldingen SET IsAanwezig = 'True' WHERE UserId = '{UserId}' AND SessieId = '{SessionId}'";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+            }
+
+        }
+
+        public void DeelnemerAfwezig(string UserId, string SessionId)
+        {
+            connection.Open();
+            string query = $"UPDATE SessieAanmeldingen SET IsAanwezig = 'False' WHERE UserId = '{UserId}' AND SessieId = '{SessionId}'";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
             }
 
         }
