@@ -6,6 +6,7 @@
 @using Microsoft.AspNetCore.Identity
 @using ClassLibrary.Models
 @using ClassLibrary
+@using Sessiemeetings.Data
 @using ClassLibrary.Services
 <h1>Sessies Bord</h1>
 
@@ -36,8 +37,6 @@ else
                     }
                 </Template>
             </RadzenGridColumn>
-
-
         </Columns>
     </RadzenGrid>
 }
@@ -65,7 +64,7 @@ else
 
         for (int i = 0; i < SessionList[0].Count(); i++)
         {
-            Sessies.Add(new SessionModel(SessionList[0].ElementAt(i), SessionList[1].ElementAt(i), SessionList[2].ElementAt(i), SessionList[3].ElementAt(i), SessionList[4].ElementAt(i), SessionList[5].ElementAt(i), SessionList[6].ElementAt(i), SessionList[7].ElementAt(i)));
+            Sessies.Add(new SessionModel(SessionList[0].ElementAt(i), SessionList[1].ElementAt(i), SessionList[2].ElementAt(i), SessionList[3].ElementAt(i), SessionList[4].ElementAt(i), SessionList[5].ElementAt(i), SessionList[6].ElementAt(i), SessionList[7].ElementAt(i), SessionList[8].ElementAt(i)));
         }
 
         for (int i = 0; i < AanmeldingenList[0].Count(); i++)

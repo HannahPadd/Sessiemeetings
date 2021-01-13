@@ -81,11 +81,11 @@ namespace ClassLibrary
             }
         }
         //Inserts into the Database
-        public void InsertSession(string Naam, string Locatie, string Onderwerp, string Tijd, string Datum, int maxDeelnemers)
+        public void InsertSession(string Naam, string Locatie, string Onderwerp, string Tijd, string Datum, int maxDeelnemers, string FormID)
         {
             connection.Open();
             string sessionId = GenerateId();
-            string query = $"INSERT INTO SessionsTable (SessieID, Naam, Locatie, Onderwerp, Tijd, Datum, MaxDeelnemers, BeschikbarePlekken) VALUES ('{sessionId}', '{Naam}', '{Locatie}', '{Onderwerp}', '{Tijd}', '{Datum}', '{maxDeelnemers}', '{maxDeelnemers}')";
+            string query = $"INSERT INTO SessionsTable (SessieID, Naam, Locatie, Onderwerp, Tijd, Datum, MaxDeelnemers, BeschikbarePlekken, FormID) VALUES ('{sessionId}', '{Naam}', '{Locatie}', '{Onderwerp}', '{Tijd}', '{Datum}', '{maxDeelnemers}', '{maxDeelnemers}', '{FormID}')";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             try
             {
@@ -172,7 +172,7 @@ namespace ClassLibrary
          {
             string query = "SELECT * FROM SessionsTable";
 
-            List<string>[] list = new List<string>[8];
+            List<string>[] list = new List<string>[9];
             list[0] = new List<string>();
             list[1] = new List<string>();
             list[2] = new List<string>();
@@ -181,6 +181,7 @@ namespace ClassLibrary
             list[5] = new List<string>();
             list[6] = new List<string>();
             list[7] = new List<string>();
+            list[8] = new List<string>();
 
             if (this.OpenConnection() == true)
             {
@@ -198,6 +199,7 @@ namespace ClassLibrary
                     list[5].Add(dataReader["Datum"] + "");
                     list[6].Add(dataReader["MaxDeelnemers"] + "");
                     list[7].Add(dataReader["BeschikbarePlekken"] + "");
+                    list[8].Add(dataReader["FormID"] + "");
                 }
                 dataReader.Close();
 

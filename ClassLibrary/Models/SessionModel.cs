@@ -13,9 +13,10 @@ namespace ClassLibrary.Models {
         public string SessionAddress { get; set; }
         public string MaxAttendees { get; set; }
         public string AvailableSpots { get; set; }
-    
+        public string FormID { get; set; }
 
-        public SessionModel(string Id, string name, string location, string description, string date, string startingTime, string maxattendees, string availablespots) {
+
+        public SessionModel(string Id, string name, string location, string description, string date, string startingTime, string maxattendees, string availablespots, string formID) {
             this.SessionId = Id;
             this.SessionName = name;
             this.SessionDesc = description;
@@ -24,6 +25,7 @@ namespace ClassLibrary.Models {
             this.StartingTime = startingTime;
             this.MaxAttendees = maxattendees;
             this.AvailableSpots = availablespots;
+            this.FormID = formID;
         }
     }
 }
