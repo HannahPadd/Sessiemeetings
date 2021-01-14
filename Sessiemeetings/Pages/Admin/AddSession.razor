@@ -5,6 +5,7 @@
 @using ClassLibrary
 @using Sessiemeetings.Data
 @inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
 
     <!DOCTYPE html>
     <html>
@@ -82,6 +83,7 @@
                                 <div class="col-md-4 align-items-center d-flex">
                                     <RadzenLabel Text="Adres" />
                                 </div>
+                            </div>
                                 <div class="col-md-8">
                                     <RadzenTextBox style="width: 100%;" @bind-Value="SessionAdress" />
                                 </div>
@@ -121,6 +123,7 @@
         @code {
 
             DateTime? value = DateTime.Now;
+            public bool succes;
 
             private IEnumerable<string>[] formsList;
             private List<EvaluationForm> forms;
@@ -151,6 +154,7 @@
                 public string SessionAdress { get; set; }
                 public string MaxDeelnemers { get; set; }
                 public DateTime TodayDate { get; set; }
+                public bool succes;
                 public string FormID { get; set; }
             }
 
@@ -166,7 +170,17 @@
             {
                 form = forms.Find(form => form.formName == FormID);
                 DbConnection addSession = new DbConnection();
-                addSession.InsertSession(SessionName, SessionAdress, SessionDesc, SessionTime.ToString("HH:mm"), SessionDate.Date.ToString("yyyy-MM-d"), MaxDeelnemers, form.FormID);
+                succes = addSession.InsertSession(SessionName, SessionAdress, SessionDesc, SessionTime.ToString("HH:mm"), SessionDate.Date.ToString("yyyy-MM-d"), MaxDeelnemers, form.FormID);
+                if (succes == true)
+                {
+                    var successMsg = new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Gelukt", Detail = "De sessie is toegevoegd", Duration = 4000 };
+                    NotificationService.Notify(successMsg);
+                }
+                else
+                {
+                    var errorMsg = new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Mislukt", Detail = "De sessie is NIET toegevoegd", Duration = 4000 };
+                    NotificationService.Notify(errorMsg);
+                }
             }
 
             void Cancel()

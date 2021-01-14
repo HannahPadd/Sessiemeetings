@@ -20,6 +20,27 @@ using ClassLibrary;
 
 namespace Sessiemeetings
 {
+
+    public class MySignInManager : SignInManager<IdentityUser>
+    {
+
+        public MySignInManager(Microsoft.AspNetCore.Identity.UserManager<Microsoft.AspNetCore.Identity.IdentityUser> userManager, Microsoft.AspNetCore.Http.IHttpContextAccessor contextAccessor, Microsoft.AspNetCore.Identity.IUserClaimsPrincipalFactory<Microsoft.AspNetCore.Identity.IdentityUser> claimsFactory, Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Identity.IdentityOptions> optionsAccessor, Microsoft.Extensions.Logging.ILogger<Microsoft.AspNetCore.Identity.SignInManager<Microsoft.AspNetCore.Identity.IdentityUser>> logger, Microsoft.AspNetCore.Authentication.IAuthenticationSchemeProvider schemes, IUserConfirmation<IdentityUser> confirmation)
+            : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes, confirmation)
+        {
+        }
+
+        public override async Task<SignInResult> PasswordSignInAsync(string userName, string password,
+            bool isPersistent, bool lockoutOnFailure)
+        {
+            var user = await UserManager.FindByEmailAsync(userName);
+            if (user == null)
+            {
+                return SignInResult.Failed;
+            }
+
+            return await PasswordSignInAsync(user, password, isPersistent, lockoutOnFailure);
+        }
+    }
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -29,8 +50,7 @@ namespace Sessiemeetings
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -38,15 +58,22 @@ namespace Sessiemeetings
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>()
+                .AddSignInManager<MySignInManager>()   //register new SignInManager 
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddRazorPages();
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Alle karakters toestaan in userName
+                options.User.AllowedUserNameCharacters =
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789- _@";
+            });
+                services.AddRazorPages(); 
             services.AddServerSideBlazor();
+            services.AddScoped<NotificationService>();
             services.AddScoped<DialogService>();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddScoped<ClassLibrary.Services.AppData>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -57,7 +84,7 @@ namespace Sessiemeetings
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+
                 app.UseHsts();
             }
 

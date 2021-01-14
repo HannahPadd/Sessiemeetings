@@ -1,6 +1,15 @@
 ﻿@page "/"
 @using System.Threading;
 @implements IDisposable
+@using Microsoft.AspNetCore.Authorization;
+@using Microsoft.AspNetCore.Identity;
+@using ClassLibrary.Models
+@using ClassLibrary
+@using ClassLibrary.Services
+@inject ClassLibrary.Services.AppData AppData
+@inject UserManager<IdentityUser> _UserManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
 
 <!DOCTYPE html>
 <html>
@@ -8,19 +17,18 @@
     <link rel="stylesheet" href="/css/CSS/style.css">
 </head>
 <body>
-    <h1>Welkom medewerker!</h1>
+    <h1>Welkom @userName!</h1>
+    <div class="card1">
+        <RadzenCard Style="width:300px; margin-bottom:20px; margin-right:20px; margin-top:50px; height: 200px">
 
-    <div class="card1"
-            <RadzenCard Style="width:300px; margin-bottom:20px; margin-right:20px; margin-top:50px; height: 200px">
 
+            <h3>Aanmelden voor een kennissessie</h3>
+            <h4>Hier kunt u de huidige sessie's bekijken en u aanmelden voor een sessie.</h4>
 
-                        <h3>Aanmelden voor een kennissessie</h3>
-                        <h4>Hier kunt u de huidige sessie's bekijken en u aanmelden voor een sessie.</h4>
+            <RadzenLink Path="SessiesBord" Text="Klik hier" Style="color:#547733" />
+        </RadzenCard>
 
-                    <RadzenLink Path="SessiesBord" Text="Klik hier" Style="color:#547733" />
-</RadzenCard>
-
-        </div>
+    </div>
 
     <div class="card2">
         <RadzenCard Style="width:300px; margin-bottom:20px; margin-right:20px; margin-top:50px; height: 200px">
@@ -34,8 +42,8 @@
 
     <div class="stick-to-right">
         @*<div class="text-center">
-            <h3>@displayDate</h3>
-        </div>*@
+                <h3>@displayDate</h3>
+            </div>*@
         <RadzenRadialGauge Style="width: 100%; height: 300px;">
             <RadzenRadialGaugeScale Step="1" Min="0" Max="12" StartAngle="0" EndAngle="360" ShowFirstTick="false"
                                     MinorStep=@minorStep
@@ -77,6 +85,18 @@
 
 
 @code {
+
+    public string userName;
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+    private async Task LogUsername()
+    {
+        var authState = await authenticationStateTask;
+        var user = authState.User;
+        userName = $"{ user.Identity.Name}";
+    }
+
     Timer timer;
     double hours;
     double minutes;
@@ -86,6 +106,7 @@
 
     protected override void OnInitialized()
     {
+        LogUsername();
         timer = new Timer(state =>
         {
             var now = DateTime.Now;
@@ -101,4 +122,6 @@
     {
         timer.Dispose();
     }
+
+
 }
