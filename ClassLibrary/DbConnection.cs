@@ -81,7 +81,7 @@ namespace ClassLibrary
             }
         }
         //Inserts into the Database
-        public void InsertSession(string Naam, string Locatie, string Onderwerp, string Tijd, string Datum, int maxDeelnemers, string FormID)
+        public bool InsertSession(string Naam, string Locatie, string Onderwerp, string Tijd, string Datum, int maxDeelnemers, string FormID)
         {
             connection.Open();
             string sessionId = GenerateId();
