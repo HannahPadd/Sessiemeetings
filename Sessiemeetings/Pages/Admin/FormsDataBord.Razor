@@ -1,0 +1,58 @@
+@page "/DataBord/{text}"
+@inject NavigationManager NavigationManager
+@using System.Text.Json;
+@using ClassLibrary
+@using Sessiemeetings.Data
+@layout AdminLayout
+
+<h1> Data Bord </h1>
+
+
+@if (forms == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <RadzenGrid PageSize="10" AllowPaging="true" Data="@forms" TItem="EvaluationForm" ColumnWidth="200px">
+        <Columns>
+            <RadzenGridColumn TItem="EvaluationForm" Property="form.FormID" Title="Gebruiker Naam" />
+            <RadzenGridColumn TItem="EvaluationForm" Property="form.formName" Title="Formulier Naam" />
+            <RadzenGridColumn TItem="EvaluationForm" Title="Weergeven" Context="form" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Left" Width="100px">
+                <Template Context="form">
+                    <RadzenButton Icon="done" ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" Click="@(args => loadFormPagina(form.DataID))">
+                    </RadzenButton>
+                </Template>
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
+}
+@code {
+    [Parameter]
+    public string Text { get; set; }
+    private IEnumerable<string>[] dataList;
+    private List<EvaluationForm> forms;
+
+
+    protected override void OnInitialized()
+    {
+        forms = new List<EvaluationForm>();
+        DbConnection getDataList = new DbConnection();
+        dataList = getDataList.GetFormsDataList(Text);
+        for (int i = 0; i < dataList[0].Count(); i++)
+        {
+            List<Field> jsonDe = JsonSerializer.Deserialize<List<Field>>(dataList[3].ElementAt(i));
+            forms.Add(new EvaluationForm(dataList[0].ElementAt(i), dataList[1].ElementAt(i), dataList[2].ElementAt(i), jsonDe ));
+        }
+
+
+    }
+
+    public void loadFormPagina(string data)
+    {
+        NavigationManager.NavigateTo("/FormsData/" + data);
+    }
+
+
+
+}
