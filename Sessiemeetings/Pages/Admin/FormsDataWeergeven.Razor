@@ -1,0 +1,65 @@
+@page "/FormsData/{text}"
+@inject NavigationManager NavigationManager
+@using Radzen.Blazor
+@using Sessiemeetings.Data
+@using ClassLibrary
+@using System.Text.Json;
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@layout AdminLayout;
+
+<div class="row">
+    <div class="col-md-6">
+        <RadzenFieldset Text="@user">
+
+            @foreach (Field field in form.fields)
+            {
+                <div class="row">
+
+                    <div class="col-sm-3">
+                        <b> @field.title  </b>
+                    </div>
+
+                    @if (field.type == "Rate")
+                    {
+                        <div class="col-sm-6">
+                            <h5> @field.data /5</h5>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-sm-6">
+                            <h5> @field.data </h5>
+                        </div>
+                    }
+                </div>
+            }
+        </RadzenFieldset>
+    </div>
+</div>
+
+
+            @code {
+                [Parameter]
+                public string Text { get; set; }
+                public EvaluationForm form;
+                List<string> list = new List<string>();
+                public string user;
+
+                protected override async Task OnInitializedAsync()
+                {
+                    var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+                    user = authState.User.Identity.Name;
+
+                }
+
+                protected override void OnInitialized()
+                {
+
+                    DbConnection getFormData = new DbConnection();
+                    list = getFormData.GetFormData(Text);
+                    List<Field> jsonDe = JsonSerializer.Deserialize<List<Field>>(list[3]);
+                    form = new EvaluationForm(list[0], list[1], list[2], jsonDe);
+                }
+
+
+            }

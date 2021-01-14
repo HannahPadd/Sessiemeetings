@@ -4,6 +4,8 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<IdentityUser> UserManager
 @using Microsoft.AspNetCore.Identity
+@using System.Text.Json;
+@using Sessiemeetings.Data
 @using ClassLibrary.Models
 @using ClassLibrary
 @using ClassLibrary.Services
@@ -23,6 +25,8 @@ else
             <RadzenGridColumn TItem="SessionModel" Property="SessionDesc" Title="Beschrijving" />
             <RadzenGridColumn TItem="SessionModel" Property="SessionAddress" Title="Locatie" />
             <RadzenGridColumn TItem="SessionModel" Property="AvailableSpots" Title="Beschikbare plekken" />
+            <RadzenGridColumn TItem="SessionModel" Property="SessionDate" Title="Datum" />
+            <RadzenGridColumn TItem="SessionModel" Property="StartingTime" Title="Begin tijd" />
             <RadzenGridColumn TItem="SessionModel" Title="Aanmelden" Context="sessie" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
                 <Template Context="sessie">
                     @if (Int32.Parse(sessie.AvailableSpots) > 0 & AanmeldingBeschikbaar(sessie))
@@ -36,8 +40,12 @@ else
                     }
                 </Template>
             </RadzenGridColumn>
-
-
+            <RadzenGridColumn TItem="SessionModel" Property="FormID" Title="Sessie Evalueren" Context="form" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Left" Width="100px">
+                <Template Context="Sessie">
+                    <RadzenButton Icon="done" ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" Click="@(args => loadFormPagina(Sessie.FormID))">
+                    </RadzenButton>
+                </Template>
+            </RadzenGridColumn>
         </Columns>
     </RadzenGrid>
 }
@@ -51,6 +59,9 @@ else
     public string User;
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationStateTask { get; set; }
+    private IEnumerable<string>[] formsList;
+    private List<EvaluationForm> forms;
+    private EvaluationForm form;
 
 
     protected override async Task OnInitializedAsync()
@@ -65,17 +76,30 @@ else
 
         for (int i = 0; i < SessionList[0].Count(); i++)
         {
-            Sessies.Add(new SessionModel(SessionList[0].ElementAt(i), SessionList[1].ElementAt(i), SessionList[2].ElementAt(i), SessionList[3].ElementAt(i), SessionList[4].ElementAt(i), SessionList[5].ElementAt(i), SessionList[6].ElementAt(i), SessionList[7].ElementAt(i)));
+            Sessies.Add(new SessionModel(SessionList[0].ElementAt(i), SessionList[1].ElementAt(i), SessionList[2].ElementAt(i), SessionList[3].ElementAt(i), SessionList[4].ElementAt(i), SessionList[5].ElementAt(i), SessionList[6].ElementAt(i), SessionList[7].ElementAt(i), SessionList[8].ElementAt(i)));
         }
 
         for (int i = 0; i < AanmeldingenList[0].Count(); i++)
         {
             if (AanmeldingenList[0].ElementAt(i) == User)
             {
-                Aanmeldingen.Add(new SessieAanmelding(AanmeldingenList[0].ElementAt(i), AanmeldingenList[1].ElementAt(i), AanmeldingenList[2].ElementAt(i)));
+                Aanmeldingen.Add(new SessieAanmelding(AanmeldingenList[0].ElementAt(i), AanmeldingenList[1].ElementAt(i), AanmeldingenList[2].ElementAt(i), bool.Parse(AanmeldingenList[3].ElementAt(i))));
             }
         }
 
+
+    }
+
+    protected override void OnInitialized()
+    {
+        forms = new List<EvaluationForm>();
+        DbConnection getFormsList = new DbConnection();
+        formsList = getFormsList.GetFormsList();
+        for (int i = 0; i < formsList[0].Count(); i++)
+        {
+            List<Field> jsonDe = JsonSerializer.Deserialize<List<Field>>(formsList[2].ElementAt(i));
+            forms.Add(new EvaluationForm("", formsList[0].ElementAt(i), formsList[1].ElementAt(i), jsonDe));
+        }
 
     }
 
@@ -96,5 +120,11 @@ else
     {
         AppData.Sessie = Sessie;
         NavigationManager.NavigateTo("/SessieAanmeldPage");
+    }
+
+    public void loadFormPagina(string ID)
+    {
+        form = forms.Find(form => form.FormID == ID);
+        NavigationManager.NavigateTo("/Form/" + form.formName);
     }
 }

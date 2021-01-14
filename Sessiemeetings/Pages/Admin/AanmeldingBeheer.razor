@@ -1,0 +1,61 @@
+﻿@page "/AanmeldingBeheer"
+@layout AdminLayout
+@inject NavigationManager NavigationManager
+@inject ClassLibrary.Services.AppData AppData
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<IdentityUser> UserManager
+@using Microsoft.AspNetCore.Identity
+@using ClassLibrary.Models
+@using ClassLibrary
+@using ClassLibrary.Services
+
+<h3>Aanmeldingbeheer</h3>
+
+@if (Sessies == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" PageSize="12" AllowPaging="true" Data="@Sessies" TItem="SessionModel" ColumnWidth="200px">
+        <Columns>
+            <RadzenGridColumn TItem="SessionModel" Property="SessionName" Title="Naam" />
+            <RadzenGridColumn TItem="SessionModel" Property="SessionDesc" Title="Beschrijving" />
+            <RadzenGridColumn TItem="SessionModel" Property="SessionAddress" Title="Locatie" />
+            <RadzenGridColumn TItem="SessionModel" Property="StartingTime" Title="Begin tijd" />
+            <RadzenGridColumn TItem="SessionModel" Property="SessionDate" Title="Datum" />
+            <RadzenGridColumn TItem="SessionModel" Property="AvailableSpots" Title="Beschikbare plekken" />
+            <RadzenGridColumn TItem="SessionModel" Title="BeheerAanmeldingen" Context="sessie" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                <Template Context="sessie">
+                    <RadzenButton Icon="done" Size="ButtonSize.Small" Click="@(args => loadAanmeldingenPagina(sessie))">
+                    </RadzenButton>
+                </Template>
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
+}
+
+@code {
+
+    private IEnumerable<string>[] SessionList;
+    private List<SessionModel> Sessies;
+
+    protected override void OnInitialized()
+    {
+        Sessies = new List<SessionModel>();
+        DbConnection getList = new DbConnection();
+        SessionList = getList.GetSessionsList();
+
+        for (int i = 0; i < SessionList[0].Count(); i++)
+        {
+            Sessies.Add(new SessionModel(SessionList[0].ElementAt(i), SessionList[1].ElementAt(i), SessionList[2].ElementAt(i), SessionList[3].ElementAt(i), SessionList[4].ElementAt(i), SessionList[5].ElementAt(i), SessionList[6].ElementAt(i), SessionList[7].ElementAt(i), SessionList[8].ElementAt(i)));
+        }
+    }
+
+    public void loadAanmeldingenPagina(SessionModel Sessie)
+    {
+        AppData.Sessie = Sessie;
+        NavigationManager.NavigateTo("/SessieAanmeldingen");
+    }
+
+}

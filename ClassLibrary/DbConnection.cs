@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using MySql.Data.MySqlClient;
+using System.Text.Json;
+
 
 namespace ClassLibrary
 {
@@ -79,11 +81,11 @@ namespace ClassLibrary
             }
         }
         //Inserts into the Database
-        public void InsertSession(string Naam, string Locatie, string Onderwerp, string Tijd, string Datum, int maxDeelnemers)
+        public void InsertSession(string Naam, string Locatie, string Onderwerp, string Tijd, string Datum, int maxDeelnemers, string FormID)
         {
             connection.Open();
             string sessionId = GenerateId();
-            string query = $"INSERT INTO SessionsTable (SessieID, Naam, Locatie, Onderwerp, Tijd, Datum, MaxDeelnemers, BeschikbarePlekken) VALUES ('{sessionId}', '{Naam}', '{Locatie}', '{Onderwerp}', '{Tijd}', '{Datum}', '{maxDeelnemers}', '{maxDeelnemers}')";
+            string query = $"INSERT INTO SessionsTable (SessieID, Naam, Locatie, Onderwerp, Tijd, Datum, MaxDeelnemers, BeschikbarePlekken, FormID) VALUES ('{sessionId}', '{Naam}', '{Locatie}', '{Onderwerp}', '{Tijd}', '{Datum}', '{maxDeelnemers}', '{maxDeelnemers}', '{FormID}')";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             try
             {
@@ -98,7 +100,7 @@ namespace ClassLibrary
         public void InsertAanmelding(string SessionId, string UserId, string Opmerking)
         {
             connection.Open();
-            string query = $"INSERT INTO SessieAanmeldingen (UserId, SessieId, Opmerking) VALUES ('{UserId}', '{SessionId}', '{Opmerking}')";
+            string query = $"INSERT INTO SessieAanmeldingen (UserId, SessieId, Opmerking, IsAanwezig) VALUES ('{UserId}', '{SessionId}', '{Opmerking}', 'False')";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             try
             {
@@ -110,6 +112,37 @@ namespace ClassLibrary
             }
         }
 
+        public void InsertForm(string Name, string Fields)
+        {
+            connection.Open();
+            string formID = GenerateId();
+            string query = $"INSERT INTO FormsTable (FormID, Name, Fields) VALUES ('{formID}', '{Name}', '{Fields}')";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+            }
+        }
+
+        public void InsertFormsData( string user, string formName, string Fields)
+        {
+            connection.Open();
+            string dataID = GenerateId();
+            string query = $"INSERT INTO FormsDataTable (DataID, UserID, FormName, FieldsData) VALUES ('{dataID}','{user}', '{formName}', '{Fields}')";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+            }
+        }
         public void updateAvailableSpots(string SessionId)
         {
             string query = $"UPDATE SessionsTable SET BeschikbarePlekken = BeschikbarePlekken - 1 WHERE SessieID = '{SessionId}'";
@@ -122,8 +155,8 @@ namespace ClassLibrary
             {
                 System.Diagnostics.Debug.WriteLine(ex.ToString());
             }
-
         }
+
         //Updates the Database
         public void Update()
         {
@@ -139,7 +172,7 @@ namespace ClassLibrary
          {
             string query = "SELECT * FROM SessionsTable";
 
-            List<string>[] list = new List<string>[8];
+            List<string>[] list = new List<string>[9];
             list[0] = new List<string>();
             list[1] = new List<string>();
             list[2] = new List<string>();
@@ -148,6 +181,7 @@ namespace ClassLibrary
             list[5] = new List<string>();
             list[6] = new List<string>();
             list[7] = new List<string>();
+            list[8] = new List<string>();
 
             if (this.OpenConnection() == true)
             {
@@ -165,6 +199,7 @@ namespace ClassLibrary
                     list[5].Add(dataReader["Datum"] + "");
                     list[6].Add(dataReader["MaxDeelnemers"] + "");
                     list[7].Add(dataReader["BeschikbarePlekken"] + "");
+                    list[8].Add(dataReader["FormID"] + "");
                 }
                 dataReader.Close();
 
@@ -178,7 +213,110 @@ namespace ClassLibrary
             }
              
          }
-         //Count statement
+
+
+        public List<string>[] GetFormsList()
+        {
+            string query = "SELECT * FROM FormsTable";
+
+            List<string>[] list = new List<string>[3];
+            list[0] = new List<string>();
+            list[1] = new List<string>();
+            list[2] = new List<string>();
+
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                //Puts the sessiontable into a list for display into the application
+                while (dataReader.Read())
+                {
+                    list[0].Add(dataReader["FormID"] + "");
+                    list[1].Add(dataReader["Name"] + "");
+                    list[2].Add(dataReader["Fields"] + "");
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+
+                return list;
+            }
+            else
+            {
+                return list;
+            }
+
+        }
+
+        public List<string>[] GetFormsDataList(string formName)
+        {
+            string query = "SELECT * FROM FormsDataTable WHERE FormName LIKE" + "'" + formName + "'";
+
+            List<string>[] list = new List<string>[4];
+            list[0] = new List<string>();
+            list[1] = new List<string>();
+            list[2] = new List<string>();
+            list[3] = new List<string>();
+
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                //Puts the sessiontable into a list for display into the application
+                while (dataReader.Read())
+                {
+                    list[0].Add(dataReader["DataID"] + "");
+                    list[1].Add(dataReader["UserID"] + "");
+                    list[2].Add(dataReader["FormName"] + "");
+                    list[3].Add(dataReader["FieldsData"] + "");
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+
+                return list;
+            }
+            else
+            {
+                return list;
+            }
+
+        }
+
+        public List<string> GetFormData(string DataID)
+        {
+            string query = "SELECT * FROM FormsDataTable WHERE DataID LIKE" + "'" + DataID + "'";
+            List<string> list = new List<string>(4);
+
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                //Puts the sessiontable into a list for display into the application
+                while (dataReader.Read())
+                {
+                    list.Add(dataReader["DataID"] + "");
+                    list.Add(dataReader["UserID"] + "");
+                    list.Add(dataReader["FormName"] + "");
+                    list.Add(dataReader["FieldsData"] + "");
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+
+                return list;
+            }
+            else
+            {
+                return list;
+            }
+        }
+
+
+        //Count statement
         public int Count()
         {
             return 0;
@@ -245,6 +383,7 @@ namespace ClassLibrary
             list[0] = new List<string>();
             list[1] = new List<string>();
             list[2] = new List<string>();
+            list[3] = new List<string>();
 
             if (this.OpenConnection() == true)
             {
@@ -256,6 +395,7 @@ namespace ClassLibrary
                     list[0].Add(dataReader["UserId"] + "");
                     list[1].Add(dataReader["SessieId"] + "");
                     list[2].Add(dataReader["Opmerking"] + "");
+                    list[3].Add(dataReader["IsAanwezig"] + "");
                 }
                 dataReader.Close();
 
@@ -266,6 +406,37 @@ namespace ClassLibrary
             else
             {
                 return list;
+            }
+        }
+
+        public void DeelnemerAanwezig(string UserId, string SessionId)
+        {
+            connection.Open();
+            string query = $"UPDATE SessieAanmeldingen SET IsAanwezig = 'True' WHERE UserId = '{UserId}' AND SessieId = '{SessionId}'";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+            }
+
+        }
+
+        public void DeelnemerAfwezig(string UserId, string SessionId)
+        {
+            connection.Open();
+            string query = $"UPDATE SessieAanmeldingen SET IsAanwezig = 'False' WHERE UserId = '{UserId}' AND SessieId = '{SessionId}'";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
             }
 
         }

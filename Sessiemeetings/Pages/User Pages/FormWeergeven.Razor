@@ -1,0 +1,114 @@
+@page "/Form/{text}"
+@inject NavigationManager NavigationManager
+@using Radzen
+@using Radzen.Blazor
+@using Sessiemeetings.Data
+@using ClassLibrary
+@using System.Text.Json;
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+
+<h1>Formulier Naam : @Text</h1>
+
+
+@foreach (Field field in form.fields)
+{
+    <div class="row">
+        <div class="col-md-3">
+            <b> @field.title  </b>
+        </div>
+        @if (field.type == "Text Box")
+        {
+            <div class="col-md-9">
+                <RadzenTextBox @bind-value="field.data" Name="Textbox0"> </RadzenTextBox>
+            </div>
+        }
+        @if (field.type == "Text Area")
+        {
+            <div class="col-md-9">
+                <RadzenTextArea Cols="30" Rows="3" @bind-value="field.data" Name="Textarea0"> </RadzenTextArea>
+            </div>
+        }
+        @if (field.type == "Rate")
+        {
+            <div class="col-md-9">
+                <RadzenRating Change=@(val => OnChange(val ,field)) />
+            </div>
+        }
+        @if (field.type == "Date")
+        {
+            <div class="col-md-9">
+                <RadzenDatePicker TValue="DateTime" ShowTime="true" ShowSeconds="false" Change=@(value => OnChange(value, field)) DateFormat="MM/dd/yyyy HH:mm" />
+            </div>
+        }
+    </div>
+
+
+}
+<div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
+        <h4></h4>
+        <RadzenButton Click=@(args => Submit()) Text="indienen" ButtonStyle="ButtonStyle.Secondary" Style="margin-bottom: 20px; width: 150px" />
+    </div>
+</div>
+
+
+
+@code {
+    [Parameter]
+    public string Text { get; set; }
+    private IEnumerable<string>[] List;
+    private List<EvaluationForm> forms;
+    private EvaluationForm form;
+    public string user;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        user = authState.User.Identity.Name;
+
+    }
+
+    protected override void OnInitialized()
+    {
+
+        forms = new List<EvaluationForm>();
+        DbConnection getFormsList = new DbConnection();
+        List = getFormsList.GetFormsList();
+        for (int i = 0; i < List[0].Count(); i++)
+        {
+            List<Field> jsonDe = JsonSerializer.Deserialize<List<Field>>(List[2].ElementAt(i));
+            forms.Add(new EvaluationForm("", List[0].ElementAt(i), List[1].ElementAt(i), jsonDe));
+        }
+        form = forms.Find(form => form.formName == Text);
+    }
+
+    void OnChange(object value, Field field)
+    {
+        field.data = value.ToString();
+        if (field.type == "Date")
+        {
+            field.data = field.data.Remove(field.data.Length - 3, 3);
+        }
+    }
+
+
+    public void Submit()
+    {
+
+        var jsonFields = JsonSerializer.Serialize(form.fields);
+        DbConnection insertData = new DbConnection();
+        insertData.InsertFormsData(user, form.formName, jsonFields);
+        Clear();
+    }
+
+    private void Clear()
+    {
+        form = new EvaluationForm();
+        NavigationManager.NavigateTo("/");
+    }
+
+}

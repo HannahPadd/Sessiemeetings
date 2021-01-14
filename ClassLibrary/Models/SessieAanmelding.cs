@@ -9,11 +9,13 @@ namespace ClassLibrary.Models
         public string SessieId { get; set; }
         public string UserId { get; set; }
         public string Opmerking { get; set; }
-        public SessieAanmelding(string userId, string sessieId, string opmerking)
+        public bool IsAanwezig { get; set; }
+        public SessieAanmelding(string userId, string sessieId, string opmerking, bool isaanwezig)
         {
             this.SessieId = sessieId;
             this.UserId = userId;
             this.Opmerking = opmerking;
+            this.IsAanwezig = isaanwezig;
         }
     }
 }

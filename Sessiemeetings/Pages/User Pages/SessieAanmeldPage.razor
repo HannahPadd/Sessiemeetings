@@ -52,12 +52,11 @@
         Sessie = AppData.Sessie;
         var authState = await AuthenticationStateTask;
         User = authState.User.Identity.Name;
-
     }
 
     void submitAanmelding()
     {
-        Aanmelding = new SessieAanmelding(User, Sessie.SessionId, opmerking);
+        Aanmelding = new SessieAanmelding(User, Sessie.SessionId, opmerking, false);
         DbConnection AanmeldingVoltooien = new DbConnection();
         AanmeldingVoltooien.InsertAanmelding(Aanmelding.SessieId, Aanmelding.UserId, Aanmelding.Opmerking);
         AanmeldingVoltooien.updateAvailableSpots(Sessie.SessionId);
