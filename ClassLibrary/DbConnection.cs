@@ -47,7 +47,7 @@ namespace ClassLibrary
             catch (MySqlException ex)
             {
                 //When handling errors, you can your application's response based 
-                //on the error number.
+                //on the error number.S
                 //The two most common error numbers when connecting are as follows:
                 //0: Cannot connect to server.
                 //1045: Invalid user name and/or password.
