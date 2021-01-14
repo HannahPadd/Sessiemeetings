@@ -9,9 +9,7 @@
 <div class="@NavMenuCssClass" @onclick="ToggleAdminNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="sessions">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Sessies
-            </NavLink>
+
 
 
             <NavLink class="nav-link" href="AddSession">
@@ -19,26 +17,27 @@
             </NavLink>
 
 
+
+
+            <NavLink class="nav-link" href="AanmeldingBeheer">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Aanmeldingen Beheren
+            </NavLink>
+
+            @*<NavLink class="nav-link" href="adminhomepage" @onclick="()=>evaluatieForm= !evaluatieForm">
+            <span class="oi oi-list-rich" aria-hidden="true"></span> Formulieren beheren
+            </NavLink>
+        @if (evaluatieForm)
+        {*@
+            <NavLink class="nav-link" href="FormsBoard">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Formulieren
+            </NavLink>
+            <NavLink class="nav-link" href="Formaanmaken">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Formulier toevoegen
+            </NavLink>
+            @*}*@
             <NavLink class="nav-link" href="administration">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Gebruikers beheren
             </NavLink>
-
-            <NavLink class="nav-link" href="AanmeldingBeheer">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Aanmelding Beheren
-            </NavLink>
-
-            <NavLink class="nav-link" href="adminhomepage" @onclick="()=>evaluatieForm= !evaluatieForm">
-            <span class="oi oi-list-rich" aria-hidden="true"></span> Evaluatie
-            </NavLink>
-        @if (evaluatieForm)
-        {
-            <NavLink class="nav-link" href="FormsBoard">
-            <span class="oi oi-list-rich" aria-hidden="true"></span> Formulier Bord
-            </NavLink>
-            <NavLink class="nav-link" href="Formaanmaken">
-            <span class="oi oi-list-rich" aria-hidden="true"></span> Formulier Aanmaken
-            </NavLink>
-        }
         </li>
     </ul>
 </div>
