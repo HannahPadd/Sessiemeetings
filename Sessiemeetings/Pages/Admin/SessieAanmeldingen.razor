@@ -7,10 +7,10 @@
 @using ClassLibrary.Models
 @using ClassLibrary
 @using ClassLibrary.Services
+@layout AdminLayout
 
-<h3>SessieAanmeldingen</h3>
+<h3>Hier ziet u de aanmeldingen voor @Sessie.SessionName</h3>
 
-<h1>@Sessie.SessionName</h1>
 <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" PageSize="12" AllowPaging="true" Data="@Aanmeldingen" TItem="SessieAanmelding" ColumnWidth="200px">
     <Columns>
         <RadzenGridColumn TItem="SessieAanmelding" Property="UserId" Title="Naam" />
