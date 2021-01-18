@@ -8,54 +8,60 @@
 @using ClassLibrary
 @using ClassLibrary.Services
 @layout AdminLayout
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <link rel="stylesheet" href="/css/CSS/style.css">
+    </head>
+    <body>
+        <h3>Hier ziet u de aanmeldingen voor @Sessie.SessionName</h3>
 
-<h3>Hier ziet u de aanmeldingen voor @Sessie.SessionName</h3>
+        <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" PageSize="12" AllowPaging="true" Data="@Aanmeldingen" TItem="SessieAanmelding" ColumnWidth="200px">
+            <Columns>
+                <RadzenGridColumn TItem="SessieAanmelding" Property="UserId" Title="Naam" />
+                <RadzenGridColumn TItem="SessieAanmelding" Property="Opmerking" Title="Opmerking" />
+                <RadzenGridColumn TItem="SessieAanmelding" Title="Is aanwezig" Context="aanmelding" Bubble="false" Filterable="true" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                    <Template Context="aanmelding">
+                        <RadzenCheckBox @bind-Value=@aanmelding.IsAanwezig TValue="bool" Change=@(args => BevestigAanwezigheid(args, aanmelding)) />
+                    </Template>
+                </RadzenGridColumn>
+            </Columns>
+        </RadzenGrid>
+        </body>
+</html>
+        @code {
 
-<RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" PageSize="12" AllowPaging="true" Data="@Aanmeldingen" TItem="SessieAanmelding" ColumnWidth="200px">
-    <Columns>
-        <RadzenGridColumn TItem="SessieAanmelding" Property="UserId" Title="Naam" />
-        <RadzenGridColumn TItem="SessieAanmelding" Property="Opmerking" Title="Opmerking" />
-        <RadzenGridColumn TItem="SessieAanmelding" Title="Is aanwezig" Context="aanmelding" Bubble="false" Filterable="true" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
-            <Template Context="aanmelding">
-                <RadzenCheckBox @bind-Value=@aanmelding.IsAanwezig TValue="bool" Change=@(args => BevestigAanwezigheid(args, aanmelding))/>
-            </Template>
-        </RadzenGridColumn>
-    </Columns>
-</RadzenGrid>
-
-@code {
-
-    private IEnumerable<string>[] AanmeldingenList;
-    public List<SessieAanmelding> Aanmeldingen;
-    public SessionModel Sessie;
-    protected override void OnInitialized()
-    {
-        Sessie = AppData.Sessie;
-        Aanmeldingen = new List<SessieAanmelding>();
-        DbConnection getList = new DbConnection();
-        AanmeldingenList = getList.GetAanmeldingen();
-
-        for (int i = 0; i < AanmeldingenList[0].Count(); i++)
-        {
-            if (AanmeldingenList[1].ElementAt(i) == Sessie.SessionId)
+            private IEnumerable<string>[] AanmeldingenList;
+            public List<SessieAanmelding> Aanmeldingen;
+            public SessionModel Sessie;
+            protected override void OnInitialized()
             {
-                Aanmeldingen.Add(new SessieAanmelding(AanmeldingenList[0].ElementAt(i), AanmeldingenList[1].ElementAt(i), AanmeldingenList[2].ElementAt(i), bool.Parse(AanmeldingenList[3].ElementAt(i))));
+                Sessie = AppData.Sessie;
+                Aanmeldingen = new List<SessieAanmelding>();
+                DbConnection getList = new DbConnection();
+                AanmeldingenList = getList.GetAanmeldingen();
+
+                for (int i = 0; i < AanmeldingenList[0].Count(); i++)
+                {
+                    if (AanmeldingenList[1].ElementAt(i) == Sessie.SessionId)
+                    {
+                        Aanmeldingen.Add(new SessieAanmelding(AanmeldingenList[0].ElementAt(i), AanmeldingenList[1].ElementAt(i), AanmeldingenList[2].ElementAt(i), bool.Parse(AanmeldingenList[3].ElementAt(i))));
+                    }
+                }
             }
-        }
-    }
 
-    void BevestigAanwezigheid(bool args, SessieAanmelding aanmelding)
-    {
-        if (args)
-        {
-            DbConnection Aanwezig = new DbConnection();
-            Aanwezig.DeelnemerAanwezig(aanmelding.UserId, aanmelding.SessieId);
-        }
-        else
-        {
-            DbConnection Afwezig = new DbConnection();
-            Afwezig.DeelnemerAfwezig(aanmelding.UserId, aanmelding.SessieId);
-        }
-    }
+            void BevestigAanwezigheid(bool args, SessieAanmelding aanmelding)
+            {
+                if (args)
+                {
+                    DbConnection Aanwezig = new DbConnection();
+                    Aanwezig.DeelnemerAanwezig(aanmelding.UserId, aanmelding.SessieId);
+                }
+                else
+                {
+                    DbConnection Afwezig = new DbConnection();
+                    Afwezig.DeelnemerAfwezig(aanmelding.UserId, aanmelding.SessieId);
+                }
+            }
 
-}
+        }

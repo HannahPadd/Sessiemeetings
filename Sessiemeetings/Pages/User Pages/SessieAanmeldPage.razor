@@ -6,60 +6,67 @@
 @using Microsoft.AspNetCore.Identity
 @using ClassLibrary.Models
 @using ClassLibrary
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/css/CSS/style.css">
+</head>
+<body>
+    <h3>Shrijf je in</h3>
 
-<h1>Shrijf je in</h1>
-
-<div class="row">
-    <div class="col-md-6">
-        <h2>Sessie Info</h2>
-        <RadzenCard Style="width:400px;">
-            <div class="row">
-                <div class="col-md-6">
-                    <div>SessieNaam:</div>
-                    <b>@Sessie.SessionName</b>
-                    <div style="margin-top:20px">Description:</div>
-                    <b>@Sessie.SessionDesc</b>
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Sessie Info</h2>
+            <RadzenCard Style="width:400px;">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div>SessieNaam:</div>
+                        <b>@Sessie.SessionName</b>
+                        <div style="margin-top:20px">Description:</div>
+                        <b>@Sessie.SessionDesc</b>
+                    </div>
+                    <div class="col-md-6">
+                        <div>Location:</div>
+                        <b>@Sessie.SessionAddress</b>
+                        <div style="margin-top:20px">Date:</div>
+                        <b>@Sessie.SessionDate</b>
+                        <div style="margin-top:20px">Starting Time</div>
+                        <b>@Sessie.StartingTime</b>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <div>Location:</div>
-                    <b>@Sessie.SessionAddress</b>
-                    <div style="margin-top:20px">Date:</div>
-                    <b>@Sessie.SessionDate</b>
-                    <div style="margin-top:20px">Starting Time</div>
-                    <b>@Sessie.StartingTime</b>
-                </div>
-            </div>
 
-        </RadzenCard>
-        <h3>Laat hier opmerkingen achter(Dieet voorkeuren)</h3>
-        <RadzenTextArea Cols="50" Rows="3" Style="margin-bottom: 20px" @bind-Value=@opmerking />
-        <RadzenButton Click="@submitAanmelding" Text="Aanmelden" Style="margin-bottom: 20px; width: 150px" />
+            </RadzenCard>
+            <h3>Laat hier opmerkingen achter(Dieet voorkeuren)</h3>
+            <RadzenTextArea Cols="50" Rows="3" Style="margin-bottom: 20px" @bind-Value=@opmerking />
+            <RadzenButton Click="@submitAanmelding" Text="Aanmelden" Style="margin-bottom: 20px; width: 150px" />
+        </div>
     </div>
-</div>
 
+    </body>
+</html>
 
-@code {
+    @code {
 
-    public SessionModel Sessie;
-    public string opmerking;
-    public SessieAanmelding Aanmelding;
-    public string User;
-    [CascadingParameter]
-    private Task<AuthenticationState> AuthenticationStateTask { get; set; }
+        public SessionModel Sessie;
+        public string opmerking;
+        public SessieAanmelding Aanmelding;
+        public string User;
+        [CascadingParameter]
+        private Task<AuthenticationState> AuthenticationStateTask { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        Sessie = AppData.Sessie;
-        var authState = await AuthenticationStateTask;
-        User = authState.User.Identity.Name;
+        protected override async Task OnInitializedAsync()
+        {
+            Sessie = AppData.Sessie;
+            var authState = await AuthenticationStateTask;
+            User = authState.User.Identity.Name;
+        }
+
+        void submitAanmelding()
+        {
+            Aanmelding = new SessieAanmelding(User, Sessie.SessionId, opmerking, false);
+            DbConnection AanmeldingVoltooien = new DbConnection();
+            AanmeldingVoltooien.InsertAanmelding(Aanmelding.SessieId, Aanmelding.UserId, Aanmelding.Opmerking);
+            AanmeldingVoltooien.updateAvailableSpots(Sessie.SessionId);
+            NavigationManager.NavigateTo("/SessiesBord");
+        }
     }
-
-    void submitAanmelding()
-    {
-        Aanmelding = new SessieAanmelding(User, Sessie.SessionId, opmerking, false);
-        DbConnection AanmeldingVoltooien = new DbConnection();
-        AanmeldingVoltooien.InsertAanmelding(Aanmelding.SessieId, Aanmelding.UserId, Aanmelding.Opmerking);
-        AanmeldingVoltooien.updateAvailableSpots(Sessie.SessionId);
-        NavigationManager.NavigateTo("/SessiesBord");
-    }
-}

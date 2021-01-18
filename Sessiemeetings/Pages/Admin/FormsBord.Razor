@@ -4,59 +4,67 @@
 @using ClassLibrary
 @using Sessiemeetings.Data
 @layout AdminLayout
-<h1>Formulier Bord</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/css/CSS/style.css">
+</head>
+<body>
+    <h3>Evaluatie formulieren beheren</h3>
 
 
-@if (forms == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <RadzenGrid PageSize="10" AllowPaging="true" Data="@forms" TItem="EvaluationForm" ColumnWidth="200px">
-        <Columns>
-            <RadzenGridColumn TItem="EvaluationForm" Property="forms.formName" Title="Naam" />
-            <RadzenGridColumn TItem="EvaluationForm" Title="Weergeven" Context="form" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Left" Width="100px">
-                <Template Context="forms">
-                    <RadzenButton Icon="done" ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" Click="@(args => loadFormPagina(forms.formName))">
-                    </RadzenButton>
-                </Template>
-            </RadzenGridColumn>
-            <RadzenGridColumn TItem="EvaluationForm" Title="Data Weergeven" Context="form" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Left" Width="100px">
-                <Template Context="forms">
-                    <RadzenButton Icon="done" ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" Click="@(args => loadDataBord(forms.formName))">
-                    </RadzenButton>
-                </Template>
-            </RadzenGridColumn>
-        </Columns>
-    </RadzenGrid>
-}
-@code {
-
-    private IEnumerable<string>[] formsList;
-    private List<EvaluationForm> forms;
-
-
-    protected override void OnInitialized()
+    @if (forms == null)
     {
-        forms = new List<EvaluationForm>();
-        DbConnection getFormsList = new DbConnection();
-        formsList = getFormsList.GetFormsList();
-        for (int i = 0; i < formsList[0].Count(); i++)
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <RadzenGrid PageSize="10" AllowPaging="true" Data="@forms" TItem="EvaluationForm" ColumnWidth="200px">
+            <Columns>
+                <RadzenGridColumn TItem="EvaluationForm" Property="forms.formName" Title="Naam" />
+                <RadzenGridColumn TItem="EvaluationForm" Title="Weergeven" Context="form" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Left" Width="100px">
+                    <Template Context="forms">
+                        <RadzenButton Icon="done" ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" Click="@(args => loadFormPagina(forms.formName))">
+                        </RadzenButton>
+                    </Template>
+                </RadzenGridColumn>
+                <RadzenGridColumn TItem="EvaluationForm" Title="Data Weergeven" Context="form" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Left" Width="100px">
+                    <Template Context="forms">
+                        <RadzenButton Icon="done" ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" Click="@(args => loadDataBord(forms.formName))">
+                        </RadzenButton>
+                    </Template>
+                </RadzenGridColumn>
+            </Columns>
+        </RadzenGrid>
+    }
+    </body>
+</html>
+    @code {
+
+        private IEnumerable<string>[] formsList;
+        private List<EvaluationForm> forms;
+
+
+        protected override void OnInitialized()
         {
-            List<Field> jsonDe = JsonSerializer.Deserialize<List<Field>>(formsList[2].ElementAt(i));
-            forms.Add(new EvaluationForm("", formsList[0].ElementAt(i), formsList[1].ElementAt(i), jsonDe));
+            forms = new List<EvaluationForm>();
+            DbConnection getFormsList = new DbConnection();
+            formsList = getFormsList.GetFormsList();
+            for (int i = 0; i < formsList[0].Count(); i++)
+            {
+                List<Field> jsonDe = JsonSerializer.Deserialize<List<Field>>(formsList[2].ElementAt(i));
+                forms.Add(new EvaluationForm("", formsList[0].ElementAt(i), formsList[1].ElementAt(i), jsonDe));
+            }
+
         }
 
-    }
+        public void loadFormPagina(string formName)
+        {
+            NavigationManager.NavigateTo("/Form/" + formName);
+        }
 
-    public void loadFormPagina(string formName)
-    {
-        NavigationManager.NavigateTo("/Form/" + formName);
+        public void loadDataBord(string formName)
+        {
+            NavigationManager.NavigateTo("/DataBord/" + formName);
+        }
     }
-
-    public void loadDataBord(string formName)
-    {
-        NavigationManager.NavigateTo("/DataBord/" + formName);
-    }
-}
